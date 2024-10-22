@@ -8,6 +8,7 @@ public partial class Global : Node
     public static Global Instance;
 
     public GameController GameController;
+    internal Logger Logger;
 
     public override void _Ready()
     {
@@ -15,5 +16,18 @@ public partial class Global : Node
             return;
 
         Instance = this;
+
+        Logger = Logger.Instance;
+
+        GetTree().AutoAcceptQuit = false;
+    }
+
+    public override void _Notification(int what)
+    {
+        if (what != NotificationWMCloseRequest)
+            return;
+
+        Logger.StopLogger();
+        GetTree().Quit();
     }
 }
