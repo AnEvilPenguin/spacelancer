@@ -1,6 +1,9 @@
 using Godot;
 using Serilog;
 
+/// <summary>
+/// Handles loading and displaying of scenes and user interfaces.
+/// </summary>
 public partial class GameController : Node
 {
     private Control _gui;
@@ -15,4 +18,7 @@ public partial class GameController : Node
 
         Log.Debug("Game controller loaded");
     }
+
+    // FIXME load, hide, unload scene logic
+    // FIXME auto load main menu scene in first on ready.
 }

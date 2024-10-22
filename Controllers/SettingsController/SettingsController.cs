@@ -2,6 +2,9 @@
 using System.IO;
 using Newtonsoft.Json.Linq;
 
+/// <summary>
+/// Manages the saving and loading of settings from file (or not).
+/// </summary>
 internal sealed class SettingsController
 {
     private const string _fileName = "settings.json";

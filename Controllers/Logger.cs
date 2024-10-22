@@ -2,6 +2,9 @@
 using Serilog.Core;
 using System.IO;
 
+/// <summary>
+/// Configures and closes down the log system.
+/// </summary>
 internal sealed class Logger
 {
     public static Logger Instance
