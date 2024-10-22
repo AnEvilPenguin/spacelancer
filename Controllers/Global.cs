@@ -9,6 +9,7 @@ public partial class Global : Node
 
     public GameController GameController;
     internal Logger Logger;
+    internal SettingsController SettingsController;
 
     public override void _Ready()
     {
@@ -17,7 +18,9 @@ public partial class Global : Node
 
         Instance = this;
 
+        // Logger needs to be loaded first, other things rely on it.
         Logger = Logger.Instance;
+        SettingsController = SettingsController.Instance;
 
         GetTree().AutoAcceptQuit = false;
     }
