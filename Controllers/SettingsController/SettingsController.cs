@@ -55,4 +55,7 @@ internal sealed class SettingsController
         _general.OverrideSettings(settingOverrides);
         _graphics.OverrideSettings(settingOverrides);
     }
+
+    // TODO generate tab per class (or ask the class to do it)
+    // TODO generate components per setting type.
 }
