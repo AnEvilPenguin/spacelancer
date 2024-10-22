@@ -15,22 +15,20 @@ internal sealed class Logger
     public static LoggingLevelSwitch LevelSwitch = new LoggingLevelSwitch();
 
     private static readonly Logger _instance = new Logger();
-    private static string _logPath;
 
     static Logger()
     {}
 
     private Logger() 
     {
-        _logPath = Path.Combine(
-            System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData),
-            "EvilPenguinIndustries\\Spacelancer",
+        var logPath = Path.Combine(
+            Constants.FolderPath,
             "spacelancer-.log"
         );
 
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.ControlledBy(LevelSwitch)
-            .WriteTo.File(_logPath, rollingInterval: RollingInterval.Day)
+            .WriteTo.File(logPath, rollingInterval: RollingInterval.Day)
             .CreateLogger();
 
         Log.Information("The global logger has been configured");
