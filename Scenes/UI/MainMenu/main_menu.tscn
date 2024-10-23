@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dn86l4r1lpbrb"]
 
-[ext_resource type="Script" path="res://Scenes/MainMenu/MainMenu.cs" id="1_nlwpn"]
+[ext_resource type="Script" path="res://Scenes/UI/MainMenu/MainMenu.cs" id="1_nlwpn"]
 
 [node name="MainMenu" type="CenterContainer"]
 anchors_preset = 15
