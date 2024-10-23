@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://dpg386ufu6d8p"]
+[gd_scene load_steps=2 format=3 uid="uid://dpg386ufu6d8p"]
 
 [ext_resource type="Script" path="res://Controllers/GameController/GameController.cs" id="1_2ajmc"]
-[ext_resource type="PackedScene" uid="uid://dn86l4r1lpbrb" path="res://Scenes/UI/MainMenu/main_menu.tscn" id="2_i534f"]
 
 [node name="GameController" type="Node"]
 script = ExtResource("1_2ajmc")
@@ -15,6 +14,3 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="MainMenu" parent="GUI" instance=ExtResource("2_i534f")]
-layout_mode = 1

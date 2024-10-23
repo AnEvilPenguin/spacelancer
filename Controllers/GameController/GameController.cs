@@ -16,9 +16,20 @@ public partial class GameController : Node
         _world2D = GetNode<Node2D>("World2D");
         _gui = GetNode<Control>("GUI");
 
+        LoadScene("res://Scenes/UI/MainMenu/main_menu.tscn", true);
+        
         Log.Debug("Game controller loaded");
     }
 
+    public void LoadScene(string scenePath, bool isUi = false)
+    {
+        CanvasItem parent = isUi ? _gui : _world2D;
+        
+        var newScene = GD.Load<PackedScene>(scenePath);
+        var instance = newScene.Instantiate<Node>();
+
+        parent.AddChild(instance);
+    }
+    
     // FIXME load, hide, unload scene logic
-    // FIXME auto load main menu scene in first on ready.
 }

@@ -7,14 +7,20 @@ public partial class MainMenu : CenterContainer
 	private Button _newGameButton;
 	private Button _settingsButton;
 	private Button _quitButton;
+	
+	private GameController _gameController;
 
 	public override void _Ready()
 	{
+		_gameController = Global.Instance.GameController;
+		
 		_continueButton = GetNode<Button>("%ContinueButton");
-		_newGameButton = GetNode<Button>("%NewGameButton");
 		_settingsButton = GetNode<Button>("%SettingsButton");
 
 		ConfigureQuitButton();
+		ConfigureNewGameButton();
+		
+		Log.Debug("Main Menu loaded");
 	}
 
 	private void ConfigureQuitButton()
@@ -30,4 +36,17 @@ public partial class MainMenu : CenterContainer
             GetTree().Root.PropagateNotification((int)NotificationWMCloseRequest);
         };
     }
+
+	private void ConfigureNewGameButton()
+	{
+		_newGameButton = GetNode<Button>("%NewGameButton");
+
+		_newGameButton.Pressed += () =>
+		{
+			_gameController.LoadScene("res://Scenes/Systems/sunrise.tscn");
+			Visible = false;
+		};
+	}
+	
+	// TODO Get 'Escape' keypress and make visible again
 }
