@@ -14,13 +14,42 @@ public partial class MainMenu : CenterContainer
 	{
 		_gameController = Global.Instance.GameController;
 		
-		_continueButton = GetNode<Button>("%ContinueButton");
 		_settingsButton = GetNode<Button>("%SettingsButton");
 
-		ConfigureQuitButton();
+		ConfigureContinueButton();
 		ConfigureNewGameButton();
+		ConfigureQuitButton();
 		
 		Log.Debug("Main Menu loaded");
+	}
+
+	public override void _Input(InputEvent @event)
+	{
+		if (Visible)
+			return;
+		
+		if (@event is InputEventKey eventKey && eventKey.Keycode == Key.Escape)
+		{
+			Log.Debug("Escape menu triggered");
+			
+			Visible = true;
+			GetTree().Paused = true;
+			
+			_continueButton.Disabled = false;
+		}
+	}
+
+	private void ConfigureContinueButton()
+	{
+		_continueButton = GetNode<Button>("%ContinueButton");
+		
+		_continueButton.Pressed += (() =>
+		{
+			Log.Debug("Continue via Main Menu");
+			
+			GetTree().Paused = false;
+			Visible = false;
+		});
 	}
 
 	private void ConfigureQuitButton()
@@ -43,10 +72,10 @@ public partial class MainMenu : CenterContainer
 
 		_newGameButton.Pressed += () =>
 		{
+			Log.Debug("New Game via Main Menu");
+			
 			_gameController.LoadScene("res://Scenes/Systems/sunrise.tscn");
 			Visible = false;
 		};
 	}
-	
-	// TODO Get 'Escape' keypress and make visible again
 }
