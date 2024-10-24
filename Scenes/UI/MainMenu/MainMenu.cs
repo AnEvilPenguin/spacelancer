@@ -75,6 +75,7 @@ public partial class MainMenu : CenterContainer
 			Log.Debug("New Game via Main Menu");
 			
 			_gameController.LoadScene("res://Scenes/Systems/sunrise.tscn");
+			_gameController.LoadScene("res://Scenes/Player/player.tscn");
 			Visible = false;
 		};
 	}

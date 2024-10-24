@@ -22,3 +22,7 @@ Global="*res://Controllers/Global.cs"
 [dotnet]
 
 project/assembly_name="Spacelancer"
+
+[rendering]
+
+2d/snap/snap_2d_transforms_to_pixel=true
