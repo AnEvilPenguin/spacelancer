@@ -88,6 +88,8 @@ public partial class Player : CharacterBody2D
         line.ZIndex += zIncrement;
         
         // We don't want the line rotating with this node.
+        // We may need to change this to explicitly use the scene (or possibly the GameController)
+        //     if the parent becomes ambiguous.
         GetParent().AddChild(line);
     }
 
