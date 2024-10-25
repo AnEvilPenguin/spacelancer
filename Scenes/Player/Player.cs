@@ -6,27 +6,23 @@ public partial class Player : CharacterBody2D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		Vector2 velocity = Velocity;
-
-		// Rotate towards mouse
-		var mouseCoords = GetGlobalMousePosition();
-		var mouseDirection = mouseCoords - GlobalPosition;
-
-		Rotation = mouseDirection.Angle();
-		// TODO limit angle to +- x degrees
+		ProcessRotation();
 		
-		DebugRotation();
+		ProcessVelocity();
 
+		MoveAndSlide();
+	}
+
+	private void ProcessVelocity()
+	{
+		var velocity = Velocity;
+		
 		// Get the input direction and handle the movement/deceleration.
 		// As good practice, you should replace UI actions with custom gameplay actions.
 		Vector2 direction = Input.GetVector("ui_down", "ui_up", "ui_left", "ui_right");
 
 		// TODO clamp left and right (Y axis)
 		// TODO clamp reverse (negative X)
-
-
-		GD.Print($"direction: {direction}");
-		GD.Print($"rotation: {Mathf.RadToDeg(Rotation)}");
 		
 		var acceleration = direction.Rotated(Rotation);
 		DebugAcceleration(acceleration);
@@ -38,12 +34,20 @@ public partial class Player : CharacterBody2D
 		
 		DebugSpeed(velocity.Length());
 
-		GD.Print("Velocity: " + velocity);
-
 		Velocity = velocity;
 		DebugVelocity();
+	}
+
+	private void ProcessRotation()
+	{
+		// Rotate towards mouse
+		var mouseCoords = GetGlobalMousePosition();
+		var mouseDirection = mouseCoords - GlobalPosition;
+
+		Rotation = mouseDirection.Angle();
+		// TODO limit angle to +- x degrees
 		
-		MoveAndSlide();
+		DebugRotation();
 	}
 
 	// TODO debug options
