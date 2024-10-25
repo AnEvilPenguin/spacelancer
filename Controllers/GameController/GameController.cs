@@ -20,7 +20,7 @@ public partial class GameController : Node
         Global.Instance.GameController = this;
 
         _world2D = GetNode<Node2D>("World2D");
-        _gui = GetNode<Control>("GUI");
+        _gui = GetNode<Control>("%GUI");
 
         LoadScene("res://Scenes/UI/MainMenu/main_menu.tscn", SceneType.Gui);
         
