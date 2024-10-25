@@ -1,3 +1,4 @@
+using System.Linq;
 using Godot;
 using Serilog;
 
@@ -36,7 +37,22 @@ public partial class GameController : Node
 
         parent.AddChild(instance);
     }
-    
+
+    public void UnloadWorld2D()
+    {
+        var childNodes = _world2D.GetChildren()
+            .Where(c => c != null)
+            .ToList();
+            
+        Log.Debug("Unloading {nodeCount} from World2D", childNodes.Count);
+
+        foreach (var child in childNodes)
+        {
+            Log.Debug("Unloading {nodeName} - {nodeId}", child.Name, child.GetInstanceId());
+            child.QueueFree();
+        }
+    }
+
     // FIXME load, hide, unload scene logic
     // consider dictionary of loaded items, to help with decisions over what to do with existing scenes
 }
