@@ -7,9 +7,15 @@ public partial class Player : CharacterBody2D
 	public override void _PhysicsProcess(double delta)
 	{
 		ProcessRotation();
-		
-		ProcessVelocity();
 
+		if (Input.IsKeyPressed(Key.B))
+			ProcessBrake();
+		else
+			ProcessVelocity();
+
+		DebugVelocity();
+		DebugSpeed(Velocity.Length());
+		
 		MoveAndSlide();
 	}
 
@@ -31,11 +37,8 @@ public partial class Player : CharacterBody2D
 		{
 			velocity = (Velocity + acceleration).LimitLength(MaxSpeed);
 		}
-		
-		DebugSpeed(velocity.Length());
 
 		Velocity = velocity;
-		DebugVelocity();
 	}
 
 	private void ProcessRotation()
@@ -48,6 +51,19 @@ public partial class Player : CharacterBody2D
 		// TODO limit angle to +- x degrees
 		
 		DebugRotation();
+	}
+
+	private void ProcessBrake()
+	{
+		var x = Mathf.MoveToward(Velocity.X, 0.0f, 1);
+		var y = Mathf.MoveToward(Velocity.Y, 0.0f, 1);
+		
+		var velocity = new Vector2(x, y);
+		
+		var brakeForce = velocity - Velocity;
+		DebugAcceleration(brakeForce);
+
+		Velocity = velocity;
 	}
 
 	// TODO debug options
