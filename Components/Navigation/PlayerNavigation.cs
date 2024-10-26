@@ -4,7 +4,7 @@ using Serilog;
 
 namespace Spacelancer.Components.Navigation;
 
-public class PlayerNavigation : AbstractNavigationSoftware, INavigationSoftware
+public class PlayerNavigation : INavigationSoftware
 {
     
     public string Name { get => _name; }
@@ -12,12 +12,9 @@ public class PlayerNavigation : AbstractNavigationSoftware, INavigationSoftware
     private const string _name = "PlayerNavigation";
     private readonly Player _player;
 
-    public PlayerNavigation(Node2D parent) : base(parent)
+    public PlayerNavigation(Player player)
     {
-        if (parent is Player player)
-            _player = player;
-        else
-            Log.Error("Non player node passed to PlayerNavigation constructor. {Type}", parent.GetType());
+        _player = player;
     }
     
     public float GetRotation(float maxRotation)
