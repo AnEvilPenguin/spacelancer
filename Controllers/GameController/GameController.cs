@@ -13,6 +13,9 @@ public enum SceneType
 /// </summary>
 public partial class GameController : Node
 {
+    // FIXME extract this into a proper component
+    public Label TempStationLabel;
+    
     private Control _gui;
     private Node2D _world2D;
 
