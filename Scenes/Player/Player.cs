@@ -38,13 +38,4 @@ public partial class Player : CharacterBody2D
 		DebugVelocity();
 		DebugSpeed(Velocity.Length());
 	}
-	
-	// TODO debug options
-	// Navigation system
-	// health
-	
-	// TODO Brakes
-	// Press B or something to move Velocity towards 0
-	
-	// Probably need to extract some of these things for enemies and the like too.
 }

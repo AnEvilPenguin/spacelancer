@@ -129,4 +129,7 @@ public partial class Player : CharacterBody2D
         line.AddPoint(start);
         line.AddPoint(end);
     }
+    
+    // TODO debug options
+    // health
 }
