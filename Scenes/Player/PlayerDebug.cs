@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using Godot;
+using Spacelancer.Components.Navigation;
 
 public partial class Player : CharacterBody2D
 {
     private Label _rotationLabel;
     private Label _speedLabel;
+    private Label _navLabel;
 
     private List<Label> _debugLabels;
     
@@ -63,6 +65,24 @@ public partial class Player : CharacterBody2D
             _speedLabel.AddThemeColorOverride("font_color", Colors.Yellow);
         else
             _speedLabel.AddThemeColorOverride("font_color", Colors.Red);
+    }
+
+    private void DebugNav()
+    {
+        if (!OS.IsDebugBuild())
+            return;
+        
+        PopulateDebugLabel(ref _navLabel);
+        PositionDebugLabel(_navLabel, 35, 125);
+        
+        _navLabel.Text = $"{_navComputer.Name ?? "No Nav Computer"}";
+        
+        if (_navComputer is null)
+            _navLabel.AddThemeColorOverride("font_color", Colors.Red);
+        else if (_navComputer.GetType() == typeof(PlayerNavigation))
+            _navLabel.AddThemeColorOverride("font_color", Colors.Green);
+        else
+            _navLabel.AddThemeColorOverride("font_color", Colors.Orange);
     }
 
     private void PopulateDebugLabel(ref Label label)

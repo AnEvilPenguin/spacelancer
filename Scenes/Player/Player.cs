@@ -14,11 +14,14 @@ public partial class Player : CharacterBody2D
 
 	public override void _PhysicsProcess(double delta)
 	{
+		DebugNav();
+		
 		// TODO work out what a sensible max rotation is
 		Rotation = _navComputer.GetRotation(0);
 		DebugRotation();
 		
 		ProcessVelocity();
+		
 		
 		MoveAndSlide();
 	}
