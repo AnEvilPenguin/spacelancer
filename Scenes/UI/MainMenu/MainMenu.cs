@@ -75,8 +75,8 @@ public partial class MainMenu : CenterContainer
 			Log.Debug("New Game via Main Menu");
 			_gameController.UnloadWorld2D();
 			
-			_gameController.LoadScene("res://Scenes/Systems/sunrise.tscn");
-			_gameController.LoadScene("res://Scenes/Player/player.tscn");
+			_gameController.LoadScene<Node2D>("res://Scenes/Systems/sunrise.tscn");
+			_gameController.LoadScene<Player>("res://Scenes/Player/player.tscn");
 			Visible = false;
 			
 			GetTree().Paused = false;
