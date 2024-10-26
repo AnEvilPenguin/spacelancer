@@ -16,12 +16,17 @@ public partial class GameController : Node
     private Control _gui;
     private Node2D _world2D;
 
+    // FIXME extract this into a proper component
+    public Label TempStationLabel;
+
     public override void _Ready()
     {
         Global.GameController = this;
 
         _world2D = GetNode<Node2D>("World2D");
         _gui = GetNode<Control>("%GUI");
+        
+        TempStationLabel = _gui.GetNode<Label>("Comms Label");
 
         LoadScene("res://Scenes/UI/MainMenu/main_menu.tscn", SceneType.Gui);
         
