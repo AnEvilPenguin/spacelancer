@@ -18,7 +18,7 @@ public partial class GameController : Node
 
     public override void _Ready()
     {
-        Global.Instance.GameController = this;
+        Global.GameController = this;
 
         _world2D = GetNode<Node2D>("World2D");
         _gui = GetNode<Control>("%GUI");

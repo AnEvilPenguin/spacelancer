@@ -12,7 +12,7 @@ public partial class MainMenu : CenterContainer
 
 	public override void _Ready()
 	{
-		_gameController = Global.Instance.GameController;
+		_gameController = Global.GameController;
 		
 		_settingsButton = GetNode<Button>("%SettingsButton");
 

@@ -6,8 +6,8 @@ using Godot;
 public partial class Global : Node
 {
     public static Global Instance;
-
-    public GameController GameController;
+    public static GameController GameController;
+    
     internal Logger Logger;
     internal SettingsController SettingsController;
 
