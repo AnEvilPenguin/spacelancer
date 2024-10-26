@@ -4,5 +4,13 @@ namespace Spacelancer.Components.Navigation;
 
 public class AbstractNavigationSoftware
 {
-    public AbstractNavigationSoftware(Node2D parent) {}
+    // Is this class even needed?
+    // Could mandate static factory in the interface instead? 
+    
+    protected readonly Node2D Parent;
+
+    protected AbstractNavigationSoftware(Node2D parent)
+    {
+        Parent = parent;
+    }
 }
