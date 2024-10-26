@@ -5,6 +5,7 @@ public partial class Station : Node2D
 {
 	// We may need to consider making this docking range if we make a map and remote comms or something
 	private bool _playerInCommsRange = false;
+	StationMenu _menu;
 	
 	public override void _Ready()
 	{
@@ -18,9 +19,13 @@ public partial class Station : Node2D
 	{
 		if (!_playerInCommsRange)
 			return;
-		
-		if (Input.IsKeyPressed(Key.C))
-			Log.Debug("Comms initiated with {StationName}", Name); // TODO load station menu instead.
+
+		if (Input.IsKeyPressed(Key.C) && (_menu == null || !_menu.Visible))
+		{
+			Log.Debug("Comms initiated with {StationName}", Name);
+			_menu = Global.GameController.LoadScene<StationMenu>("res://Scenes/UI/StationMenu/station_menu.tscn");
+			_menu.ShowMenu();
+		}
 	}
 
 	private void OnStationAreaEntered(Node2D body)
