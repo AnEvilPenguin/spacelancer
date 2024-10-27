@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://c4mljrynnxorl"]
+[gd_scene load_steps=6 format=3 uid="uid://c4mljrynnxorl"]
 
-[ext_resource type="PackedScene" uid="uid://dtfjhrdepulhe" path="res://Scenes/Stations/station_1.tscn" id="1_2nu3c"]
+[ext_resource type="PackedScene" uid="uid://dtfjhrdepulhe" path="res://Scenes/Stations/station.tscn" id="1_2nu3c"]
 [ext_resource type="Texture2D" uid="uid://bhb8wpv2cyhtn" path="res://Assets/Placeholder Art/spaceStation_026.png" id="2_6v7le"]
+[ext_resource type="Texture2D" uid="uid://p8j5qfmaqx6n" path="res://Assets/Placeholder Art/spaceStation_017.png" id="2_835pb"]
 [ext_resource type="Texture2D" uid="uid://c320b4nt81wdn" path="res://Assets/Placeholder Art/spaceStation_029.png" id="3_5t7rx"]
 [ext_resource type="Texture2D" uid="uid://gmqsa67ro2nm" path="res://Assets/Placeholder Art/spaceStation_030.png" id="4_di71g"]
 
@@ -9,7 +10,10 @@
 
 [node name="Station1" parent="." instance=ExtResource("1_2nu3c")]
 
-[node name="Station2" type="Node2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="Station1"]
+texture = ExtResource("2_835pb")
+
+[node name="Station2" parent="." instance=ExtResource("1_2nu3c")]
 position = Vector2(7015, -14)
 
 [node name="Sprite2D" type="Sprite2D" parent="Station2"]
