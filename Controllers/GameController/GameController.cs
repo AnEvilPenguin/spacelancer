@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
@@ -58,15 +59,30 @@ public partial class GameController : Node
 
         foreach (var child in childNodes)
         {
-            var id = child.GetInstanceId();
-            Log.Debug("Unloading {nodeName} - {nodeId}", child.Name, id);
-            
+            try
+            {
+                UnloadScene(child);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "Failed to unload {nodeName} - {nodeId}", child.Name, child.GetInstanceId());
+            }
+        }
+    }
+
+    private void UnloadScene(Node scene)
+    {
+        var id = scene.GetInstanceId();
+        Log.Debug("Unloading {nodeName} - {nodeId}", scene.Name, id);
+
+        if (_nodeToPathLookup.ContainsKey(id))
+        {
             var scenePath = _nodeToPathLookup[id];
             _loadedScenes.Remove(scenePath);
             _nodeToPathLookup.Remove(id);
-            
-            child.QueueFree();
         }
+        
+        scene.QueueFree();
     }
 
     // FIXME load, hide, unload scene logic
