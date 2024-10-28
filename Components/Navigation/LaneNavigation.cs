@@ -19,11 +19,11 @@ public class LaneNavigation : INavigationSoftware
     
     public string Name => $"LaneNavigation - {_origin.Name} to {_destination.Name} - {_state}";
 
-    private Player _player;
-    private Spacelane _origin;
-    private Spacelane _destination;
+    private readonly Player _player;
+    private readonly Spacelane _origin;
+    private readonly Spacelane _destination;
 
-    private INavigationSoftware _originalSoftware;
+    private readonly INavigationSoftware _originalSoftware;
     
     private LaneState _state;
     
