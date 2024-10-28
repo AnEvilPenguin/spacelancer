@@ -75,11 +75,11 @@ public partial class Player : CharacterBody2D
         PopulateDebugLabel(ref _navLabel);
         PositionDebugLabel(_navLabel, 35, 125);
         
-        _navLabel.Text = $"{_navComputer.Name ?? "No Nav Computer"}";
+        _navLabel.Text = $"{NavComputer.Name ?? "No Nav Computer"}";
         
-        if (_navComputer is null)
+        if (NavComputer is null)
             _navLabel.AddThemeColorOverride("font_color", Colors.Red);
-        else if (_navComputer.GetType() == typeof(PlayerNavigation))
+        else if (NavComputer.GetType() == typeof(PlayerNavigation))
             _navLabel.AddThemeColorOverride("font_color", Colors.Green);
         else
             _navLabel.AddThemeColorOverride("font_color", Colors.Orange);

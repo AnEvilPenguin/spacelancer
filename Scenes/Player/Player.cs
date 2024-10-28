@@ -5,11 +5,11 @@ public partial class Player : CharacterBody2D
 {
 	public const float MaxSpeed = 150.0f;
 
-	private INavigationSoftware _navComputer;
+	public INavigationSoftware NavComputer;
 
 	public override void _Ready()
 	{
-		_navComputer = new PlayerNavigation(this);
+		NavComputer = new PlayerNavigation(this);
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -17,7 +17,7 @@ public partial class Player : CharacterBody2D
 		DebugNav();
 		
 		// TODO work out what a sensible max rotation is
-		Rotation = _navComputer.GetRotation(0);
+		Rotation = NavComputer.GetRotation(0);
 		DebugRotation();
 		
 		ProcessVelocity();
@@ -28,7 +28,7 @@ public partial class Player : CharacterBody2D
 
 	private void ProcessVelocity()
 	{
-		var velocity = _navComputer.GetVelocity(MaxSpeed);
+		var velocity = NavComputer.GetVelocity(MaxSpeed);
 
 		var acceleration = velocity - Velocity;
 		DebugAcceleration(acceleration);
