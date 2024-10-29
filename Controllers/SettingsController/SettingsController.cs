@@ -31,6 +31,7 @@ internal sealed class SettingsController
         Load();
     }
 
+    // TODO Move file loading to util file 
     public static void Load()
     {
         var fullPath = Path.Combine(Constants.FolderPath, _fileName);
