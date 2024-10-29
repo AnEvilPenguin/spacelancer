@@ -20,8 +20,6 @@ public class CargoHold
     }
     
     public IEnumerable<CommodityType> GetCargoContents() => _cargoHold.Keys;
-    
-    public bool HasCargoContents(CommodityType type) => _cargoHold.ContainsKey(type);
 
     public int GetUnusedCapacity() =>
         _cargoHold.Values.Aggregate(Capacity, (acc, cur) => acc - cur.GetVolume());
@@ -49,8 +47,7 @@ public class CargoHold
         
         _cargoHold[type] = value;
     }
-        
-
+    
     public void RemoveFromCargoHold(CommodityType type)
     {
         if (_cargoHold.ContainsKey(type))
