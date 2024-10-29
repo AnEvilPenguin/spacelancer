@@ -3,4 +3,5 @@
 public enum CommoditySize
 {
     Small,
+    Medium
 }

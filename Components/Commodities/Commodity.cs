@@ -14,4 +14,11 @@ public sealed class Commodity
         Quantity = quantity;
         PurchasePrice = purchasePrice;
     }
+    
+    public int GetVolume() =>
+        Size switch
+        {
+            CommoditySize.Medium => Quantity * 5,
+            _ => Quantity
+        };
 }
