@@ -1,5 +1,8 @@
 ﻿namespace Spacelancer.Components.Commodities;
 
+// TODO consider reworking this entirely.
+// A Class for each commodity type
+
 public sealed class Commodity
 {
     public CommoditySize Size { get; private set; }

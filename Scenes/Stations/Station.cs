@@ -1,11 +1,15 @@
+using System.Collections.Generic;
 using Godot;
 using Serilog;
+using Spacelancer.Components.Commodities;
 
 public partial class Station : Node2D
 {
 	// We may need to consider making this docking range if we make a map and remote comms or something
 	private bool _playerInCommsRange = false;
 	StationMenu _menu;
+
+	private Dictionary<CommodityType, int> _comodityList = new Dictionary<CommodityType, int>();
 	
 	public override void _Ready()
 	{
@@ -24,9 +28,11 @@ public partial class Station : Node2D
 		{
 			Log.Debug("Comms initiated with {StationName}", Name);
 			_menu = Global.GameController.LoadScene<StationMenu>("res://Scenes/UI/StationMenu/station_menu.tscn");
-			_menu.ShowMenu();
+			_menu.ShowMenu(this);
 		}
 	}
+
+	public void OverrideCommodityPrice(CommodityType commodity, int price) => _comodityList[commodity] = price;
 
 	private void OnStationAreaEntered(Node2D body)
 	{

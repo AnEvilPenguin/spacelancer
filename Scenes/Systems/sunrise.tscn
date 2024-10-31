@@ -1,12 +1,14 @@
-[gd_scene load_steps=6 format=3 uid="uid://c4mljrynnxorl"]
+[gd_scene load_steps=7 format=3 uid="uid://c4mljrynnxorl"]
 
 [ext_resource type="PackedScene" uid="uid://dtfjhrdepulhe" path="res://Scenes/Stations/station.tscn" id="1_2nu3c"]
+[ext_resource type="Script" path="res://Scenes/Systems/Sunrise.cs" id="1_p6squ"]
 [ext_resource type="Texture2D" uid="uid://bhb8wpv2cyhtn" path="res://Assets/Placeholder Art/spaceStation_026.png" id="2_6v7le"]
 [ext_resource type="Texture2D" uid="uid://p8j5qfmaqx6n" path="res://Assets/Placeholder Art/spaceStation_017.png" id="2_835pb"]
 [ext_resource type="Texture2D" uid="uid://gmqsa67ro2nm" path="res://Assets/Placeholder Art/spaceStation_030.png" id="4_di71g"]
 [ext_resource type="PackedScene" uid="uid://c5ncrwmqu6r64" path="res://Scenes/Spacelane/spacelane.tscn" id="6_pf0hb"]
 
 [node name="Sunrise" type="Node2D"]
+script = ExtResource("1_p6squ")
 
 [node name="Station1" parent="." instance=ExtResource("1_2nu3c")]
 

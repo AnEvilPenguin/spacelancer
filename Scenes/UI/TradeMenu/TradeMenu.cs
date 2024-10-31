@@ -6,6 +6,8 @@ public partial class TradeMenu : CenterContainer
 	[Signal]
 	public delegate void ClosingEventHandler();
 	
+	private Station _selectedStation;
+	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -15,7 +17,12 @@ public partial class TradeMenu : CenterContainer
 		{
 			Visible = false;
 			EmitSignal(SignalName.Closing);
-			QueueFree();
 		};
+		
+		// TODO get player inventory and add them to the list.
+		// TODO get station inventory and add it to the list.
 	}
+	
+	public void SetStation(Station station) =>
+		_selectedStation = station;
 }

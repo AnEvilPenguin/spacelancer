@@ -3,7 +3,8 @@ using System;
 
 public partial class StationMenu : CenterContainer
 {
-
+	private Station _selectedStation;
+	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -18,7 +19,7 @@ public partial class StationMenu : CenterContainer
 		ProcessMode = ProcessModeEnum.Always;
 	}
 
-	public void ShowMenu()
+	public void ShowMenu(Station station)
 	{
 		Visible = true;
 		GetTree().Paused = true;
@@ -34,6 +35,8 @@ public partial class StationMenu : CenterContainer
 	{
 		Visible = false;
 		var tradeMenu = Global.GameController.LoadScene<TradeMenu>("res://Scenes/UI/TradeMenu/trade_menu.tscn");
+		
+		tradeMenu.SetStation(_selectedStation);
 		tradeMenu.Closing += () =>
 			Visible = true;
 	}
