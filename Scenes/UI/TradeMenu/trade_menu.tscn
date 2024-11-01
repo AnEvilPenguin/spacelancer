@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://8tar0ticwja7"]
+[gd_scene load_steps=3 format=3 uid="uid://8tar0ticwja7"]
 
 [ext_resource type="Script" path="res://Scenes/UI/TradeMenu/TradeMenu.cs" id="1_onqm3"]
+[ext_resource type="PackedScene" uid="uid://d0upo2stidynu" path="res://Scenes/UI/TradeMenu/TradeAction/trade_action.tscn" id="2_khkfr"]
 
 [node name="TradeMenu" type="CenterContainer"]
 process_mode = 3
@@ -42,7 +43,11 @@ fixed_icon_size = Vector2i(75, 75)
 
 [node name="OperationPanel" type="PanelContainer" parent="PanelContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+
+[node name="TradeAction" parent="PanelContainer/VBoxContainer/HBoxContainer/OperationPanel" instance=ExtResource("2_khkfr")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="StationPanel" type="PanelContainer" parent="PanelContainer/VBoxContainer/HBoxContainer"]

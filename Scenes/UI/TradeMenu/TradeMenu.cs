@@ -12,6 +12,7 @@ public partial class TradeMenu : CenterContainer
 	private Station _selectedStation;
 	private ItemList _sellerItemList;
 	private Label _descriptionLabel;
+	private TradeAction _tradeAction;
 	
 	private Dictionary<int, Tuple<Commodity, int>> _commodities = new ();
 	
@@ -26,12 +27,15 @@ public partial class TradeMenu : CenterContainer
 		_sellerItemList = GetNode<ItemList>("%StationPanel/VBoxContainer/ItemList");
 		_sellerItemList.ItemSelected += OnItemSelected;
 		
+		_tradeAction = GetNode<TradeAction>("%TradeAction");
+		
 		leaveButton.Pressed += () =>
 		{
 			Visible = false;
 			
 			_sellerItemList.Clear();
 			_descriptionLabel.Text = defaultText;
+			_tradeAction.Visible = false;
 			
 			EmitSignal(SignalName.Closing);
 		};
@@ -72,6 +76,10 @@ public partial class TradeMenu : CenterContainer
 		label.AppendLine(commodity.Description);
 		
 		_descriptionLabel.Text = label.ToString();
+
+		var maxQuantity = commodity.GetQuantityFromVolume(Global.Player.Hold.GetUnusedCapacity());
+		
+		_tradeAction.SetBuyFromStation(commodity, maxQuantity, amount);
 	}
 		
 }
