@@ -114,7 +114,7 @@ public partial class TradeAction : Control
 
 	private void BuyFromStation()
 	{
-		// TODO check that we have enough cash
+		// TODO check that we have enough cash?
 		
 		var hold = Global.Player.Hold;
 		
@@ -125,6 +125,8 @@ public partial class TradeAction : Control
 		var count = (int)_hSlider.Value;
 		var totalPrice = _currentPrice * count;
 
+		Global.Player.Credits -= totalPrice;
+		
 		var newStack = new CommodityStack(_currentCommodity, count, totalPrice);
 
 		if (stack == null)
@@ -134,6 +136,7 @@ public partial class TradeAction : Control
 			return;
 		}
 		
+		hold.RemoveFromCargoHold(_currentCommodity.Name);
 		var combinedStack = stack.CombineStack(newStack);
 		
 		hold.SetToCargoHold(_currentCommodity.Name, combinedStack);
