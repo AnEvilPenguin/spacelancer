@@ -11,7 +11,7 @@ public class CargoHold
     public CommoditySize SizeClass { get; private set; }
     public int Capacity { get; private set; }
 
-    private readonly Dictionary<CommodityType, Commodity> _cargoHold = new Dictionary<CommodityType, Commodity>();
+    private readonly Dictionary<string, CommodityStack> _cargoHold = new Dictionary<string, CommodityStack>();
 
     public CargoHold(CommoditySize sizeClass, int capacity)
     {
@@ -19,20 +19,22 @@ public class CargoHold
         Capacity = capacity;
     }
     
-    public IEnumerable<CommodityType> GetCargoContents() => _cargoHold.Keys;
+    public IEnumerable<string> GetCargoContents() => _cargoHold.Keys;
 
     public int GetUnusedCapacity() =>
         _cargoHold.Values.Aggregate(Capacity, (acc, cur) => acc - cur.GetVolume());
 
-    public Commodity GetFromCargoHold(CommodityType type) =>
+    public CommodityStack GetFromCargoHold(string type) =>
         _cargoHold.GetValueOrDefault(type);
     
-    public void SetToCargoHold(CommodityType type, Commodity value)
+    public void SetToCargoHold(string type, CommodityStack value)
     {
-        if (value.Size > SizeClass)
+        var commodity = value.Commodity;
+        
+        if (commodity.Size > SizeClass)
         {
-            Log.Error("{Cargo} of size {SizeClass} is too large to fit in cargo hold of {HoldSize}", value.Type, value.Size, SizeClass);
-            throw new ArgumentOutOfRangeException($"{value.Type} of size {value.Size} is too large to fit in cargo hold of {SizeClass}");
+            Log.Error("{Cargo} of size {SizeClass} is too large to fit in cargo hold of {HoldSize}", commodity.Name, commodity.Size, SizeClass);
+            throw new ArgumentOutOfRangeException($"{commodity.Name} of size {commodity.Size} is too large to fit in cargo hold of {SizeClass}");
         }
 
         var cargoVolume = value.GetVolume();
@@ -40,15 +42,15 @@ public class CargoHold
         
         if (cargoVolume > unusedCapacity)
         {
-            Log.Error("{Cargo} of volume {CargoVolume} exceeds the free capacity of {UnusedCapacity}", value.Type, cargoVolume, unusedCapacity);
+            Log.Error("{Cargo} of volume {CargoVolume} exceeds the free capacity of {UnusedCapacity}", commodity.Name, cargoVolume, unusedCapacity);
             throw new ArgumentOutOfRangeException(
-                $"{value.Type} of volume {cargoVolume} exceeds the free capacity of {unusedCapacity}");
+                $"{commodity.Name} of volume {cargoVolume} exceeds the free capacity of {unusedCapacity}");
         }
         
         _cargoHold[type] = value;
     }
     
-    public void RemoveFromCargoHold(CommodityType type)
+    public void RemoveFromCargoHold(string type)
     {
         if (_cargoHold.ContainsKey(type))
             _cargoHold.Remove(type);

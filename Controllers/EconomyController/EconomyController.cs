@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
 using Spacelancer.Components.Commodities;
 
 namespace Spacelancer.Controllers.EconomyController;
@@ -11,10 +11,5 @@ public class EconomyController
     // Have a default price per commodity
     // Have specific overrides for specific stations
 
-    public static int GetDefaultPrice(CommodityType type) =>
-        type switch
-        {
-            CommodityType.EnergyCell => 8,
-            _ => throw new InvalidEnumArgumentException($"Invalid commodity type {type}")
-        };
+    
 }

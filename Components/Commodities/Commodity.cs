@@ -1,27 +1,13 @@
-﻿namespace Spacelancer.Components.Commodities;
+﻿using Godot;
 
-// TODO consider reworking this entirely.
-// A Class for each commodity type
+namespace Spacelancer.Components.Commodities;
 
-public sealed class Commodity
+public abstract class Commodity
 {
-    public CommoditySize Size { get; private set; }
-    public CommodityType Type { get; private set; }
-    public int Quantity { get; private set; }
-    public int PurchasePrice { get; private set; }
-
-    public Commodity(CommoditySize size, CommodityType type, int quantity, int purchasePrice)
-    {
-        Size = size;
-        Type = type;
-        Quantity = quantity;
-        PurchasePrice = purchasePrice;
-    }
+    public abstract CommoditySize Size { get; }
+    public abstract string Name { get; }
+    public abstract int DefaultPrice { get; }
+    public abstract string Description { get; }
     
-    public int GetVolume() =>
-        Size switch
-        {
-            CommoditySize.Medium => Quantity * 5,
-            _ => Quantity
-        };
+    public abstract Texture2D Texture { get;  }
 }
