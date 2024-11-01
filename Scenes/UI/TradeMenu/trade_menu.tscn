@@ -35,6 +35,11 @@ layout_mode = 2
 layout_mode = 2
 text = "Player"
 
+[node name="ItemList" type="ItemList" parent="PanelContainer/VBoxContainer/HBoxContainer/PlayerPanel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 400)
+layout_mode = 2
+fixed_icon_size = Vector2i(75, 75)
+
 [node name="OperationPanel" type="PanelContainer" parent="PanelContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
@@ -52,10 +57,17 @@ layout_mode = 2
 layout_mode = 2
 text = "Commodity"
 
+[node name="ItemList" type="ItemList" parent="PanelContainer/VBoxContainer/HBoxContainer/StationPanel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 400)
+layout_mode = 2
+fixed_column_width = 125
+fixed_icon_size = Vector2i(75, 75)
+
 [node name="Panel" type="PanelContainer" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/Panel"]
+[node name="DescriptionLabel" type="Label" parent="PanelContainer/VBoxContainer/Panel"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "A summary of whatever the hell is going on"
 
