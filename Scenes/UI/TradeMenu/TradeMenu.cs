@@ -14,7 +14,7 @@ public partial class TradeMenu : CenterContainer
 	private Label _descriptionLabel;
 	private TradeAction _tradeAction;
 	
-	private Dictionary<int, Tuple<Commodity, int>> _commodities = new ();
+	private Dictionary<int, Tuple<Commodity, int>> _stationComodities = new ();
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -25,7 +25,7 @@ public partial class TradeMenu : CenterContainer
 		var defaultText = _descriptionLabel.Text;
 		
 		_sellerItemList = GetNode<ItemList>("%StationPanel/VBoxContainer/ItemList");
-		_sellerItemList.ItemSelected += OnItemSelected;
+		_sellerItemList.ItemSelected += (long value) => OnItemSelected(value, _stationComodities);
 		
 		_tradeAction = GetNode<TradeAction>("%TradeAction");
 		
@@ -36,7 +36,7 @@ public partial class TradeMenu : CenterContainer
 			_sellerItemList.Clear();
 			_descriptionLabel.Text = defaultText;
 			_tradeAction.Visible = false;
-			_commodities.Clear();
+			_stationComodities.Clear();
 			
 			EmitSignal(SignalName.Closing);
 		};
@@ -58,14 +58,14 @@ public partial class TradeMenu : CenterContainer
 		{
 			var tuple = commodities[i];
 			
-			_commodities.Add(i, tuple);
+			_stationComodities.Add(i, tuple);
 			_sellerItemList.AddItem($"{tuple.Item1.Name}\n{tuple.Item2} credits", tuple.Item1.Texture);
 		}
 	}
 
-	private void OnItemSelected(long index)
+	private void OnItemSelected(long index, Dictionary<int, Tuple<Commodity, int>> commodities)
 	{
-		var tuple = _commodities[(int)index];
+		var tuple = commodities[(int)index];
 		var commodity = tuple.Item1;
 		var amount = tuple.Item2;
 		
