@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 using Serilog;
@@ -7,9 +8,10 @@ public partial class Station : Node2D
 {
 	// We may need to consider making this docking range if we make a map and remote comms or something
 	private bool _playerInCommsRange = false;
-	StationMenu _menu;
-
-	private Dictionary<CommodityType, int> _comodityList = new Dictionary<CommodityType, int>();
+	private StationMenu _menu;
+	
+	private List<Tuple<Commodity, int>> _commoditiesForSale = new List<Tuple<Commodity, int>>();
+	private Dictionary<Commodity, int> _commodityBuyPriceOverride = new Dictionary<Commodity, int>();
 	
 	public override void _Ready()
 	{
@@ -32,7 +34,17 @@ public partial class Station : Node2D
 		}
 	}
 
-	public void OverrideCommodityPrice(CommodityType commodity, int price) => _comodityList[commodity] = price;
+	public void AddCommodityForSale(Commodity commodity) =>
+		AddCommodityForSale(commodity, commodity.DefaultPrice);
+
+	public void AddCommodityForSale(Commodity commodity, int price) =>
+		_commoditiesForSale.Add(new Tuple<Commodity, int>(commodity, price));
+
+	public void AddCommodityToBuy(Commodity commodity, int price) =>
+		_commodityBuyPriceOverride.Add(commodity, price);
+
+	public List<Tuple<Commodity, int>> GetCommodityForSale() => 
+		new List<Tuple<Commodity, int>>(_commoditiesForSale);
 
 	private void OnStationAreaEntered(Node2D body)
 	{

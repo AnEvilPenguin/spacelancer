@@ -23,6 +23,8 @@ public partial class StationMenu : CenterContainer
 	{
 		Visible = true;
 		GetTree().Paused = true;
+		
+		_selectedStation = station;
 	}
 
 	private void OnLeaveButtonPressed()
@@ -35,6 +37,7 @@ public partial class StationMenu : CenterContainer
 	{
 		Visible = false;
 		var tradeMenu = Global.GameController.LoadScene<TradeMenu>("res://Scenes/UI/TradeMenu/trade_menu.tscn");
+		tradeMenu.Visible = true;
 		
 		tradeMenu.SetStation(_selectedStation);
 		tradeMenu.Closing += () =>
