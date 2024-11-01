@@ -76,10 +76,8 @@ public partial class TradeMenu : CenterContainer
 		label.AppendLine(commodity.Description);
 		
 		_descriptionLabel.Text = label.ToString();
-
-		var maxQuantity = commodity.GetQuantityFromVolume(Global.Player.Hold.GetUnusedCapacity());
 		
-		_tradeAction.SetBuyFromStation(commodity, maxQuantity, amount);
+		_tradeAction.SetBuyFromStation(commodity, amount);
 	}
 		
 }
