@@ -36,6 +36,7 @@ public partial class TradeMenu : CenterContainer
 			_sellerItemList.Clear();
 			_descriptionLabel.Text = defaultText;
 			_tradeAction.Visible = false;
+			_commodities.Clear();
 			
 			EmitSignal(SignalName.Closing);
 		};

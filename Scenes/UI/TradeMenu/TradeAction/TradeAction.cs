@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using Serilog;
 using Spacelancer.Components.Commodities;
@@ -43,6 +44,7 @@ public partial class TradeAction : Control
 		_action.Text = "<-- Buy";
 		
 		_hSlider.Value = 0;
+		_hSlider.Editable = true;
 		SetBuySliderMax();
 		
 		_quantity.Text = "Quantity: 0";
@@ -62,9 +64,11 @@ public partial class TradeAction : Control
 		_selling = true;
 		
 		_action.Text = "Sell -->";
+		_action.Disabled = false;
 		
 		_hSlider.Value = 0;
 		_hSlider.MaxValue = stack.Count;
+		_hSlider.Editable = true;
 		
 		_quantity.Text = "Quantity: 0";
 		_price.Text = $"Price: {price}";
@@ -76,14 +80,20 @@ public partial class TradeAction : Control
 
 	private void SetBuySliderMax()
 	{
-		// TODO check that we have enough cash
-		
 		var hold = Global.Player.Hold;
+
+		var cash = Global.Player.Credits;
+		var canAfford = cash / _currentPrice;
 
 		var unusedCapacity = hold.GetUnusedCapacity();
 		var maxQuantity = _currentCommodity.GetQuantityFromVolume(unusedCapacity);
 		
-		_hSlider.MaxValue = maxQuantity;
+		_hSlider.MaxValue = Math.Min(maxQuantity, canAfford);
+		if (_hSlider.MaxValue == 0)
+		{
+			_action.Disabled = true;
+			_hSlider.Editable = false;
+		}
 	}
 
 	private void OnTradeActionButtonPressed()
