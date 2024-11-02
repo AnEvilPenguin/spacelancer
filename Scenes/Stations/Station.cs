@@ -46,6 +46,14 @@ public partial class Station : Node2D
 	public List<Tuple<Commodity, int>> GetCommodityForSale() => 
 		new List<Tuple<Commodity, int>>(_commoditiesForSale);
 
+	public int GetCommodityToBuyPrice(Commodity commodity)
+	{
+		if (_commodityBuyPriceOverride.TryGetValue(commodity, out int price))
+			return price;
+		
+		return commodity.DefaultPrice;
+	}
+
 	private void OnStationAreaEntered(Node2D body)
 	{
 		if (body is Player)

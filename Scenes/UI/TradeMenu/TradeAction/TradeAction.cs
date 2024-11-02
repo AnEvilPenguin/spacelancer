@@ -99,17 +99,17 @@ public partial class TradeAction : Control
 	private void OnTradeActionButtonPressed()
 	{
 		if (_selling)
-		{
 			SellToStation();
-			return;
-		}
-
-		BuyFromStation();
+		else
+			BuyFromStation();
+		
+		// TODO signal up to reevaluate UI
 	}
 		
 
 	private void SellToStation()
 	{
+		// TODO actually sell to station
 	}
 
 	private void BuyFromStation()
