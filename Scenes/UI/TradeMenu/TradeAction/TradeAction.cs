@@ -110,6 +110,11 @@ public partial class TradeAction : Control
 	private void SellToStation()
 	{
 		// TODO actually sell to station
+		// TODO move this off to the parent menu.
+		// Make player and station lists their own component
+		// Make each item card its own component
+		// Signal up to the trade menu to actually get things to happen
+		// Trade menu pushes changes down into the subcomponents.
 	}
 
 	private void BuyFromStation()
