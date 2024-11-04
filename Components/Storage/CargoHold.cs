@@ -23,6 +23,9 @@ public class CargoHold
 
     public int GetUnusedCapacity() =>
         _cargoHold.Values.Aggregate(Capacity, (acc, cur) => acc - cur.GetVolume());
+    
+    public int CheckCapacity(Commodity commodity) =>
+        commodity.GetQuantityFromVolume(GetUnusedCapacity());
 
     public CommodityStack GetFromCargoHold(string type) =>
         _cargoHold.GetValueOrDefault(type);
@@ -45,6 +48,12 @@ public class CargoHold
             Log.Error("{Cargo} of volume {CargoVolume} exceeds the free capacity of {UnusedCapacity}", commodity.Name, cargoVolume, unusedCapacity);
             throw new ArgumentOutOfRangeException(
                 $"{commodity.Name} of volume {cargoVolume} exceeds the free capacity of {unusedCapacity}");
+        }
+
+        if (_cargoHold.TryGetValue(type, out var stack))
+        {
+            value = value.CombineStack(stack);
+            _cargoHold.Remove(type);
         }
         
         _cargoHold[type] = value;

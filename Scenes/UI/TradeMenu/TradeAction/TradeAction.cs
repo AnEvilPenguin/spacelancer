@@ -5,7 +5,7 @@ using Spacelancer.Components.Commodities;
 
 public partial class TradeAction : Control
 {
-	private Button _action;
+	private Button _button;
 	private TextureRect _texture;
 	private Label _name;
 	private HSlider _hSlider;
@@ -17,12 +17,14 @@ public partial class TradeAction : Control
 	private Commodity _currentCommodity;
 	private int _currentPrice;
 	private bool _selling;
+
+	private Action<int> _action;
 	
 	public override void _Ready()
 	{
 		Visible = false;
 		
-		_action = GetNode<Button>("%Action");
+		_button = GetNode<Button>("%Action");
 		_hSlider = GetNode<HSlider>("%HSlider");
 		_texture = GetNode<TextureRect>("%Texture");
 		_name = GetNode<Label>("%Name");
@@ -30,54 +32,64 @@ public partial class TradeAction : Control
 		_price = GetNode<Label>("%Price");
 		_total = GetNode<Label>("%Total");
 
-		_action.Pressed += OnTradeActionButtonPressed;
+		_button.Pressed += OnTradeButtonButtonPressed;
 		_hSlider.ValueChanged += OnSliderValueChanged;
 	}
 
-	public void SetBuyFromStation(Commodity commodity, int price)
+	public void Reset()
 	{
-		Visible = true;
-		_currentCommodity = commodity;
-		_currentPrice = price;
-		_selling = false;
+		Visible = false;
+		_button.Disabled = true;
 		
-		_action.Text = "<-- Buy";
-		
-		_hSlider.Value = 0;
-		_hSlider.Editable = true;
-		SetBuySliderMax();
-		
-		_quantity.Text = "Quantity: 0";
-		_price.Text = $"Price: {price}";
-		_total.Text = "Total: 0";
-		
-		_texture.Texture = commodity.Texture;
-		_name.Text = commodity.Name;
-	}
-	
-	// TODO consider changing this to a CommodityStack and putting profit label back in
-	public void SetSellToStation(CommodityStack stack, int price)
-	{
-		Visible = true;
-		_currentCommodity = stack.Commodity;
-		_currentPrice = price;
-		_selling = true;
-		
-		_action.Text = "Sell -->";
-		_action.Disabled = false;
-		
-		_hSlider.Value = 0;
-		_hSlider.MaxValue = stack.Count;
-		_hSlider.Editable = true;
-		
-		_quantity.Text = "Quantity: 0";
-		_price.Text = $"Price: {price}";
-		_total.Text = "Total: 0";
-		
-		_texture.Texture = _currentCommodity.Texture;
-		_name.Text = _currentCommodity.Name;
+		_currentCommodity = null;
 	}
 
+	/// <summary>
+	/// Sets the current behaviour of the component
+	/// </summary>
+	/// <param name="commodity">The commodity being bought/sold</param>
+	/// <param name="price">The price of the commodity</param>
+	/// <param name="action">
+	///		An action to be executed when the button is pressed
+	///		<param name="action arg1">Quantity</param>
+	/// </param>
+	/// <param name="buttonText">The label applied to the button</param>
+	/// <param name="sliderMax">The maximum value of the slider</param>
+	public void SetAction(Commodity commodity, int price, Action<int> action, string buttonText, int sliderMax)
+	{
+		Visible = true;
+		
+		_button.Disabled = false;
+		_action = action;
+		
+		_currentCommodity = commodity;
+		_currentPrice = price;
+		
+		_button.Text = buttonText;
+		
+		_hSlider.Value = 0;
+		_hSlider.MaxValue = sliderMax;
+		_hSlider.Editable = true;
+		
+		_quantity.Text = "Quantity: 0";
+		_price.Text = $"Price: {price}";
+		_total.Text = "Total: 0";
+	}
+	
+	public void SetSliderMax(int max) => 
+		_hSlider.MaxValue = max;
+	
+	private void OnTradeButtonButtonPressed() =>
+		_action((int)_hSlider.Value);
+	
+	private void OnSliderValueChanged(double value)
+	{
+		_quantity.Text = $"Quantity: {(int)value}";
+		_total.Text = $"Total: {(int)value * _currentPrice}";
+	}
+	
+	// TODO clean this up on re-implementation
+	/*
 	private void SetBuySliderMax()
 	{
 		var hold = Global.Player.Hold;
@@ -91,31 +103,13 @@ public partial class TradeAction : Control
 		_hSlider.MaxValue = Math.Min(maxQuantity, canAfford);
 		if (_hSlider.MaxValue == 0)
 		{
-			_action.Disabled = true;
+			_button.Disabled = true;
 			_hSlider.Editable = false;
 		}
 	}
-
-	private void OnTradeActionButtonPressed()
-	{
-		if (_selling)
-			SellToStation();
-		else
-			BuyFromStation();
-		
-		// TODO signal up to reevaluate UI
-	}
-		
-
-	private void SellToStation()
-	{
-		// TODO actually sell to station
-		// TODO move this off to the parent menu.
-		// Make player and station lists their own component
-		// Make each item card its own component
-		// Signal up to the trade menu to actually get things to happen
-		// Trade menu pushes changes down into the subcomponents.
-	}
+	*/
+	
+	/*
 
 	private void BuyFromStation()
 	{
@@ -147,10 +141,7 @@ public partial class TradeAction : Control
 		hold.SetToCargoHold(_currentCommodity.Name, combinedStack);
 		SetBuySliderMax();
 	}
+	*/
 
-	private void OnSliderValueChanged(double value)
-	{
-		_quantity.Text = $"Quantity: {(int)value}";
-		_total.Text = $"Total: {(int)value * _currentPrice}";
-	}
+
 }

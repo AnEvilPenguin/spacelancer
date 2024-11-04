@@ -33,6 +33,9 @@ public partial class TradeList : Control
 	public void ClearItemList() =>
 		_itemList.Clear();
 
+	public void DeselectItems() =>
+		_itemList.DeselectAll();
+
 	private void OnItemSelected(long value) =>
 		EmitSignal(SignalName.ItemSelected, (int)value);
 }
