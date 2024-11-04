@@ -39,7 +39,7 @@ public partial class StationMenu : CenterContainer
 		var tradeMenu = Global.GameController.LoadScene<TradeMenu>("res://Scenes/UI/TradeMenu/trade_menu.tscn");
 		tradeMenu.Visible = true;
 		
-		tradeMenu.SetStation(_selectedStation);
+		tradeMenu.LoadMenu(_selectedStation);
 		tradeMenu.Closing += () =>
 			Visible = true;
 	}

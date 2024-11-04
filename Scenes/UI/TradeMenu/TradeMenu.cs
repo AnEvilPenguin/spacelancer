@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Spacelancer.Components.Commodities;
+using Spacelancer.Components.Storage;
 
 public partial class TradeMenu : CenterContainer
 {
@@ -49,13 +50,19 @@ public partial class TradeMenu : CenterContainer
 			
 			EmitSignal(SignalName.Closing);
 		};
-		
-		// TODO get player inventory and add them to the list.
-		// TODO get station inventory and add it to the list.
 	}
 
-	public void SetStation(Station station)
+	public void LoadMenu(Station station)
 	{
+		SetStationMenu(station);
+		SetPlayerMenu(Global.Player.Hold);
+	}
+
+	private void SetStationMenu(Station station)
+	{
+		_sellerTradeList.ClearItemList();
+		_stationComodities.Clear();
+		
 		_selectedStation = station;
 		_sellerTradeList.SetTitle(station.Name);
 
@@ -66,17 +73,20 @@ public partial class TradeMenu : CenterContainer
 			var index = _sellerTradeList.AddItemToList(tuple.Item1, tuple.Item2);
 			_stationComodities.Add(index, tuple);
 		}
-		
-		// TODO extract this to a method and deal with this on load/byt/sell
+	}
 
-		var hold = Global.Player.Hold;
+	private void SetPlayerMenu(CargoHold hold)
+	{
+		_playerTradeList.ClearItemList();
+		_playerComodities.Clear();
+		
 		var holdContents = hold.GetCargoContents().ToList();
 
 		foreach (var item in holdContents)
 		{
 			var stack = hold.GetFromCargoHold(item);
 			
-			var price = station.GetCommodityToBuyPrice(stack.Commodity);
+			var price = _selectedStation.GetCommodityToBuyPrice(stack.Commodity);
 			
 			var index = _playerTradeList.AddItemToList(stack.Commodity, price);
 			_playerComodities.Add(index, new Tuple<CommodityStack, int>(stack, price));
@@ -118,5 +128,4 @@ public partial class TradeMenu : CenterContainer
 		
 		_tradeAction.SetSellToStation(tuple.Item1, amount);
 	}
-		
 }
