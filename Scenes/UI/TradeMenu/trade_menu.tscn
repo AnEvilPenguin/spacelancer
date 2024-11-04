@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://8tar0ticwja7"]
+[gd_scene load_steps=5 format=3 uid="uid://8tar0ticwja7"]
 
 [ext_resource type="Script" path="res://Scenes/UI/TradeMenu/TradeMenu.cs" id="1_onqm3"]
 [ext_resource type="PackedScene" uid="uid://d0upo2stidynu" path="res://Scenes/UI/TradeMenu/TradeAction/trade_action.tscn" id="2_khkfr"]
 [ext_resource type="PackedScene" uid="uid://xwvk678nmisa" path="res://Scenes/UI/TradeMenu/TradeList/trade_list.tscn" id="2_ralce"]
+[ext_resource type="PackedScene" uid="uid://bmhj2qkgqaolh" path="res://Scenes/UI/TradeMenu/TradeDescription/trade_description.tscn" id="4_fxxup"]
 
 [node name="TradeMenu" type="CenterContainer"]
 process_mode = 3
@@ -45,13 +46,9 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 
-[node name="Panel" type="PanelContainer" parent="PanelContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="DescriptionLabel" type="Label" parent="PanelContainer/VBoxContainer/Panel"]
+[node name="TradeDescription" parent="PanelContainer/VBoxContainer" instance=ExtResource("4_fxxup")]
 unique_name_in_owner = true
 layout_mode = 2
-text = "A summary of whatever the hell is going on"
 
 [node name="LeaveButton" type="Button" parent="PanelContainer/VBoxContainer"]
 unique_name_in_owner = true

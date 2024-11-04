@@ -14,8 +14,8 @@ public partial class TradeMenu : CenterContainer
 	private Station _selectedStation;
 	private TradeList _sellerTradeList;
 	private TradeList _playerTradeList;
-	private Label _descriptionLabel;
 	private TradeAction _tradeAction;
+	private TradeDescription _tradeDescription;
 	
 	private Dictionary<int, Tuple<Commodity, int>> _stationComodities = new ();
 	private Dictionary<int, Tuple<CommodityStack, int>> _playerComodities = new ();
@@ -25,9 +25,6 @@ public partial class TradeMenu : CenterContainer
 	{
 		var leaveButton = GetNode<Button>("%LeaveButton");
 		
-		_descriptionLabel = GetNode<Label>("%DescriptionLabel");
-		var defaultText = _descriptionLabel.Text;
-		
 		_sellerTradeList = GetNode<TradeList>("%StationTradeList");
 		_sellerTradeList.ItemSelected += OnTradeSellSelected;
 		
@@ -36,6 +33,7 @@ public partial class TradeMenu : CenterContainer
 		_playerTradeList.SetTitle("Player");
 		
 		_tradeAction = GetNode<TradeAction>("%TradeAction");
+		_tradeDescription = GetNode<TradeDescription>("%TradeDescription");
 		
 		leaveButton.Pressed += () =>
 		{
@@ -44,9 +42,10 @@ public partial class TradeMenu : CenterContainer
 			_sellerTradeList.ClearItemList();
 			_playerTradeList.ClearItemList();
 			
-			_descriptionLabel.Text = defaultText;
 			_tradeAction.Visible = false;
 			_stationComodities.Clear();
+			
+			_tradeDescription.Reset();
 			
 			EmitSignal(SignalName.Closing);
 		};
@@ -93,6 +92,8 @@ public partial class TradeMenu : CenterContainer
 		}
 	}
 
+	// FIXME pull out description component and just feed it a component
+	// Unify these functions, let the action component do the heavy lifting
 	private void OnTradeSellSelected(int index)
 	{
 		var tuple = _stationComodities[(int)index];
@@ -100,14 +101,7 @@ public partial class TradeMenu : CenterContainer
 		var amount = tuple.Item2;
 		
 
-		var label = new StringBuilder();
-		label.AppendLine(commodity.Name);
-		label.AppendLine($"Price: {amount} credits");
-		label.AppendLine();
-		label.AppendLine(commodity.Description);
-		
-		_descriptionLabel.Text = label.ToString();
-		
+		_tradeDescription.SetTradeDetails(commodity, amount);
 		_tradeAction.SetBuyFromStation(commodity, amount);
 	}
 	
@@ -117,15 +111,7 @@ public partial class TradeMenu : CenterContainer
 		var commodity = tuple.Item1.Commodity;
 		var amount = tuple.Item2;
 		
-
-		var label = new StringBuilder();
-		label.AppendLine(commodity.Name);
-		label.AppendLine($"Price: {amount} credits");
-		label.AppendLine();
-		label.AppendLine(commodity.Description);
-		
-		_descriptionLabel.Text = label.ToString();
-		
+		_tradeDescription.SetTradeDetails(commodity, amount);
 		_tradeAction.SetSellToStation(tuple.Item1, amount);
 	}
 }
