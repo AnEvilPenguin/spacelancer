@@ -11,8 +11,8 @@ public partial class TradeMenu : CenterContainer
 	public delegate void ClosingEventHandler();
 	
 	private Station _selectedStation;
-	private ItemList _sellerItemList;
-	private ItemList _playerItemList;
+	private TradeList _sellerTradeList;
+	private TradeList _playerTradeList;
 	private Label _descriptionLabel;
 	private TradeAction _tradeAction;
 	
@@ -27,11 +27,12 @@ public partial class TradeMenu : CenterContainer
 		_descriptionLabel = GetNode<Label>("%DescriptionLabel");
 		var defaultText = _descriptionLabel.Text;
 		
-		_sellerItemList = GetNode<ItemList>("%StationPanel/VBoxContainer/ItemList");
-		_sellerItemList.ItemSelected += OnItemSellSelected;
+		_sellerTradeList = GetNode<TradeList>("%StationTradeList");
+		_sellerTradeList.ItemSelected += OnTradeSellSelected;
 		
-		_playerItemList = GetNode<ItemList>("%PlayerPanel/VBoxContainer/ItemList");
-		_playerItemList.ItemSelected += OnItemBuySelected;
+		_playerTradeList = GetNode<TradeList>("%PlayerTradeList");
+		_playerTradeList.ItemSelected += OnTradeBuySelected;
+		_playerTradeList.SetTitle("Player");
 		
 		_tradeAction = GetNode<TradeAction>("%TradeAction");
 		
@@ -39,7 +40,9 @@ public partial class TradeMenu : CenterContainer
 		{
 			Visible = false;
 			
-			_sellerItemList.Clear();
+			_sellerTradeList.ClearItemList();
+			_playerTradeList.ClearItemList();
+			
 			_descriptionLabel.Text = defaultText;
 			_tradeAction.Visible = false;
 			_stationComodities.Clear();
@@ -54,18 +57,14 @@ public partial class TradeMenu : CenterContainer
 	public void SetStation(Station station)
 	{
 		_selectedStation = station;
-		
-		var container = GetNode<VBoxContainer>("%StationPanel/VBoxContainer");
-		container.GetNode<Label>("Label").Text = station.Name;
+		_sellerTradeList.SetTitle(station.Name);
 
 		var commodities = station.GetCommodityForSale();
 
-		for (int i = 0; i < commodities.Count; i++)
+		foreach (var tuple in commodities)
 		{
-			var tuple = commodities[i];
-			
-			_stationComodities.Add(i, tuple);
-			_sellerItemList.AddItem($"{tuple.Item1.Name}\n{tuple.Item2} credits", tuple.Item1.Texture);
+			var index = _sellerTradeList.AddItemToList(tuple.Item1, tuple.Item2);
+			_stationComodities.Add(index, tuple);
 		}
 		
 		// TODO extract this to a method and deal with this on load/byt/sell
@@ -73,20 +72,18 @@ public partial class TradeMenu : CenterContainer
 		var hold = Global.Player.Hold;
 		var holdContents = hold.GetCargoContents().ToList();
 
-		for (int i = 0; i < holdContents.Count; i++)
+		foreach (var item in holdContents)
 		{
-			var type = holdContents[i];
-
-			var stack = hold.GetFromCargoHold(type);
+			var stack = hold.GetFromCargoHold(item);
 			
 			var price = station.GetCommodityToBuyPrice(stack.Commodity);
 			
-			_playerComodities.Add(i, new Tuple<CommodityStack, int>(stack, price));
-			_playerItemList.AddItem($"{stack.Commodity.Name}\n{price} credits", stack.Commodity.Texture);
+			var index = _playerTradeList.AddItemToList(stack.Commodity, price);
+			_playerComodities.Add(index, new Tuple<CommodityStack, int>(stack, price));
 		}
 	}
 
-	private void OnItemSellSelected(long index)
+	private void OnTradeSellSelected(int index)
 	{
 		var tuple = _stationComodities[(int)index];
 		var commodity = tuple.Item1;
@@ -104,7 +101,7 @@ public partial class TradeMenu : CenterContainer
 		_tradeAction.SetBuyFromStation(commodity, amount);
 	}
 	
-	private void OnItemBuySelected(long index)
+	private void OnTradeBuySelected(int index)
 	{
 		var tuple = _playerComodities[(int)index];
 		var commodity = tuple.Item1.Commodity;
