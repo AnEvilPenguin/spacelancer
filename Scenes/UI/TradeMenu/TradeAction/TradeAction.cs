@@ -78,9 +78,17 @@ public partial class TradeAction : Control
 	
 	public void SetSliderMax(int max) => 
 		_hSlider.MaxValue = max;
-	
-	private void OnTradeButtonButtonPressed() =>
+
+	private void OnTradeButtonButtonPressed()
+	{
+		if (_action == null)
+		{
+			Log.Debug("No action assigned to TradeAction");
+			return;
+		}
+		
 		_action((int)_hSlider.Value);
+	}
 	
 	private void OnSliderValueChanged(double value)
 	{
