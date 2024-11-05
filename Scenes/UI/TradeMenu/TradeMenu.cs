@@ -18,8 +18,8 @@ public partial class TradeMenu : CenterContainer
 	private TradeAction _tradeAction;
 	private TradeDescription _tradeDescription;
 	
-	private Dictionary<int, Tuple<Commodity, int>> _stationComodities = new ();
-	private Dictionary<int, Tuple<CommodityStack, int>> _playerComodities = new ();
+	private readonly Dictionary<int, Tuple<Commodity, int>> _stationCommodities = new ();
+	private readonly Dictionary<int, Tuple<CommodityStack, int>> _playerCommodities = new ();
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -44,7 +44,7 @@ public partial class TradeMenu : CenterContainer
 			_playerTradeList.ClearItemList();
 			
 			_tradeAction.Reset();
-			_stationComodities.Clear();
+			_stationCommodities.Clear();
 			
 			_tradeDescription.Reset();
 			
@@ -56,12 +56,13 @@ public partial class TradeMenu : CenterContainer
 	{
 		SetStationMenu(station);
 		SetPlayerMenu(Global.Player.Hold);
+		UpdatePlayerCashLabel();
 	}
 
 	private void SetStationMenu(Station station)
 	{
 		_sellerTradeList.ClearItemList();
-		_stationComodities.Clear();
+		_stationCommodities.Clear();
 		
 		_selectedStation = station;
 		_sellerTradeList.SetTitle(station.Name);
@@ -71,14 +72,14 @@ public partial class TradeMenu : CenterContainer
 		foreach (var tuple in commodities)
 		{
 			var index = _sellerTradeList.AddItemToList(tuple.Item1, tuple.Item2);
-			_stationComodities.Add(index, tuple);
+			_stationCommodities.Add(index, tuple);
 		}
 	}
 
 	private void SetPlayerMenu(CargoHold hold)
 	{
 		_playerTradeList.ClearItemList();
-		_playerComodities.Clear();
+		_playerCommodities.Clear();
 		
 		var holdContents = hold.GetCargoContents().ToList();
 
@@ -89,7 +90,7 @@ public partial class TradeMenu : CenterContainer
 			var price = _selectedStation.GetCommodityToBuyPrice(stack.Commodity);
 			
 			var index = _playerTradeList.AddItemToList(stack.Commodity, price);
-			_playerComodities.Add(index, new Tuple<CommodityStack, int>(stack, price));
+			_playerCommodities.Add(index, new Tuple<CommodityStack, int>(stack, price));
 		}
 	}
 
@@ -101,11 +102,11 @@ public partial class TradeMenu : CenterContainer
 		return Math.Min(canStore, canAfford);
 	}
 	
-	// TODO Unify these functions, let the action component do the heavy lifting
+	// TODO Try to unify these functions, let the action component do the heavy lifting
 	// Also consider what way round we want these named, probably want the player to be the focus
 	private void OnTradeSellSelected(int index)
 	{
-		var tuple = _stationComodities[(int)index];
+		var tuple = _stationCommodities[(int)index];
 		var commodity = tuple.Item1;
 		var price = tuple.Item2;
 		
@@ -139,12 +140,13 @@ public partial class TradeMenu : CenterContainer
 			
 			_tradeAction.SetSliderMax(GetMaxCommodityPurchase(commodity, price));
 			SetPlayerMenu(hold);
+			UpdatePlayerCashLabel();
 		}, "<== Buy", maxPurchaseCount);
 	}
 	
 	private void OnTradeBuySelected(int index)
 	{
-		var tuple = _playerComodities[(int)index];
+		var tuple = _playerCommodities[(int)index];
 		var stack = tuple.Item1;
 		var commodity = stack.Commodity;
 		var price = tuple.Item2;
@@ -152,14 +154,37 @@ public partial class TradeMenu : CenterContainer
 		_sellerTradeList.DeselectItems();
 		
 		_tradeDescription.SetTradeDetails(commodity, price);
-		// FIXME proper action implementation
+
 		_tradeAction.SetAction(commodity, price, (quantity) =>
 		{
 			Log.Debug("Selling {Quantity} {Commodity} at {Price}", quantity, commodity.Name, price);
 			
-			// TODO remove inventory
-			// TODO give player money
-			// TODO trigger ui re-evaluation
+			var player = Global.Player;
+			var hold = player.Hold;
+			
+			var currentStack = hold.GetFromCargoHold(commodity.Name);
+			hold.RemoveFromCargoHold(commodity.Name);
+
+			if (quantity < currentStack.Count)
+			{
+				var newCount = currentStack.Count - quantity;
+				var purchasePrice = (currentStack.PurchasePrice / currentStack.Count) * newCount;
+				var newStack = new CommodityStack(commodity, newCount, purchasePrice);
+
+				hold.SetToCargoHold(commodity.Name, newStack);
+				
+				_tradeAction.SetSliderMax(newCount);
+			}
+			else
+				_tradeAction.SetSliderMax(0);
+			
+			player.Credits += price * quantity;
+			
+			SetPlayerMenu(hold);
+			UpdatePlayerCashLabel();
 		}, "Sell ==>", stack.Count);
 	}
+
+	private void UpdatePlayerCashLabel() =>
+		_playerTradeList.SetTitle($"Player - {Global.Player.Credits} Credits");
 }
