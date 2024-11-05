@@ -21,11 +21,11 @@ position = Vector2(7015, -14)
 [node name="Sprite2D" type="Sprite2D" parent="Station2"]
 texture = ExtResource("2_6v7le")
 
-[node name="JumpGate" type="Node2D" parent="."]
+[node name="JumpGate - Moonshot" type="Node2D" parent="."]
 position = Vector2(0, 7000)
 scale = Vector2(4, 4)
 
-[node name="Sprite2D" type="Sprite2D" parent="JumpGate"]
+[node name="Sprite2D" type="Sprite2D" parent="JumpGate - Moonshot"]
 texture = ExtResource("4_di71g")
 
 [node name="Spacelane1a" parent="." node_paths=PackedStringArray("Partner") instance=ExtResource("6_pf0hb")]

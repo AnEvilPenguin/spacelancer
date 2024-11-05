@@ -37,8 +37,12 @@ public partial class Station : Node2D
 	public void AddCommodityForSale(Commodity commodity) =>
 		AddCommodityForSale(commodity, commodity.DefaultPrice);
 
-	public void AddCommodityForSale(Commodity commodity, int price) =>
+	public void AddCommodityForSale(Commodity commodity, int price)
+	{
 		_commoditiesForSale.Add(new Tuple<Commodity, int>(commodity, price));
+		AddCommodityToBuy(commodity, price);
+	}
+		
 
 	public void AddCommodityToBuy(Commodity commodity, int price) =>
 		_commodityBuyPriceOverride.Add(commodity.Name, price);
