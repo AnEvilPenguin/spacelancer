@@ -92,6 +92,14 @@ public partial class TradeMenu : CenterContainer
 			_playerComodities.Add(index, new Tuple<CommodityStack, int>(stack, price));
 		}
 	}
+
+	private int GetMaxCommodityPurchase(Commodity commodity, int price)
+	{
+		var canAfford = Global.Player.Credits / price;
+		var canStore = Global.Player.Hold.CheckCapacity(commodity);
+		
+		return Math.Min(canStore, canAfford);
+	}
 	
 	// TODO Unify these functions, let the action component do the heavy lifting
 	// Also consider what way round we want these named, probably want the player to be the focus
@@ -101,28 +109,49 @@ public partial class TradeMenu : CenterContainer
 		var commodity = tuple.Item1;
 		var price = tuple.Item2;
 		
+		var maxPurchaseCount = GetMaxCommodityPurchase(commodity, price);
+		
+		_playerTradeList.DeselectItems();
+		
 		_tradeDescription.SetTradeDetails(commodity, price);
-		// FIXME set slidermax properly
-		// FIXME proper action implementation
+		
 		_tradeAction.SetAction(commodity, price, (quantity) =>
 		{
 			Log.Debug("Buying {Quantity} {Commodity} at {Price}", quantity, commodity.Name, price);
 			
 			// TODO check enough money
-			// TODO remove money
-			// TODO get hold to store wares
-			// TODO trigger ui reload
-		}, "<== Buy", 10);
+			
+			var player = Global.Player;
+			var hold = player.Hold;
+
+			var totalPrice = price * quantity;
+
+			if (player.Credits < totalPrice)
+			{
+				Log.Error("Player cant afford purchase of {Commodity} - {price} at {TotalPrice}", commodity.Name, price, totalPrice, totalPrice);
+				throw new Exception("Player cant afford purchase");
+			}
+				
+			player.Credits -= totalPrice;
+			
+			var stack = new CommodityStack(commodity, quantity, totalPrice);
+			hold.SetToCargoHold(commodity.Name, stack);
+			
+			_tradeAction.SetSliderMax(GetMaxCommodityPurchase(commodity, price));
+			SetPlayerMenu(hold);
+		}, "<== Buy", maxPurchaseCount);
 	}
 	
 	private void OnTradeBuySelected(int index)
 	{
 		var tuple = _playerComodities[(int)index];
-		var commodity = tuple.Item1.Commodity;
+		var stack = tuple.Item1;
+		var commodity = stack.Commodity;
 		var price = tuple.Item2;
 		
+		_sellerTradeList.DeselectItems();
+		
 		_tradeDescription.SetTradeDetails(commodity, price);
-		// FIXME set slidermax properly
 		// FIXME proper action implementation
 		_tradeAction.SetAction(commodity, price, (quantity) =>
 		{
@@ -131,6 +160,6 @@ public partial class TradeMenu : CenterContainer
 			// TODO remove inventory
 			// TODO give player money
 			// TODO trigger ui re-evaluation
-		}, "Sell ==>", 50);
+		}, "Sell ==>", stack.Count);
 	}
 }

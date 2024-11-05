@@ -76,6 +76,9 @@ public partial class TradeAction : Control
 		_total.Text = "Total: 0";
 	}
 	
+	public void SetSliderMax(int max) => 
+		_hSlider.MaxValue = max;
+	
 	private void OnTradeButtonButtonPressed() =>
 		_action((int)_hSlider.Value);
 	
