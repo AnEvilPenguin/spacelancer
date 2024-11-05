@@ -75,9 +75,22 @@ public partial class TradeAction : Control
 		_price.Text = $"Price: {price}";
 		_total.Text = "Total: 0";
 	}
-	
-	public void SetSliderMax(int max) => 
+
+	public void SetSliderMax(int max)
+	{
 		_hSlider.MaxValue = max;
+
+		if (max <= 0)
+		{
+			_hSlider.Editable = false;
+			_button.Disabled = true;
+			return;
+		}
+		
+		_hSlider.Editable = true;
+		_button.Disabled = false;
+	}
+		
 
 	private void OnTradeButtonButtonPressed()
 	{
