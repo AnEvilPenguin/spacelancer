@@ -41,3 +41,6 @@ shape = SubResource("SegmentShape2D_v0hdj")
 [node name="EntryArea" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(0, -37)
 shape = SubResource("RectangleShape2D_qwpvd")
+
+[node name="Exit" type="Marker2D" parent="."]
+position = Vector2(0.25, -68.5)

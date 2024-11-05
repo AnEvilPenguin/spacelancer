@@ -75,7 +75,7 @@ public partial class GameController : Node
         }
     }
 
-    private void UnloadScene(Node scene)
+    public void UnloadScene(Node scene)
     {
         var id = scene.GetInstanceId();
         Log.Debug("Unloading {nodeName} - {nodeId}", scene.Name, id);
