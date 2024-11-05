@@ -3,28 +3,44 @@ using System;
 
 public partial class StationMenu : CenterContainer
 {
-	private Button _leaveButton; 
+	private Station _selectedStation;
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		_leaveButton = GetNode<Button>("%Leave");
-		_leaveButton.Pressed += OnLeaveButtonPressed;
+		var leaveButton = GetNode<Button>("%Leave");
+		leaveButton.Pressed += OnLeaveButtonPressed;
+
+		var tradeButton = GetNode<Button>("%Trade");
+		tradeButton.Pressed += OnTradeButtonPressed;
 		
 		// We can interact with this menu when the game is paused in the background.
 		// We might not need this when we actually implement docking
 		ProcessMode = ProcessModeEnum.Always;
 	}
 
-	public void ShowMenu()
+	public void ShowMenu(Station station)
 	{
 		Visible = true;
 		GetTree().Paused = true;
+		
+		_selectedStation = station;
 	}
 
 	private void OnLeaveButtonPressed()
 	{
 		Visible = false;
 		GetTree().Paused = false;
+	}
+
+	private void OnTradeButtonPressed()
+	{
+		Visible = false;
+		var tradeMenu = Global.GameController.LoadScene<TradeMenu>("res://Scenes/UI/TradeMenu/trade_menu.tscn");
+		tradeMenu.Visible = true;
+		
+		tradeMenu.LoadMenu(_selectedStation);
+		tradeMenu.Closing += () =>
+			Visible = true;
 	}
 }

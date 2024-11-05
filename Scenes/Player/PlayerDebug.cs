@@ -2,7 +2,7 @@
 using Godot;
 using Spacelancer.Components.Navigation;
 
-public partial class Player : CharacterBody2D
+public partial class Player
 {
     private Label _rotationLabel;
     private Label _speedLabel;

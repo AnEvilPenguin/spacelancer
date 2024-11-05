@@ -1,11 +1,17 @@
+using System;
+using System.Collections.Generic;
 using Godot;
 using Serilog;
+using Spacelancer.Components.Commodities;
 
 public partial class Station : Node2D
 {
 	// We may need to consider making this docking range if we make a map and remote comms or something
 	private bool _playerInCommsRange = false;
-	StationMenu _menu;
+	private StationMenu _menu;
+	
+	private readonly List<Tuple<Commodity, int>> _commoditiesForSale = new List<Tuple<Commodity, int>>();
+	private readonly Dictionary<string, int> _commodityBuyPriceOverride = new Dictionary<string, int>();
 	
 	public override void _Ready()
 	{
@@ -24,8 +30,32 @@ public partial class Station : Node2D
 		{
 			Log.Debug("Comms initiated with {StationName}", Name);
 			_menu = Global.GameController.LoadScene<StationMenu>("res://Scenes/UI/StationMenu/station_menu.tscn");
-			_menu.ShowMenu();
+			_menu.ShowMenu(this);
 		}
+	}
+
+	public void AddCommodityForSale(Commodity commodity) =>
+		AddCommodityForSale(commodity, commodity.DefaultPrice);
+
+	public void AddCommodityForSale(Commodity commodity, int price)
+	{
+		_commoditiesForSale.Add(new Tuple<Commodity, int>(commodity, price));
+		AddCommodityToBuy(commodity, price);
+	}
+		
+
+	public void AddCommodityToBuy(Commodity commodity, int price) =>
+		_commodityBuyPriceOverride.Add(commodity.Name, price);
+
+	public List<Tuple<Commodity, int>> GetCommodityForSale() => 
+		new List<Tuple<Commodity, int>>(_commoditiesForSale);
+
+	public int GetCommodityToBuyPrice(Commodity commodity)
+	{
+		if (_commodityBuyPriceOverride.TryGetValue(commodity.Name, out int price))
+			return price;
+		
+		return commodity.DefaultPrice;
 	}
 
 	private void OnStationAreaEntered(Node2D body)

@@ -1,5 +1,7 @@
 using Godot;
+using Spacelancer.Components.Commodities;
 using Spacelancer.Components.Navigation;
+using Spacelancer.Components.Storage;
 
 public partial class Player : CharacterBody2D
 {

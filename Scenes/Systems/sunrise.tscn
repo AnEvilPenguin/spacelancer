@@ -1,12 +1,14 @@
-[gd_scene load_steps=6 format=3 uid="uid://c4mljrynnxorl"]
+[gd_scene load_steps=7 format=3 uid="uid://c4mljrynnxorl"]
 
 [ext_resource type="PackedScene" uid="uid://dtfjhrdepulhe" path="res://Scenes/Stations/station.tscn" id="1_2nu3c"]
+[ext_resource type="Script" path="res://Scenes/Systems/Sunrise.cs" id="1_p6squ"]
 [ext_resource type="Texture2D" uid="uid://bhb8wpv2cyhtn" path="res://Assets/Placeholder Art/spaceStation_026.png" id="2_6v7le"]
 [ext_resource type="Texture2D" uid="uid://p8j5qfmaqx6n" path="res://Assets/Placeholder Art/spaceStation_017.png" id="2_835pb"]
-[ext_resource type="Texture2D" uid="uid://gmqsa67ro2nm" path="res://Assets/Placeholder Art/spaceStation_030.png" id="4_di71g"]
+[ext_resource type="PackedScene" uid="uid://dv5d275uoyl83" path="res://Scenes/JumpGate/jump_gate.tscn" id="6_f21fx"]
 [ext_resource type="PackedScene" uid="uid://c5ncrwmqu6r64" path="res://Scenes/Spacelane/spacelane.tscn" id="6_pf0hb"]
 
 [node name="Sunrise" type="Node2D"]
+script = ExtResource("1_p6squ")
 
 [node name="Station1" parent="." instance=ExtResource("1_2nu3c")]
 
@@ -18,13 +20,6 @@ position = Vector2(7015, -14)
 
 [node name="Sprite2D" type="Sprite2D" parent="Station2"]
 texture = ExtResource("2_6v7le")
-
-[node name="JumpGate" type="Node2D" parent="."]
-position = Vector2(0, 7000)
-scale = Vector2(4, 4)
-
-[node name="Sprite2D" type="Sprite2D" parent="JumpGate"]
-texture = ExtResource("4_di71g")
 
 [node name="Spacelane1a" parent="." node_paths=PackedStringArray("Partner") instance=ExtResource("6_pf0hb")]
 rotation = -1.5708
@@ -44,3 +39,6 @@ Partner = NodePath("../Spacelane2b")
 position = Vector2(0, 6200)
 rotation = 3.14159
 Partner = NodePath("../Spacelane2a")
+
+[node name="Moonshot" parent="." instance=ExtResource("6_f21fx")]
+position = Vector2(0, 7000)

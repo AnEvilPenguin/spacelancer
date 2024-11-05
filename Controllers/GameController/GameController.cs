@@ -35,7 +35,12 @@ public partial class GameController : Node
     public T LoadScene<T>(string scenePath) where T : Node
     {
         if (_loadedScenes.ContainsKey(scenePath) && _loadedScenes[scenePath] is T scene)
-            return scene;
+        {
+            if (IsInstanceValid(scene) && !scene.IsQueuedForDeletion())
+                return scene;
+            
+            _loadedScenes.Remove(scenePath);
+        }
 
         var newScene = GD.Load<PackedScene>(scenePath);
         var instance = newScene.Instantiate<T>();
@@ -70,7 +75,7 @@ public partial class GameController : Node
         }
     }
 
-    private void UnloadScene(Node scene)
+    public void UnloadScene(Node scene)
     {
         var id = scene.GetInstanceId();
         Log.Debug("Unloading {nodeName} - {nodeId}", scene.Name, id);

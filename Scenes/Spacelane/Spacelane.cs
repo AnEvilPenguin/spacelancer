@@ -59,7 +59,7 @@ public partial class Spacelane : Node2D
 
 	private void TakeControlOfShip(Player player)
 	{
-		if (player.NavComputer is LaneNavigation navigation)
+		if (player.NavComputer is LaneNavigation)
 			return;
 		
 		var computer = new LaneNavigation(player, this, Partner);
