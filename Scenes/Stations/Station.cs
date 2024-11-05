@@ -10,8 +10,8 @@ public partial class Station : Node2D
 	private bool _playerInCommsRange = false;
 	private StationMenu _menu;
 	
-	private List<Tuple<Commodity, int>> _commoditiesForSale = new List<Tuple<Commodity, int>>();
-	private Dictionary<Commodity, int> _commodityBuyPriceOverride = new Dictionary<Commodity, int>();
+	private readonly List<Tuple<Commodity, int>> _commoditiesForSale = new List<Tuple<Commodity, int>>();
+	private readonly Dictionary<string, int> _commodityBuyPriceOverride = new Dictionary<string, int>();
 	
 	public override void _Ready()
 	{
@@ -41,14 +41,14 @@ public partial class Station : Node2D
 		_commoditiesForSale.Add(new Tuple<Commodity, int>(commodity, price));
 
 	public void AddCommodityToBuy(Commodity commodity, int price) =>
-		_commodityBuyPriceOverride.Add(commodity, price);
+		_commodityBuyPriceOverride.Add(commodity.Name, price);
 
 	public List<Tuple<Commodity, int>> GetCommodityForSale() => 
 		new List<Tuple<Commodity, int>>(_commoditiesForSale);
 
 	public int GetCommodityToBuyPrice(Commodity commodity)
 	{
-		if (_commodityBuyPriceOverride.TryGetValue(commodity, out int price))
+		if (_commodityBuyPriceOverride.TryGetValue(commodity.Name, out int price))
 			return price;
 		
 		return commodity.DefaultPrice;
