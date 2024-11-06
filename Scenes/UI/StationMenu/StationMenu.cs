@@ -58,6 +58,8 @@ public partial class StationMenu : CenterContainer
 		var commsMenu = Global.GameController.LoadScene<CommsMenu>("res://Scenes/UI/CommsMenu/comms_menu.tscn");
 		commsMenu.Visible = true;
 		
+		commsMenu.LoadNonPlayerCharacters(_selectedStation.GetNonPlayerCharacters());
+		
 		commsMenu.Closing += () =>
 			Visible = true;
 	}

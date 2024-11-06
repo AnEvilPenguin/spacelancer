@@ -40,7 +40,7 @@ public partial class Station : Node2D
 	public void AddNpc(NonPlayerCharacter npc) =>
 		_nonPlayerCharacters.Add(npc);
 	
-	public List<NonPlayerCharacter> NonPlayerCharacters => 
+	public List<NonPlayerCharacter> GetNonPlayerCharacters() => 
 		new List<NonPlayerCharacter>(_nonPlayerCharacters);
 	
 	public bool HasNpc() =>
