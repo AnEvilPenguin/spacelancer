@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bsl20rc0t0r1t"]
+[gd_scene load_steps=3 format=3 uid="uid://bsl20rc0t0r1t"]
 
 [ext_resource type="Script" path="res://Scenes/UI/CommsMenu/ChatArea/ChatArea.cs" id="1_a0elj"]
+[ext_resource type="PackedScene" uid="uid://gwv6ijqs1lax" path="res://Scenes/UI/CommsMenu/ChatArea/chat_message.tscn" id="2_2s0k7"]
 
 [node name="ChatArea" type="PanelContainer"]
 custom_minimum_size = Vector2(600, 400)
@@ -8,6 +9,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 size_flags_vertical = 3
 script = ExtResource("1_a0elj")
+_chatMessageScene = ExtResource("2_2s0k7")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 2
@@ -16,35 +18,3 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-
-[node name="Panel" type="PanelContainer" parent="ScrollContainer/ChatContainer"]
-custom_minimum_size = Vector2(500, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 3
-
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/ChatContainer/Panel"]
-layout_mode = 2
-color = Color(0.996078, 0.403922, 0.337255, 1)
-
-[node name="RichTextLabel" type="RichTextLabel" parent="ScrollContainer/ChatContainer/Panel"]
-layout_mode = 2
-text = "Cat ipsum dolor sit amet, kitty time scratch me now! stop scratching me! check cat door for ambush 10 times before coming in so ask to go outside and ask to come inside and ask to go outside and ask to come inside. Meow loudly just to annoy owners steal the warm chair right after you get up bleghbleghvomit my furball really tie the room together for paw at beetle and eat it before it gets away and do doodoo in the litter-box, clickityclack on the piano, be frumpygrumpy."
-fit_content = true
-scroll_active = false
-
-[node name="Panel2" type="PanelContainer" parent="ScrollContainer/ChatContainer"]
-custom_minimum_size = Vector2(500, 0)
-layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 3
-
-[node name="ColorRect" type="ColorRect" parent="ScrollContainer/ChatContainer/Panel2"]
-layout_mode = 2
-color = Color(1, 0.262745, 0.360784, 1)
-
-[node name="RichTextLabel" type="RichTextLabel" parent="ScrollContainer/ChatContainer/Panel2"]
-layout_mode = 2
-text = "Bacon ipsum dolor amet alcatra chuck chislic jowl beef ribs burgdoggen. Doner meatball hamburger salami tenderloin chuck ribeye bacon. "
-fit_content = true
-scroll_active = false
