@@ -41,9 +41,19 @@ public partial class GameController : Node
             
             _loadedScenes.Remove(scenePath);
         }
+        
+        T instance;
 
-        var newScene = GD.Load<PackedScene>(scenePath);
-        var instance = newScene.Instantiate<T>();
+        try
+        {
+            var newScene = GD.Load<PackedScene>(scenePath);
+            instance = newScene.Instantiate<T>();
+        }
+        catch (Exception e)
+        {
+            Log.Error(e, "Error loading scene from {Path}", scenePath);
+            throw;
+        }
         
         _loadedScenes.Add(scenePath, instance);
         _nodeToPathLookup.Add(instance.GetInstanceId(), scenePath);
