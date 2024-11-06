@@ -22,6 +22,6 @@ public partial class Sunrise : Node2D
 		var foo = new NonPlayerCharacter("Foo");
 		foo.LoadDialog();
 		
-		station2.AddNpc(foo);
+		station1.AddNpc(foo);
 	}
 }
