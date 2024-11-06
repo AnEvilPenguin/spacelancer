@@ -3,7 +3,6 @@
 [ext_resource type="Script" path="res://Scenes/UI/CommsMenu/ChatArea/ChatMessage.cs" id="1_o17fb"]
 
 [node name="ChatMessage" type="PanelContainer"]
-custom_minimum_size = Vector2(500, 0)
 offset_right = 40.0
 offset_bottom = 40.0
 size_flags_vertical = 3
@@ -21,3 +20,6 @@ bbcode_enabled = true
 text = "A test message"
 fit_content = true
 scroll_active = false
+
+[node name="KludgeLabel" type="Label" parent="."]
+layout_mode = 2
