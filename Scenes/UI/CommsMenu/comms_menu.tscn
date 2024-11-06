@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://dkslfm80tmlsy"]
+[gd_scene load_steps=4 format=3 uid="uid://dkslfm80tmlsy"]
 
 [ext_resource type="Texture2D" uid="uid://b3xk3t0u2eon4" path="res://icon.svg" id="1_46rv4"]
 [ext_resource type="Script" path="res://Scenes/UI/CommsMenu/CommsMenu.cs" id="1_bfnqc"]
+[ext_resource type="PackedScene" uid="uid://bsl20rc0t0r1t" path="res://Scenes/UI/CommsMenu/ChatArea/chat_area.tscn" id="3_0qx3u"]
 
 [node name="CommsMenu" type="PanelContainer"]
 process_mode = 3
@@ -103,48 +104,8 @@ text = "Name"
 layout_mode = 2
 text = "Affiliation"
 
-[node name="ChatArea" type="PanelContainer" parent="HBoxContainer/ChatContainer/VBoxContainer"]
+[node name="ChatArea" parent="HBoxContainer/ChatContainer/VBoxContainer" instance=ExtResource("3_0qx3u")]
 layout_mode = 2
-size_flags_vertical = 3
-
-[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/ChatContainer/VBoxContainer/ChatArea"]
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ChatContainer/VBoxContainer/ChatArea/ScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Panel" type="PanelContainer" parent="HBoxContainer/ChatContainer/VBoxContainer/ChatArea/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(500, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 3
-
-[node name="ColorRect" type="ColorRect" parent="HBoxContainer/ChatContainer/VBoxContainer/ChatArea/ScrollContainer/VBoxContainer/Panel"]
-layout_mode = 2
-color = Color(0.996078, 0.403922, 0.337255, 1)
-
-[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/ChatContainer/VBoxContainer/ChatArea/ScrollContainer/VBoxContainer/Panel"]
-layout_mode = 2
-text = "Cat ipsum dolor sit amet, kitty time scratch me now! stop scratching me! check cat door for ambush 10 times before coming in so ask to go outside and ask to come inside and ask to go outside and ask to come inside. Meow loudly just to annoy owners steal the warm chair right after you get up bleghbleghvomit my furball really tie the room together for paw at beetle and eat it before it gets away and do doodoo in the litter-box, clickityclack on the piano, be frumpygrumpy."
-fit_content = true
-scroll_active = false
-
-[node name="Panel2" type="PanelContainer" parent="HBoxContainer/ChatContainer/VBoxContainer/ChatArea/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(500, 0)
-layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 3
-
-[node name="ColorRect" type="ColorRect" parent="HBoxContainer/ChatContainer/VBoxContainer/ChatArea/ScrollContainer/VBoxContainer/Panel2"]
-layout_mode = 2
-color = Color(1, 0.262745, 0.360784, 1)
-
-[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/ChatContainer/VBoxContainer/ChatArea/ScrollContainer/VBoxContainer/Panel2"]
-layout_mode = 2
-text = "Bacon ipsum dolor amet alcatra chuck chislic jowl beef ribs burgdoggen. Doner meatball hamburger salami tenderloin chuck ribeye bacon. "
-fit_content = true
-scroll_active = false
 
 [node name="MessageArea" type="PanelContainer" parent="HBoxContainer/ChatContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 100)
