@@ -1,9 +1,12 @@
 using Godot;
 using System;
+using Serilog;
 
 public partial class StationMenu : CenterContainer
 {
 	private Station _selectedStation;
+
+	private Button _commsButton;
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -13,6 +16,9 @@ public partial class StationMenu : CenterContainer
 
 		var tradeButton = GetNode<Button>("%Trade");
 		tradeButton.Pressed += OnTradeButtonPressed;
+		
+		_commsButton = GetNode<Button>("%Comms");
+		_commsButton.Pressed += OnCommsButtonPressed;
 		
 		// We can interact with this menu when the game is paused in the background.
 		// We might not need this when we actually implement docking
@@ -25,6 +31,8 @@ public partial class StationMenu : CenterContainer
 		GetTree().Paused = true;
 		
 		_selectedStation = station;
+
+		_commsButton.Visible = station.HasNpc();
 	}
 
 	private void OnLeaveButtonPressed()
@@ -41,6 +49,16 @@ public partial class StationMenu : CenterContainer
 		
 		tradeMenu.LoadMenu(_selectedStation);
 		tradeMenu.Closing += () =>
+			Visible = true;
+	}
+
+	private void OnCommsButtonPressed()
+	{
+		Visible = false;
+		var commsMenu = Global.GameController.LoadScene<CommsMenu>("res://Scenes/UI/CommsMenu/comms_menu.tscn");
+		commsMenu.Visible = true;
+		
+		commsMenu.Closing += () =>
 			Visible = true;
 	}
 }
