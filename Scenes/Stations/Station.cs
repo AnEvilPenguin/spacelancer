@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Godot;
 using Serilog;
 using Spacelancer.Components.Commodities;
+using Spacelancer.Components.NPCs;
 
 public partial class Station : Node2D
 {
@@ -12,6 +13,8 @@ public partial class Station : Node2D
 	
 	private readonly List<Tuple<Commodity, int>> _commoditiesForSale = new List<Tuple<Commodity, int>>();
 	private readonly Dictionary<string, int> _commodityBuyPriceOverride = new Dictionary<string, int>();
+	
+	private readonly List<NonPlayerCharacter> _nonPlayerCharacters = new List<NonPlayerCharacter>();
 	
 	public override void _Ready()
 	{
@@ -34,6 +37,15 @@ public partial class Station : Node2D
 		}
 	}
 
+	public void AddNpc(NonPlayerCharacter npc) =>
+		_nonPlayerCharacters.Add(npc);
+	
+	public List<NonPlayerCharacter> GetNonPlayerCharacters() => 
+		new List<NonPlayerCharacter>(_nonPlayerCharacters);
+	
+	public bool HasNpc() =>
+		_nonPlayerCharacters.Count > 0;
+
 	public void AddCommodityForSale(Commodity commodity) =>
 		AddCommodityForSale(commodity, commodity.DefaultPrice);
 
@@ -42,7 +54,6 @@ public partial class Station : Node2D
 		_commoditiesForSale.Add(new Tuple<Commodity, int>(commodity, price));
 		AddCommodityToBuy(commodity, price);
 	}
-		
 
 	public void AddCommodityToBuy(Commodity commodity, int price) =>
 		_commodityBuyPriceOverride.Add(commodity.Name, price);

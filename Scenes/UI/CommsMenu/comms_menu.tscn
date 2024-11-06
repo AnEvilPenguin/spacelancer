@@ -1,0 +1,141 @@
+[gd_scene load_steps=5 format=3 uid="uid://dkslfm80tmlsy"]
+
+[ext_resource type="Texture2D" uid="uid://b3xk3t0u2eon4" path="res://icon.svg" id="1_46rv4"]
+[ext_resource type="Script" path="res://Scenes/UI/CommsMenu/CommsMenu.cs" id="1_bfnqc"]
+[ext_resource type="PackedScene" uid="uid://bsl20rc0t0r1t" path="res://Scenes/UI/CommsMenu/ChatArea/chat_area.tscn" id="3_0qx3u"]
+[ext_resource type="PackedScene" uid="uid://bshqougn5pree" path="res://Scenes/UI/CommsMenu/ChatArea/message_area.tscn" id="4_yvfqq"]
+
+[node name="CommsMenu" type="PanelContainer"]
+process_mode = 3
+custom_minimum_size = Vector2(800, 600)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_bfnqc")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="ContactContainer" type="PanelContainer" parent="HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ContactContainer"]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/ContactContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ContactContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/ContactContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/ContactContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/ContactContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(75, 75)
+layout_mode = 2
+size_flags_horizontal = 2
+texture = ExtResource("1_46rv4")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ContactContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NameLabel" type="Label" parent="HBoxContainer/ContactContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Name"
+
+[node name="Description" type="RichTextLabel" parent="HBoxContainer/ContactContainer/VBoxContainer/ScrollContainer/VBoxContainer/PanelContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Hi I'm Foo
+I love pottery and eating bees."
+visible_characters = 30
+visible_ratio = 0.714286
+
+[node name="LeaveButton" type="Button" parent="HBoxContainer/ContactContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Leave (Remove on refactor)"
+
+[node name="ChatContainer" type="PanelContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ChatContainer"]
+layout_mode = 2
+
+[node name="ContactHeader" type="PanelContainer" parent="HBoxContainer/ChatContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 75)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/ChatContainer/VBoxContainer/ContactHeader"]
+layout_mode = 2
+
+[node name="ProfilePic" type="TextureRect" parent="HBoxContainer/ChatContainer/VBoxContainer/ContactHeader/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("1_46rv4")
+expand_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ChatContainer/VBoxContainer/ContactHeader/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NameLabel" type="Label" parent="HBoxContainer/ChatContainer/VBoxContainer/ContactHeader/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Name"
+
+[node name="AffiliationLabel" type="Label" parent="HBoxContainer/ChatContainer/VBoxContainer/ContactHeader/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Affiliation"
+
+[node name="ChatArea" parent="HBoxContainer/ChatContainer/VBoxContainer" instance=ExtResource("3_0qx3u")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="MessageArea" parent="HBoxContainer/ChatContainer/VBoxContainer" instance=ExtResource("4_yvfqq")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ContactCallout" type="PanelContainer" parent="HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/ContactCallout"]
+layout_mode = 2
+
+[node name="ProfilePic" type="TextureRect" parent="HBoxContainer/ContactCallout/VBoxContainer"]
+layout_mode = 2
+texture = ExtResource("1_46rv4")
+expand_mode = 4
+
+[node name="NameLabel" type="Label" parent="HBoxContainer/ContactCallout/VBoxContainer"]
+layout_mode = 2
+text = "Name"
+
+[node name="AffiliationLabel" type="Label" parent="HBoxContainer/ContactCallout/VBoxContainer"]
+layout_mode = 2
+text = "Affiliation"
+
+[node name="Description" type="RichTextLabel" parent="HBoxContainer/ContactCallout/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Hi I'm Foo
+
+I love pottery and eating bees."

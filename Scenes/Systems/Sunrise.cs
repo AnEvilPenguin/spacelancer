@@ -1,6 +1,10 @@
+using System;
+using System.Collections.Generic;
 using Godot;
-using Spacelancer.Components.Commodities;
+using Serilog;
 using Spacelancer.Components.Economy;
+using Spacelancer.Components.NPCs;
+using Spacelancer.Util;
 
 public partial class Sunrise : Node2D
 {
@@ -14,5 +18,10 @@ public partial class Sunrise : Node2D
 		
 		station2.AddCommodityToBuy(Economy.Silicon, 135);
 		station2.AddCommodityForSale(Economy.Microcontroller, 116);
+
+		var foo = new NonPlayerCharacter("Foo");
+		foo.LoadDialog();
+		
+		station1.AddNpc(foo);
 	}
 }

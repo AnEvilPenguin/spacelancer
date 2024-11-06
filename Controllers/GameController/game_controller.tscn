@@ -8,6 +8,7 @@ script = ExtResource("1_2ajmc")
 [node name="World2D" type="Node2D" parent="."]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+process_mode = 3
 
 [node name="GUI" type="Control" parent="CanvasLayer"]
 unique_name_in_owner = true

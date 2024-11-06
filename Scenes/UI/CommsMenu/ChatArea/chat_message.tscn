@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://gwv6ijqs1lax"]
+
+[ext_resource type="Script" path="res://Scenes/UI/CommsMenu/ChatArea/ChatMessage.cs" id="1_o17fb"]
+
+[node name="ChatMessage" type="PanelContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_vertical = 3
+script = ExtResource("1_o17fb")
+_inboundColor = Color(0, 0.168627, 0.211765, 1)
+_outboundColor = Color(0.188235, 0.0392157, 0.141176, 1)
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 2
+color = Color(0.188235, 0.0392157, 0.141176, 1)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 2
+bbcode_enabled = true
+text = "A test message"
+fit_content = true
+scroll_active = false
+
+[node name="KludgeLabel" type="Label" parent="."]
+layout_mode = 2

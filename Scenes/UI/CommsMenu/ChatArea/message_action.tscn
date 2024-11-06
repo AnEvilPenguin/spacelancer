@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://88nmi54smvnn"]
+
+[ext_resource type="Script" path="res://Scenes/UI/CommsMenu/ChatArea/MessageAction.cs" id="1_y6hs4"]
+
+[node name="MessageAction" type="PanelContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 3
+script = ExtResource("1_y6hs4")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "Action 1"
