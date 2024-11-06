@@ -12,8 +12,10 @@ public partial class CommsMenu : PanelContainer
 	public delegate void ClosingEventHandler();
 	
 	private ChatArea _chatArea;
+	private MessageArea _messageArea;
 	
 	private List<NonPlayerCharacter> _nonPlayerCharacters;
+	private NonPlayerCharacter _currentNonPlayerCharacter;
 	
 	public override void _Ready()
 	{
@@ -27,17 +29,18 @@ public partial class CommsMenu : PanelContainer
 		};
 		
 		_chatArea = GetNode<ChatArea>("%ChatArea");
+		_messageArea = GetNode<MessageArea>("%MessageArea");
+
+		_messageArea.ActionSelected += OnMessageAreaSelected;
 	}
 
 	public void LoadNonPlayerCharacters(List<NonPlayerCharacter> list)
 	{
 		_nonPlayerCharacters = list;
 
-		NonPlayerCharacter first;
-
 		try
 		{
-			first = _nonPlayerCharacters.First();
+			_currentNonPlayerCharacter = _nonPlayerCharacters.First();
 		}
 		catch (Exception e)
 		{
@@ -45,9 +48,22 @@ public partial class CommsMenu : PanelContainer
 			throw;
 		}
 		
-		var dialog = first.GetDialog();
+		var dialog = _currentNonPlayerCharacter.GetDialog();
+		NewInboundMessage(dialog);
+	}
+
+	private void NewInboundMessage(Dialog dialog)
+	{
 		_chatArea.SendMessage(dialog.Text, ChatDirection.Inbound);
 		
-		// TODO get some sort of loop where we can get and set the next response?
+		dialog.Responses.ForEach((r) => _messageArea.AddMessageAction(r));
+	}
+
+	private void OnMessageAreaSelected(string text, int nextId)
+	{
+		_chatArea.SendMessage(text, ChatDirection.Outbound);
+		
+		var nextDialog = _currentNonPlayerCharacter.GetDialog(nextId);
+		NewInboundMessage(nextDialog);
 	}
 }
