@@ -2,23 +2,28 @@ using Godot;
 using System;
 using Serilog;
 
-public partial class StationMenu : CenterContainer
+public partial class StationMenu : PanelContainer
 {
 	private Station _selectedStation;
 
-	private Button _commsButton;
+	private IconButton _commsButton;
+	private IconButton _equipmentButton;
+	private IconButton _shipyardButton;
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		var leaveButton = GetNode<Button>("%Leave");
+		var leaveButton = GetNode<IconButton>("%ExitButton");
 		leaveButton.Pressed += OnLeaveButtonPressed;
-
-		var tradeButton = GetNode<Button>("%Trade");
+		
+		var tradeButton = GetNode<IconButton>("%TradeButton");
 		tradeButton.Pressed += OnTradeButtonPressed;
 		
-		_commsButton = GetNode<Button>("%Comms");
+		_commsButton = GetNode<IconButton>("%BarButton");
 		_commsButton.Pressed += OnCommsButtonPressed;
+		
+		_equipmentButton = GetNode<IconButton>("%EquipmentButton");
+		_shipyardButton = GetNode<IconButton>("%ShipyardButton");
 		
 		// We can interact with this menu when the game is paused in the background.
 		// We might not need this when we actually implement docking
@@ -33,6 +38,8 @@ public partial class StationMenu : CenterContainer
 		_selectedStation = station;
 
 		_commsButton.Visible = station.HasNpc();
+		_equipmentButton.Visible = station.HasEquipment();
+		_shipyardButton.Visible = station.HasShipyard();
 	}
 
 	private void OnLeaveButtonPressed()

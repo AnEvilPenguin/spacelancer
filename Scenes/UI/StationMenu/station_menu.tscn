@@ -1,34 +1,71 @@
-[gd_scene load_steps=2 format=3 uid="uid://c407hvbcxorwm"]
+[gd_scene load_steps=8 format=3 uid="uid://c407hvbcxorwm"]
 
 [ext_resource type="Script" path="res://Scenes/UI/StationMenu/StationMenu.cs" id="1_h3e58"]
+[ext_resource type="Texture2D" uid="uid://bd86rnbtp07c7" path="res://Assets/Icons/beer-mug-empty-solid.svg" id="3_dd2te"]
+[ext_resource type="Texture2D" uid="uid://bi1qoxemc5ehi" path="res://Assets/Icons/dolly-solid.svg" id="4_al4as"]
+[ext_resource type="PackedScene" uid="uid://k1xfbpv7ywee" path="res://Scenes/UI/StationMenu/IconButton/icon_button.tscn" id="4_o5icm"]
+[ext_resource type="Texture2D" uid="uid://diqc2bdurrwkx" path="res://Assets/Icons/screwdriver-wrench-solid.svg" id="5_0yvmd"]
+[ext_resource type="Texture2D" uid="uid://dmsfnopo81fcp" path="res://Assets/Icons/shuttle-space-solid.svg" id="6_osmh1"]
+[ext_resource type="Texture2D" uid="uid://u2hidvt1t5qh" path="res://Assets/Icons/door-open-solid.svg" id="7_jswn4"]
 
-[node name="StationMenu" type="CenterContainer"]
+[node name="StationMenu" type="PanelContainer"]
 process_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+custom_minimum_size = Vector2(800, 600)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -512.0
+offset_top = -384.0
+offset_right = 512.0
+offset_bottom = 384.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_h3e58")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
-custom_minimum_size = Vector2(300, 0)
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+[node name="MenuButtons" type="PanelContainer" parent="HBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 
-[node name="Comms" type="Button" parent="PanelContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MenuButtons"]
+layout_mode = 2
+
+[node name="PlayerButton" parent="HBoxContainer/MenuButtons/VBoxContainer" instance=ExtResource("4_o5icm")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+_iconColor = Color(0.926332, 0.842536, 0.856373, 1)
+
+[node name="BarButton" parent="HBoxContainer/MenuButtons/VBoxContainer" instance=ExtResource("4_o5icm")]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Comms"
+_iconTexture = ExtResource("3_dd2te")
 
-[node name="Trade" type="Button" parent="PanelContainer/VBoxContainer"]
+[node name="TradeButton" parent="HBoxContainer/MenuButtons/VBoxContainer" instance=ExtResource("4_o5icm")]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Trade"
+_iconTexture = ExtResource("4_al4as")
+_iconColor = Color(0.832614, 0.814516, 0.5613, 1)
 
-[node name="Leave" type="Button" parent="PanelContainer/VBoxContainer"]
+[node name="EquipmentButton" parent="HBoxContainer/MenuButtons/VBoxContainer" instance=ExtResource("4_o5icm")]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Leave Station"
+_iconTexture = ExtResource("5_0yvmd")
+_iconColor = Color(0.842486, 0.75976, 0.936008, 1)
+
+[node name="ShipyardButton" parent="HBoxContainer/MenuButtons/VBoxContainer" instance=ExtResource("4_o5icm")]
+unique_name_in_owner = true
+layout_mode = 2
+_iconTexture = ExtResource("6_osmh1")
+_iconColor = Color(0.641469, 0.879435, 0.530396, 1)
+
+[node name="ExitButton" parent="HBoxContainer/MenuButtons/VBoxContainer" instance=ExtResource("4_o5icm")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 10
+_iconTexture = ExtResource("7_jswn4")
+_iconColor = Color(0.777765, 0.786768, 0.935332, 1)

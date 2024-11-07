@@ -45,6 +45,10 @@ public partial class Station : Node2D
 	
 	public bool HasNpc() =>
 		_nonPlayerCharacters.Count > 0;
+	
+	public bool HasShipyard() => false;
+	
+	public bool HasEquipment() => false;
 
 	public void AddCommodityForSale(Commodity commodity) =>
 		AddCommodityForSale(commodity, commodity.DefaultPrice);
