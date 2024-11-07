@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://c407hvbcxorwm"]
+[gd_scene load_steps=10 format=3 uid="uid://c407hvbcxorwm"]
 
 [ext_resource type="Script" path="res://Scenes/UI/StationMenu/StationMenu.cs" id="1_h3e58"]
 [ext_resource type="Texture2D" uid="uid://bd86rnbtp07c7" path="res://Assets/Icons/beer-mug-empty-solid.svg" id="3_dd2te"]
@@ -7,6 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://diqc2bdurrwkx" path="res://Assets/Icons/screwdriver-wrench-solid.svg" id="5_0yvmd"]
 [ext_resource type="Texture2D" uid="uid://dmsfnopo81fcp" path="res://Assets/Icons/shuttle-space-solid.svg" id="6_osmh1"]
 [ext_resource type="Texture2D" uid="uid://u2hidvt1t5qh" path="res://Assets/Icons/door-open-solid.svg" id="7_jswn4"]
+[ext_resource type="PackedScene" uid="uid://dkslfm80tmlsy" path="res://Scenes/UI/StationMenu/CommsMenu/comms_menu.tscn" id="8_5sgqv"]
+[ext_resource type="PackedScene" uid="uid://8tar0ticwja7" path="res://Scenes/UI/StationMenu/TradeMenu/trade_menu.tscn" id="9_kvl84"]
 
 [node name="StationMenu" type="PanelContainer"]
 process_mode = 3
@@ -69,3 +71,13 @@ layout_mode = 2
 size_flags_vertical = 10
 _iconTexture = ExtResource("7_jswn4")
 _iconColor = Color(0.777765, 0.786768, 0.935332, 1)
+
+[node name="CommsMenu" parent="HBoxContainer" instance=ExtResource("8_5sgqv")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="TradeMenu" parent="HBoxContainer" instance=ExtResource("9_kvl84")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3

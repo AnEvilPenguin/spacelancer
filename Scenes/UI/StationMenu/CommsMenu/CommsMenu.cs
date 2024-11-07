@@ -8,9 +8,6 @@ using Spacelancer.Scenes.UI.CommsMenu.ChatArea;
 
 public partial class CommsMenu : PanelContainer
 {
-	[Signal]
-	public delegate void ClosingEventHandler();
-	
 	private ChatArea _chatArea;
 	private MessageArea _messageArea;
 	
@@ -19,15 +16,6 @@ public partial class CommsMenu : PanelContainer
 	
 	public override void _Ready()
 	{
-		var leaveButton = GetNode<Button>("%LeaveButton");
-		
-		leaveButton.Pressed += () =>
-		{
-			Visible = false;
-			_chatArea.ClearMessages();
-			EmitSignal(SignalName.Closing);
-		};
-		
 		_chatArea = GetNode<ChatArea>("%ChatArea");
 		_messageArea = GetNode<MessageArea>("%MessageArea");
 
@@ -51,6 +39,9 @@ public partial class CommsMenu : PanelContainer
 		var dialog = _currentNonPlayerCharacter.GetDialog();
 		NewInboundMessage(dialog);
 	}
+
+	public void ClearChat() =>
+		_chatArea.ClearMessages();
 
 	private void NewInboundMessage(Dialog dialog)
 	{

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bshqougn5pree"]
 
-[ext_resource type="Script" path="res://Scenes/UI/CommsMenu/ChatArea/MessageArea.cs" id="1_habml"]
-[ext_resource type="PackedScene" uid="uid://88nmi54smvnn" path="res://Scenes/UI/CommsMenu/ChatArea/message_action.tscn" id="2_rfhh1"]
+[ext_resource type="Script" path="res://Scenes/UI/StationMenu/CommsMenu/ChatArea/MessageArea.cs" id="1_habml"]
+[ext_resource type="PackedScene" uid="uid://88nmi54smvnn" path="res://Scenes/UI/StationMenu/CommsMenu/ChatArea/message_action.tscn" id="2_rfhh1"]
 
 [node name="MessageArea" type="PanelContainer"]
 offset_right = 40.0

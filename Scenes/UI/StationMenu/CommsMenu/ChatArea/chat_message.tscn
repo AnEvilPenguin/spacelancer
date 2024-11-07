@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://gwv6ijqs1lax"]
 
-[ext_resource type="Script" path="res://Scenes/UI/CommsMenu/ChatArea/ChatMessage.cs" id="1_o17fb"]
+[ext_resource type="Script" path="res://Scenes/UI/StationMenu/CommsMenu/ChatArea/ChatMessage.cs" id="1_o17fb"]
 
 [node name="ChatMessage" type="PanelContainer"]
 offset_right = 40.0

@@ -6,7 +6,7 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_oyj2c"]
 shader = ExtResource("1_0twto")
-shader_parameter/color1 = Color(0.74366, 0.798625, 0.939924, 1)
+shader_parameter/color1 = Color(0.926332, 0.842536, 0.856373, 1)
 
 [node name="IconButton" type="CenterContainer"]
 anchors_preset = 15
