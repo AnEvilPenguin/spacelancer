@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://k1xfbpv7ywee"]
+
+[ext_resource type="Shader" path="res://Scenes/UI/StationMenu/IconButton/icon_shader.gdshader" id="1_0twto"]
+[ext_resource type="Script" path="res://Scenes/UI/StationMenu/IconButton/IconButton.cs" id="1_11stj"]
+[ext_resource type="Texture2D" uid="uid://b26psyy5p5wof" path="res://Assets/Icons/user-astronaut-solid.svg" id="2_wfepf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oyj2c"]
+shader = ExtResource("1_0twto")
+shader_parameter/color1 = Color(0.74366, 0.798625, 0.939924, 1)
+
+[node name="IconButton" type="CenterContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_11stj")
+_iconTexture = ExtResource("2_wfepf")
+_iconColor = Color(0.0287354, 0.917126, 0.880698, 1)
+
+[node name="TextureButton" type="TextureButton" parent="."]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_oyj2c")
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture_normal = ExtResource("2_wfepf")
+ignore_texture_size = true
+stretch_mode = 5
