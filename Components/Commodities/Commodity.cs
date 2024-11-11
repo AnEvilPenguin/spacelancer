@@ -2,14 +2,14 @@
 
 namespace Spacelancer.Components.Commodities;
 
-public abstract class Commodity
+public class Commodity
 {
-    public abstract CommoditySize Size { get; }
-    public abstract string Name { get; }
-    public abstract int DefaultPrice { get; }
-    public abstract string Description { get; }
+    public CommoditySize Size { get; }
+    public string Name { get; }
+    public int DefaultPrice { get; }
+    public string Description { get; }
     
-    public abstract Texture2D Texture { get;  }
+    public Texture2D Texture { get;  }
 
     public int GetQuantityFromVolume(int volume) =>
         Size switch
@@ -17,4 +17,15 @@ public abstract class Commodity
             CommoditySize.Medium => volume / 5,
             _ => volume,
         };
+
+    public Commodity(string name, int defaultPrice, string description, CommoditySize size = CommoditySize.Small, string textureName = "icon.svg")
+    {
+        Size = size;
+        Name = name;
+        DefaultPrice = defaultPrice;
+        Description = description;
+        
+        // TODO pick a directory to use for these
+        Texture = GD.Load<Texture2D>($"res://{textureName}");
+    }
 }
