@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Godot;
 using Serilog;
+using Spacelancer.Components.Commodities;
 using Spacelancer.Components.Economy;
 using Spacelancer.Components.NPCs;
 using Spacelancer.Util;
@@ -13,11 +14,15 @@ public partial class Sunrise : Node2D
 		var station1 = GetNode<Station>("Station1");
 		var station2 = GetNode<Station>("Station2");
 		
-		station1.AddCommodityForSale(Economy.EnergyCell);
-		station1.AddCommodityToBuy(Economy.Microcontroller, 160);
+		var energyCell = Global.Economy.GetCommodity(CommodityType.EnergyCell);
+		var silicon = Global.Economy.GetCommodity(CommodityType.Silicon);
+		var microcontroller = Global.Economy.GetCommodity(CommodityType.Microcontroller);
 		
-		station2.AddCommodityToBuy(Economy.Silicon, 135);
-		station2.AddCommodityForSale(Economy.Microcontroller, 116);
+		station1.AddCommodityForSale(energyCell);
+		station1.AddCommodityToBuy(microcontroller, 160);
+		
+		station2.AddCommodityToBuy(silicon, 135);
+		station2.AddCommodityForSale(microcontroller, 116);
 
 		var foo = new NonPlayerCharacter("Foo");
 		foo.LoadDialog();

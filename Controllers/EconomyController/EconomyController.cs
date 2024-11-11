@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Spacelancer.Components.Commodities;
+using Spacelancer.Components.Economy;
 
 namespace Spacelancer.Controllers.EconomyController;
 
@@ -11,5 +12,8 @@ public class EconomyController
     // Have a default price per commodity
     // Have specific overrides for specific stations
 
-    
+    private readonly Economy _economy = new Economy();
+
+    public Commodity GetCommodity(CommodityType commodityName) =>
+        _economy.GetCommodity(commodityName);
 }

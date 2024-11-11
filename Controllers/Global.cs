@@ -8,7 +8,7 @@ public partial class Global : Node
 {
     public static Global Instance;
     public static GameController GameController;
-    public static EconomyController EconomyController { get; } = new EconomyController();
+    public static EconomyController Economy { get; } = new EconomyController();
     public static Player Player;
     
     internal Logger Logger;
