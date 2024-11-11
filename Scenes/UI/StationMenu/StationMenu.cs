@@ -92,5 +92,6 @@ public partial class StationMenu : PanelContainer
 		_commsMenu.ClearChat();
 		
 		_tradeMenu.Visible = false;
+		_tradeMenu.ClearMenu();
 	}
 }

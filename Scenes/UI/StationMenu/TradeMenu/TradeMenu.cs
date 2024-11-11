@@ -32,6 +32,22 @@ public partial class TradeMenu : CenterContainer
 		_tradeDescription = GetNode<TradeDescription>("%TradeDescription");
 	}
 
+	public void ClearAction()
+	{
+		_tradeAction.Reset();
+		_tradeDescription.Reset();
+	}
+
+	public void ClearMenu()
+	{
+		_sellerTradeList.ClearItemList();
+		_playerTradeList.ClearItemList();
+		
+		ClearAction();
+		
+		_stationCommodities.Clear();
+	}
+
 	public void LoadMenu(Station station)
 	{
 		SetStationMenu(station);
