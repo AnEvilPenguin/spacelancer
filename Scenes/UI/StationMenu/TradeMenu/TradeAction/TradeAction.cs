@@ -67,6 +67,8 @@ public partial class TradeAction : Control
 		
 		_button.Text = buttonText;
 		
+		_name.Text = commodity.Name;
+		
 		_hSlider.Value = 0;
 		_hSlider.MaxValue = sliderMax;
 		_hSlider.Editable = true;

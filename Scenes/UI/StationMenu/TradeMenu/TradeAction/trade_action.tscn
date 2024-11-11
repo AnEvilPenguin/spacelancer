@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://d0upo2stidynu"]
 
-[ext_resource type="Script" path="res://Scenes/UI/TradeMenu/TradeAction/TradeAction.cs" id="1_t2j4a"]
+[ext_resource type="Script" path="res://Scenes/UI/StationMenu/TradeMenu/TradeAction/TradeAction.cs" id="1_t2j4a"]
 
 [node name="TradeAction" type="Control"]
 layout_mode = 3

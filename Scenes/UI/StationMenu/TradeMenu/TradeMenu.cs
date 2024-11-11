@@ -9,9 +9,6 @@ using Spacelancer.Components.Storage;
 
 public partial class TradeMenu : CenterContainer
 {
-	[Signal]
-	public delegate void ClosingEventHandler();
-	
 	private Station _selectedStation;
 	private TradeList _sellerTradeList;
 	private TradeList _playerTradeList;
@@ -24,8 +21,6 @@ public partial class TradeMenu : CenterContainer
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		var leaveButton = GetNode<Button>("%LeaveButton");
-		
 		_sellerTradeList = GetNode<TradeList>("%StationTradeList");
 		_sellerTradeList.ItemSelected += OnTradeSellSelected;
 		
@@ -35,21 +30,22 @@ public partial class TradeMenu : CenterContainer
 		
 		_tradeAction = GetNode<TradeAction>("%TradeAction");
 		_tradeDescription = GetNode<TradeDescription>("%TradeDescription");
+	}
+
+	public void ClearAction()
+	{
+		_tradeAction.Reset();
+		_tradeDescription.Reset();
+	}
+
+	public void ClearMenu()
+	{
+		_sellerTradeList.ClearItemList();
+		_playerTradeList.ClearItemList();
 		
-		leaveButton.Pressed += () =>
-		{
-			Visible = false;
-			
-			_sellerTradeList.ClearItemList();
-			_playerTradeList.ClearItemList();
-			
-			_tradeAction.Reset();
-			_stationCommodities.Clear();
-			
-			_tradeDescription.Reset();
-			
-			EmitSignal(SignalName.Closing);
-		};
+		ClearAction();
+		
+		_stationCommodities.Clear();
 	}
 
 	public void LoadMenu(Station station)

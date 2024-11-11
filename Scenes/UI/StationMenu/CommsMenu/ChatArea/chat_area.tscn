@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bsl20rc0t0r1t"]
 
-[ext_resource type="Script" path="res://Scenes/UI/CommsMenu/ChatArea/ChatArea.cs" id="1_a0elj"]
-[ext_resource type="PackedScene" uid="uid://gwv6ijqs1lax" path="res://Scenes/UI/CommsMenu/ChatArea/chat_message.tscn" id="2_2s0k7"]
+[ext_resource type="Script" path="res://Scenes/UI/StationMenu/CommsMenu/ChatArea/ChatArea.cs" id="1_a0elj"]
+[ext_resource type="PackedScene" uid="uid://gwv6ijqs1lax" path="res://Scenes/UI/StationMenu/CommsMenu/ChatArea/chat_message.tscn" id="2_2s0k7"]
 
 [node name="ChatArea" type="PanelContainer"]
 custom_minimum_size = Vector2(600, 400)

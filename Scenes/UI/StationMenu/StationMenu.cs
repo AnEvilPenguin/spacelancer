@@ -2,23 +2,22 @@ using Godot;
 using System;
 using Serilog;
 
-public partial class StationMenu : CenterContainer
+public partial class StationMenu : PanelContainer
 {
 	private Station _selectedStation;
 
-	private Button _commsButton;
+	private IconButton _playerButton;
+	private IconButton _commsButton;
+	private IconButton _equipmentButton;
+	private IconButton _shipyardButton;
 	
-	// Called when the node enters the scene tree for the first time.
+	private CommsMenu _commsMenu;
+	private TradeMenu _tradeMenu;
+
 	public override void _Ready()
 	{
-		var leaveButton = GetNode<Button>("%Leave");
-		leaveButton.Pressed += OnLeaveButtonPressed;
-
-		var tradeButton = GetNode<Button>("%Trade");
-		tradeButton.Pressed += OnTradeButtonPressed;
-		
-		_commsButton = GetNode<Button>("%Comms");
-		_commsButton.Pressed += OnCommsButtonPressed;
+		AttachButtons();
+		AttachMenus();
 		
 		// We can interact with this menu when the game is paused in the background.
 		// We might not need this when we actually implement docking
@@ -33,34 +32,66 @@ public partial class StationMenu : CenterContainer
 		_selectedStation = station;
 
 		_commsButton.Visible = station.HasNpc();
+		_equipmentButton.Visible = station.HasEquipment();
+		_shipyardButton.Visible = station.HasShipyard();
 	}
 
 	private void OnLeaveButtonPressed()
 	{
+		HideMenus();
+		
 		Visible = false;
 		GetTree().Paused = false;
 	}
 
 	private void OnTradeButtonPressed()
 	{
-		Visible = false;
-		var tradeMenu = Global.GameController.LoadScene<TradeMenu>("res://Scenes/UI/TradeMenu/trade_menu.tscn");
-		tradeMenu.Visible = true;
+		HideMenus();
 		
-		tradeMenu.LoadMenu(_selectedStation);
-		tradeMenu.Closing += () =>
-			Visible = true;
+		_tradeMenu.Visible = true;
+		_tradeMenu.LoadMenu(_selectedStation);
 	}
 
 	private void OnCommsButtonPressed()
 	{
-		Visible = false;
-		var commsMenu = Global.GameController.LoadScene<CommsMenu>("res://Scenes/UI/CommsMenu/comms_menu.tscn");
-		commsMenu.Visible = true;
+		HideMenus();
 		
-		commsMenu.LoadNonPlayerCharacters(_selectedStation.GetNonPlayerCharacters());
+		_commsMenu.Visible = true;
+		_commsMenu.LoadNonPlayerCharacters(_selectedStation.GetNonPlayerCharacters());
+	}
+
+	private void AttachButtons()
+	{
+		var leaveButton = GetNode<IconButton>("%ExitButton");
+		leaveButton.Pressed += OnLeaveButtonPressed;
 		
-		commsMenu.Closing += () =>
-			Visible = true;
+		var tradeButton = GetNode<IconButton>("%TradeButton");
+		tradeButton.Pressed += OnTradeButtonPressed;
+		
+		_playerButton = GetNode<IconButton>("%PlayerButton");
+		_playerButton.Pressed += HideMenus;
+		
+		_commsButton = GetNode<IconButton>("%BarButton");
+		_commsButton.Pressed += OnCommsButtonPressed;
+		
+		_equipmentButton = GetNode<IconButton>("%EquipmentButton");
+		_shipyardButton = GetNode<IconButton>("%ShipyardButton");
+	}
+
+	private void AttachMenus()
+	{
+		_commsMenu = GetNode<CommsMenu>("%CommsMenu");
+		_tradeMenu = GetNode<TradeMenu>("%TradeMenu");
+		
+		HideMenus();
+	}
+
+	private void HideMenus()
+	{
+		_commsMenu.Visible = false;
+		_commsMenu.ClearChat();
+		
+		_tradeMenu.Visible = false;
+		_tradeMenu.ClearMenu();
 	}
 }

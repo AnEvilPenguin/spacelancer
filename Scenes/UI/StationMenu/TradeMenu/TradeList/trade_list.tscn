@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://xwvk678nmisa"]
 
-[ext_resource type="Script" path="res://Scenes/UI/TradeMenu/TradeList/TradeList.cs" id="1_ga6iy"]
+[ext_resource type="Script" path="res://Scenes/UI/StationMenu/TradeMenu/TradeList/TradeList.cs" id="1_ga6iy"]
 
 [node name="TradeList" type="PanelContainer"]
 anchors_preset = 15
