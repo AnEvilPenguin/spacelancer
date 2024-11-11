@@ -11,6 +11,8 @@
     <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Configuration\Commodities.json" />
     <Content Include="Configuration\Conversations\foo.json" />
+    <Content Include="Configuration\Schemas\Commodities.json" />
   </ItemGroup>
 </Project>
