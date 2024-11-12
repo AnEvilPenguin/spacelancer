@@ -14,8 +14,11 @@
     <Content Include="Configuration\Commodities.json" />
     <Content Include="Configuration\Conversations\foo.json" />
     <Content Include="Configuration\Schemas\Commodities.json" />
+    <Content Include="Configuration\Schemas\Stations.json" />
     <Content Include="Configuration\Schemas\Systems.json" />
     <Content Include="Configuration\Systems.json" />
+    <Content Include="Configuration\Systems\UA01\Stations.json" />
+    <Content Include="Configuration\Systems\UA02\Stations.json" />
     <Content Include="Controllers\GameController\game_controller.tscn" />
   </ItemGroup>
 </Project>

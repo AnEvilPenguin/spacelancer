@@ -1,0 +1,23 @@
+﻿{
+  "$schema": "../../Schemas/Stations.json",
+  "stations": [
+    {
+      "id": "UA02_S01",
+      "displayName": "Brummbaer Station",
+      "stationType": "Mine",
+      "affiliation": "Unaffiliated",
+      "listings": [
+        {
+          "commodity": "EnergyCell",
+          "transaction": "buy",
+          "price": 7
+        },
+        {
+          "commodity": "Silicon",
+          "transaction": "sell",
+          "price": 45
+        }
+      ]
+    }
+  ]
+}

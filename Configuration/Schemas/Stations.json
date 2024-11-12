@@ -1,0 +1,65 @@
+﻿{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "stations": {
+      "title": "Stations",
+      "description": "Defines space stations that a player can visit",
+      "type": "array",
+      "items": {
+        "title": "Station",
+        "description": "An individual station",
+        "properties": {
+          "id": {
+            "description": "The unique id that is used to identify the station",
+            "type": "string"
+          },
+          "displayName": {
+            "description": "The name of the station that is shown to the player",
+            "type": "string"
+          },
+          "affiliation": {
+            "description": "The 'owner' of the station",
+            "type": "string"
+          },
+          "stationType": {
+            "description": "The type of station. Used to determine the visuals",
+            "type": "string",
+            "enum": [
+              "Mine",
+              "Factory",
+              "Generic"
+            ]
+          },
+          "listings": {
+            "description": "A list of any items on sale or specifically bought at the station",
+            "type": "array",
+            "items": {
+              "title": "Listing",
+              "description": "An individual item listing",
+              "type": "object",
+              "properties": {
+                "commodity": {
+                  "type": "string",
+                  "description": "The commodity id listed"
+                },
+                "transaction": {
+                  "type": "string",
+                  "description": "The type of listing",
+                  "enum": ["buy", "sell"]
+                },
+                "price": {
+                  "type": "integer",
+                  "description": "The price at which the commodity is bought"
+                }
+              },
+              "required": ["commodity", "transaction"]
+            }
+          }
+        },
+        "required": ["id", "displayName", "affiliation", "stationType"]
+      }
+    }
+  },
+  "required": ["stations"]
+}
