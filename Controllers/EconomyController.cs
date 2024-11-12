@@ -20,13 +20,7 @@ public class EconomyController
     
     private void LoadCommodities()
     {
-        var configuration = CommodityLoader.LoadFromResource("Commodities");
-
-        if (!configuration.TryGetValue("commodities", out var rawCommodities))
-        {
-            Log.Error("Commodities configuration file not loaded correctly {rawData}", configuration);
-            throw new InvalidOperationException("Commodities configuration file not loaded correctly");
-        }
+        var rawCommodities = CommodityLoader.GetTokenFromResource("Commodities", "commodities");
 
         foreach (var rawCommodity in rawCommodities)
         {
