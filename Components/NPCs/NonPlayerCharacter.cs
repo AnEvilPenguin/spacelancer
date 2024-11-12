@@ -9,8 +9,11 @@ namespace Spacelancer.Components.NPCs;
 public class NonPlayerCharacter
 {
     public string Name { get; private set; }
-    private readonly List<Dialog> _dialogList = new List<Dialog>();
-
+    
+    private static readonly JsonResource ConversationLoader = new("res://Configuration/Conversations");
+    
+    private readonly List<Dialog> _dialogList = new();
+    
     public NonPlayerCharacter(string name)
     {
         Name = name;
@@ -18,7 +21,7 @@ public class NonPlayerCharacter
 
     public void LoadDialog()
     {
-        var dialogs = JsonResource.LoadFromResource(Name.ToLower())?.GetValue("Dialog");
+        var dialogs = ConversationLoader.LoadFromResource(Name.ToLower())?.GetValue("Dialog");
 		
         if (dialogs == null)
             return;

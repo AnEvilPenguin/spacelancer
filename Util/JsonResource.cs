@@ -5,9 +5,16 @@ namespace Spacelancer.Util;
 
 public class JsonResource
 {
-    public static JObject LoadFromResource(string resourceName)
+    private readonly string _basePath;
+
+    public JsonResource(string basePath)
     {
-        using var file = FileAccess.Open($"res://Configuration/Conversations/{resourceName}.json", FileAccess.ModeFlags.Read);
+        _basePath = basePath;
+    }
+    
+    public JObject LoadFromResource(string resourceName)
+    {
+        using var file = FileAccess.Open($"{_basePath}/{resourceName}.json", FileAccess.ModeFlags.Read);
         string content = file.GetAsText();
         
         var json = JObject.Parse(content);
