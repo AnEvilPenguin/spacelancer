@@ -41,5 +41,6 @@
         "required": ["id", "displayName", "defaultPrice", "summary", "size"]
       }
     }
-  }
+  },
+  "required": ["commodities"]
 }

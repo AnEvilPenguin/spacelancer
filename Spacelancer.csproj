@@ -15,5 +15,7 @@
     <Content Include="Configuration\Conversations\foo.json" />
     <Content Include="Configuration\Schemas\Commodities.json" />
     <Content Include="Configuration\Schemas\Systems.json" />
+    <Content Include="Configuration\Systems.json" />
+    <Content Include="Controllers\GameController\game_controller.tscn" />
   </ItemGroup>
 </Project>

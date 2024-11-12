@@ -1,0 +1,21 @@
+﻿{
+  "$schema": "./Schemas/Systems.json",
+  "systems": [
+    {
+      "id": "UA01",
+      "displayName": "Sunrise",
+      "affiliation": "Independent",
+      "jumpGates": [
+        "UA02"
+      ]
+    },
+    {
+      "id": "UA02",
+      "displayName": "Moonshot",
+      "affiliation": "Independent",
+      "jumpGates": [
+        "UA01"
+      ]
+    }
+  ]
+}

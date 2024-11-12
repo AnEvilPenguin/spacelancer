@@ -21,10 +21,20 @@
           "affiliation": {
             "description": "The 'owner' of the system",
             "type": "string"
+          },
+          "jumpGates": {
+            "description": "A list of system ids connected via Jump Gates",
+            "type": "array",
+            "items": {
+              "title": "Linked System",
+              "description": "The id of any system linked to via a jump gate",
+              "type": "string"
+            }
           }
         },
         "required": ["id", "displayName", "affiliation"]
       }
     }
-  }
+  },
+  "required": ["systems"]
 }

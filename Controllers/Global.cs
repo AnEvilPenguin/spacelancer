@@ -8,10 +8,9 @@ namespace Spacelancer.Controllers;
 public partial class Global : Node
 {
     public static Global Instance;
-    public static GameController.GameController GameController;
-    public static EconomyController.EconomyController Economy { get; } = new EconomyController.EconomyController();
     public static GameController GameController;
     public static EconomyController Economy { get; } = new();
+    public static UniverseController Universe { get; } = new();
     public static Scenes.Player.Player Player;
     
     internal Logger Logger;
