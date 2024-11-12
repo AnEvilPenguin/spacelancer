@@ -1,5 +1,6 @@
 using Godot;
 using Serilog;
+using Spacelancer.Controllers;
 
 namespace Spacelancer.Scenes.UI;
 
@@ -10,11 +11,11 @@ public partial class MainMenu : CenterContainer
 	private Button _settingsButton;
 	private Button _quitButton;
 	
-	private Controllers.GameController.GameController _gameController;
+	private GameController _gameController;
 
 	public override void _Ready()
 	{
-		_gameController = Controllers.Global.GameController;
+		_gameController = Global.GameController;
 		
 		_settingsButton = GetNode<Button>("%SettingsButton");
 

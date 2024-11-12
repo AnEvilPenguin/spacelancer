@@ -4,7 +4,7 @@ using Serilog;
 using Spacelancer.Components.Economy.Commodities;
 using Spacelancer.Util;
 
-namespace Spacelancer.Controllers.EconomyController;
+namespace Spacelancer.Controllers;
 
 public class EconomyController
 {
