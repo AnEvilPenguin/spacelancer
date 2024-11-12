@@ -14,5 +14,6 @@
     <Content Include="Configuration\Commodities.json" />
     <Content Include="Configuration\Conversations\foo.json" />
     <Content Include="Configuration\Schemas\Commodities.json" />
+    <Content Include="Configuration\Schemas\Systems.json" />
   </ItemGroup>
 </Project>

@@ -1,22 +1,52 @@
-﻿using System.Collections.Generic;
-using Spacelancer.Components.Economy;
+﻿using System;
+using System.Collections.Generic;
+using Serilog;
 using Spacelancer.Components.Economy.Commodities;
+using Spacelancer.Util;
 
 namespace Spacelancer.Controllers.EconomyController;
 
 public class EconomyController
 {
-    // Long term we need to think about how we want to handle this.
-    // Do we need a functioning long term economy, or can we just have something that only the player interacts with?
-    // Initial plan: Just don't keep track of things. Let a player buy as much as they can carry, and sell as much as they have
-    // Have a default price per commodity
-    // Have specific overrides for specific stations
+    private static readonly JsonResource CommodityLoader = new("res://Configuration/");
+    
+    private readonly Dictionary<string, Commodity> _commodities = new();
 
-    private readonly Economy _economy = new Economy();
+    public void LoadCommodities()
+    {
+        var configuration = CommodityLoader.LoadFromResource("Commodities");
+
+        if (!configuration.ContainsKey("commodities"))
+        {
+            Log.Error("Commodities configuration file not loaded correctly {rawData}", configuration);
+            throw new InvalidOperationException("Commodities configuration file not loaded correctly");
+        }
+        
+        var rawCommodities = configuration["commodities"];
+        foreach (var rawCommodity in rawCommodities)
+        {
+            var id = rawCommodity.Value<String>("id");
+            var name = rawCommodity.Value<String>("displayName");
+            var price = rawCommodity.Value<int>("defaultPrice");
+            var description = rawCommodity.Value<String>("summary");
+            var rawSize = rawCommodity.Value<String>("size");
+
+            if (!Enum.TryParse(rawSize, out CommoditySize size))
+            {
+                Log.Error("Commodity size for {id} is not valid {rawSize}", id,rawSize);
+                break;
+            }
+            
+            var commodity = new Commodity(name, price, description, size);
+            
+            _commodities.Add(id, commodity);
+        }
+    }
+    
+    public Commodity GetCommodity(string commodityId) =>
+        _commodities[commodityId];
 
     public void LoadEconomy() =>
-        _economy.LoadCommodities();
-
-    public Commodity GetCommodity(string commodityId) =>
-        _economy.GetCommodity(commodityId);
+        LoadCommodities();
+    
 }
