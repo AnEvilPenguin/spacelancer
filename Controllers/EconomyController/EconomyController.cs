@@ -11,18 +11,23 @@ public class EconomyController
     private static readonly JsonResource CommodityLoader = new("res://Configuration/");
     
     private readonly Dictionary<string, Commodity> _commodities = new();
+    
+    public Commodity GetCommodity(string commodityId) =>
+        _commodities[commodityId];
 
-    public void LoadCommodities()
+    public void LoadEconomy() =>
+        LoadCommodities();
+    
+    private void LoadCommodities()
     {
         var configuration = CommodityLoader.LoadFromResource("Commodities");
 
-        if (!configuration.ContainsKey("commodities"))
+        if (!configuration.TryGetValue("commodities", out var rawCommodities))
         {
             Log.Error("Commodities configuration file not loaded correctly {rawData}", configuration);
             throw new InvalidOperationException("Commodities configuration file not loaded correctly");
         }
-        
-        var rawCommodities = configuration["commodities"];
+
         foreach (var rawCommodity in rawCommodities)
         {
             var id = rawCommodity.Value<String>("id");
@@ -42,11 +47,4 @@ public class EconomyController
             _commodities.Add(id, commodity);
         }
     }
-    
-    public Commodity GetCommodity(string commodityId) =>
-        _commodities[commodityId];
-
-    public void LoadEconomy() =>
-        LoadCommodities();
-    
 }
