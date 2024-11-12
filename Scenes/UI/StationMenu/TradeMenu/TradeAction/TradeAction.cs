@@ -1,7 +1,9 @@
 using System;
 using Godot;
 using Serilog;
-using Spacelancer.Components.Commodities;
+using Spacelancer.Components.Economy.Commodities;
+
+namespace Spacelancer.Scenes.UI.StationMenu.TradeMenu.TradeAction;
 
 public partial class TradeAction : Control
 {

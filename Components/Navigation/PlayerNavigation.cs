@@ -10,9 +10,9 @@ public class PlayerNavigation : INavigationSoftware
     public string Name { get => _name; }
     
     private const string _name = "PlayerNavigation";
-    private readonly Player _player;
+    private readonly Scenes.Player.Player _player;
 
-    public PlayerNavigation(Player player)
+    public PlayerNavigation(Scenes.Player.Player player)
     {
         _player = player;
     }

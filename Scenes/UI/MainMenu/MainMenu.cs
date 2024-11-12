@@ -1,6 +1,8 @@
 using Godot;
 using Serilog;
 
+namespace Spacelancer.Scenes.UI;
+
 public partial class MainMenu : CenterContainer
 {
 	private Button _continueButton;
@@ -8,11 +10,11 @@ public partial class MainMenu : CenterContainer
 	private Button _settingsButton;
 	private Button _quitButton;
 	
-	private GameController _gameController;
+	private Controllers.GameController.GameController _gameController;
 
 	public override void _Ready()
 	{
-		_gameController = Global.GameController;
+		_gameController = Controllers.Global.GameController;
 		
 		_settingsButton = GetNode<Button>("%SettingsButton");
 
@@ -54,7 +56,7 @@ public partial class MainMenu : CenterContainer
 
 	private void ConfigureQuitButton()
 	{
-        _quitButton = GetNode<Button>("%QuitButton");
+		_quitButton = GetNode<Button>("%QuitButton");
 
 		_quitButton.Pressed += () =>
 		{
@@ -62,9 +64,9 @@ public partial class MainMenu : CenterContainer
 
 			// We want to send the quit notification so that other components
 			//     get the chance to shut down cleanly.
-            GetTree().Root.PropagateNotification((int)NotificationWMCloseRequest);
-        };
-    }
+			GetTree().Root.PropagateNotification((int)NotificationWMCloseRequest);
+		};
+	}
 
 	private void ConfigureNewGameButton()
 	{

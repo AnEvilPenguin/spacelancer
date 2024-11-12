@@ -18,9 +18,9 @@ public class LaneNavigation : INavigationSoftware
     
     public string Name => $"LaneNavigation - {_origin.Name} to {_destination.Name} - {_state}";
 
-    private readonly Player _player;
-    private readonly Spacelane _origin;
-    private readonly Spacelane _destination;
+    private readonly Scenes.Player.Player _player;
+    private readonly Scenes.Spacelane.Spacelane _origin;
+    private readonly Scenes.Spacelane.Spacelane _destination;
 
     private readonly INavigationSoftware _originalSoftware;
     
@@ -28,7 +28,7 @@ public class LaneNavigation : INavigationSoftware
     
     // FIXME develop interface/class for space ships?
     // Could consider having some sort of sensor range to fire off events for nearby objects?
-    public LaneNavigation(Player ship, Spacelane origin, Spacelane destination)
+    public LaneNavigation(Scenes.Player.Player ship, Scenes.Spacelane.Spacelane origin, Scenes.Spacelane.Spacelane destination)
     {
         _player = ship;
         _origin = origin;

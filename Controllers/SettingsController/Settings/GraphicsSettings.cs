@@ -1,6 +1,8 @@
 ﻿using Godot;
 using Serilog;
 
+namespace Spacelancer.Controllers.SettingsController.Settings;
+
 /// <summary>
 /// Settings related to graphics, FullScreen, Resolution, etc.
 /// </summary>

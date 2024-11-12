@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using Spacelancer.Components.Commodities;
 using Spacelancer.Components.Economy;
+using Spacelancer.Components.Economy.Commodities;
 
 namespace Spacelancer.Controllers.EconomyController;
 

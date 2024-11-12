@@ -1,5 +1,6 @@
 using Godot;
-using Spacelancer.Controllers.EconomyController;
+
+namespace Spacelancer.Controllers;
 
 /// <summary>
 /// Auto-load class to enable us to manage controllers nicely
@@ -7,12 +8,12 @@ using Spacelancer.Controllers.EconomyController;
 public partial class Global : Node
 {
     public static Global Instance;
-    public static GameController GameController;
-    public static EconomyController Economy { get; } = new EconomyController();
-    public static Player Player;
+    public static GameController.GameController GameController;
+    public static EconomyController.EconomyController Economy { get; } = new EconomyController.EconomyController();
+    public static Scenes.Player.Player Player;
     
     internal Logger Logger;
-    internal SettingsController SettingsController;
+    internal SettingsController.SettingsController SettingsController;
 
     public override void _Ready()
     {
@@ -23,7 +24,7 @@ public partial class Global : Node
 
         // Logger needs to be loaded first, other things rely on it.
         Logger = Logger.Instance;
-        SettingsController = SettingsController.Instance;
+        SettingsController = Controllers.SettingsController.SettingsController.Instance;
 
         GetTree().AutoAcceptQuit = false;
     }

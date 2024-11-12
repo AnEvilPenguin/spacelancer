@@ -1,4 +1,4 @@
-﻿namespace Spacelancer.Components.Commodities;
+﻿namespace Spacelancer.Components.Economy.Commodities;
 
 public sealed class CommodityListing
 {

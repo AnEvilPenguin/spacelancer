@@ -2,14 +2,16 @@ using System;
 using System.Collections.Generic;
 using Godot;
 using Serilog;
-using Spacelancer.Components.Commodities;
+using Spacelancer.Components.Economy.Commodities;
 using Spacelancer.Components.NPCs;
+
+namespace Spacelancer.Scenes.Stations;
 
 public partial class Station : Node2D
 {
 	// We may need to consider making this docking range if we make a map and remote comms or something
 	private bool _playerInCommsRange = false;
-	private StationMenu _menu;
+	private UI.StationMenu.StationMenu _menu;
 	
 	private readonly List<Tuple<Commodity, int>> _commoditiesForSale = new List<Tuple<Commodity, int>>();
 	private readonly Dictionary<string, int> _commodityBuyPriceOverride = new Dictionary<string, int>();
@@ -32,7 +34,7 @@ public partial class Station : Node2D
 		if (Input.IsKeyPressed(Key.C) && (_menu == null || !_menu.Visible))
 		{
 			Log.Debug("Comms initiated with {StationName}", Name);
-			_menu = Global.GameController.LoadScene<StationMenu>("res://Scenes/UI/StationMenu/station_menu.tscn");
+			_menu = Controllers.Global.GameController.LoadScene<UI.StationMenu.StationMenu>("res://Scenes/UI/StationMenu/station_menu.tscn");
 			_menu.ShowMenu(this);
 		}
 	}
@@ -75,12 +77,12 @@ public partial class Station : Node2D
 
 	private void OnStationAreaEntered(Node2D body)
 	{
-		if (body is Player)
+		if (body is Player.Player)
 		{
 			_playerInCommsRange = true;
 			Log.Debug("Player in comms range of {StationName}", Name);
 			
-			var label = Global.GameController.TempStationLabel;
+			var label = Controllers.Global.GameController.TempStationLabel;
 			label.Text = $"Press C to talk to {Name}";
 			label.Visible = true;
 		}
@@ -88,12 +90,12 @@ public partial class Station : Node2D
 
 	private void OnStationAreaExited(Node2D body)
 	{
-		if (body is Player)
+		if (body is Player.Player)
 		{
 			_playerInCommsRange = false;
 			Log.Debug("Player left comms range of {StationName}", Name);
 			
-			var label = Global.GameController.TempStationLabel;
+			var label = Controllers.Global.GameController.TempStationLabel;
 			label.Visible = false;
 		}
 	}

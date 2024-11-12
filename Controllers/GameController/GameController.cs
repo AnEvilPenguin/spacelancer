@@ -4,6 +4,8 @@ using System.Linq;
 using Godot;
 using Serilog;
 
+namespace Spacelancer.Controllers.GameController;
+
 /// <summary>
 /// Handles loading and displaying of scenes and user interfaces.
 /// </summary>
@@ -39,7 +41,7 @@ public partial class GameController : Node
         Global.Economy.LoadEconomy();
 			
         LoadScene<Node2D>("res://Scenes/Systems/sunrise.tscn");
-        Global.Player = LoadScene<Player>("res://Scenes/Player/player.tscn");
+        Global.Player = LoadScene<Scenes.Player.Player>("res://Scenes/Player/player.tscn");
     }
 
     public T LoadScene<T>(string scenePath) where T : Node

@@ -1,23 +1,25 @@
-using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Godot;
 using Serilog;
 using Spacelancer.Components.NPCs;
-using Spacelancer.Scenes.UI.CommsMenu.ChatArea;
+using Spacelancer.Scenes.UI.StationMenu.CommsMenu.ChatArea;
+
+namespace Spacelancer.Scenes.UI.StationMenu.CommsMenu;
 
 public partial class CommsMenu : PanelContainer
 {
-	private ChatArea _chatArea;
-	private MessageArea _messageArea;
+	private ChatArea.ChatArea _chatArea;
+	private ChatArea.MessageArea _messageArea;
 	
 	private List<NonPlayerCharacter> _nonPlayerCharacters;
 	private NonPlayerCharacter _currentNonPlayerCharacter;
 	
 	public override void _Ready()
 	{
-		_chatArea = GetNode<ChatArea>("%ChatArea");
-		_messageArea = GetNode<MessageArea>("%MessageArea");
+		_chatArea = GetNode<ChatArea.ChatArea>("%ChatArea");
+		_messageArea = GetNode<ChatArea.MessageArea>("%MessageArea");
 
 		_messageArea.ActionSelected += OnMessageAreaSelected;
 	}

@@ -1,7 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog;
-using System;
+
+namespace Spacelancer.Controllers.SettingsController.Settings;
 
 /// <summary>
 /// Implements common logic for all 'settings' classes

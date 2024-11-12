@@ -1,6 +1,6 @@
 ﻿using Godot;
 
-namespace Spacelancer.Components.Commodities;
+namespace Spacelancer.Components.Economy.Commodities;
 
 public class Commodity
 {

@@ -1,4 +1,4 @@
-﻿namespace Spacelancer.Scenes.UI.CommsMenu.ChatArea;
+﻿namespace Spacelancer.Scenes.UI.StationMenu.CommsMenu.ChatArea;
 
 public enum ChatDirection
 {

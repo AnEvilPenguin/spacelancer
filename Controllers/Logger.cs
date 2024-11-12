@@ -1,6 +1,9 @@
-﻿using Serilog;
+﻿using System.IO;
+using Serilog;
 using Serilog.Core;
-using System.IO;
+using Constants = Spacelancer.Util.Constants;
+
+namespace Spacelancer.Controllers;
 
 /// <summary>
 /// Configures and closes down the log system.

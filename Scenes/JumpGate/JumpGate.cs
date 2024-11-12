@@ -2,6 +2,8 @@ using Godot;
 using Serilog;
 using Spacelancer.Components.Navigation;
 
+namespace Spacelancer.Scenes.JumpGate;
+
 public partial class JumpGate : Node2D
 {
     private Area2D _entry;
@@ -21,7 +23,7 @@ public partial class JumpGate : Node2D
     {
         Log.Debug("{Body} entered jump gate to {Destination}", body.Name, Name);
         
-        if (body is Player player)
+        if (body is Player.Player player)
         {
             TakeControlOfShip(player);
         }
@@ -32,7 +34,7 @@ public partial class JumpGate : Node2D
         Log.Debug("{Body} exited jump gate from {Destination}", body.Name, Name);
     }
     
-    private void TakeControlOfShip(Player player)
+    private void TakeControlOfShip(Player.Player player)
     {
         if (player.NavComputer is JumpNavigation)
             return;

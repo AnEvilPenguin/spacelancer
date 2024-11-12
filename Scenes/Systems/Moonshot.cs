@@ -1,16 +1,15 @@
 using Godot;
-using System;
-using Spacelancer.Components.Commodities;
-using Spacelancer.Components.Economy;
+
+namespace Spacelancer.Scenes.Systems;
 
 public partial class Moonshot : Node2D
 {
 	public override void _Ready()
 	{
-		var station = GetNode<Station>("Silicon Mine");
+		var station = GetNode<Stations.Station>("Silicon Mine");
 
-		var energyCell = Global.Economy.GetCommodity("EnergyCell");
-		var silicon = Global.Economy.GetCommodity("Silicon");
+		var energyCell = Controllers.Global.Economy.GetCommodity("EnergyCell");
+		var silicon = Controllers.Global.Economy.GetCommodity("Silicon");
 		
 		station.AddCommodityForSale(silicon, 45);
 		station.AddCommodityToBuy(energyCell, 7);
