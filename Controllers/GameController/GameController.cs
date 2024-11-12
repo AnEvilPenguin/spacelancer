@@ -32,6 +32,16 @@ public partial class GameController : Node
         Log.Debug("Game controller loaded");
     }
 
+    public void NewGame()
+    {
+        UnloadWorld2D();
+        
+        Global.Economy.LoadEconomy();
+			
+        LoadScene<Node2D>("res://Scenes/Systems/sunrise.tscn");
+        Global.Player = LoadScene<Player>("res://Scenes/Player/player.tscn");
+    }
+
     public T LoadScene<T>(string scenePath) where T : Node
     {
         if (_loadedScenes.ContainsKey(scenePath) && _loadedScenes[scenePath] is T scene)

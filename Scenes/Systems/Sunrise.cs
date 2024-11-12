@@ -14,9 +14,9 @@ public partial class Sunrise : Node2D
 		var station1 = GetNode<Station>("Station1");
 		var station2 = GetNode<Station>("Station2");
 		
-		var energyCell = Global.Economy.GetCommodity(CommodityType.EnergyCell);
-		var silicon = Global.Economy.GetCommodity(CommodityType.Silicon);
-		var microcontroller = Global.Economy.GetCommodity(CommodityType.Microcontroller);
+		var energyCell = Global.Economy.GetCommodity("EnergyCell");
+		var silicon = Global.Economy.GetCommodity("Silicon");
+		var microcontroller = Global.Economy.GetCommodity("Microcontroller");
 		
 		station1.AddCommodityForSale(energyCell);
 		station1.AddCommodityToBuy(microcontroller, 160);

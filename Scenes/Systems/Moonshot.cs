@@ -9,8 +9,8 @@ public partial class Moonshot : Node2D
 	{
 		var station = GetNode<Station>("Silicon Mine");
 
-		var energyCell = Global.Economy.GetCommodity(CommodityType.EnergyCell);
-		var silicon = Global.Economy.GetCommodity(CommodityType.Silicon);
+		var energyCell = Global.Economy.GetCommodity("EnergyCell");
+		var silicon = Global.Economy.GetCommodity("Silicon");
 		
 		station.AddCommodityForSale(silicon, 45);
 		station.AddCommodityToBuy(energyCell, 7);

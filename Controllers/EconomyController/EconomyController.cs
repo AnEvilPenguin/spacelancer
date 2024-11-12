@@ -14,6 +14,9 @@ public class EconomyController
 
     private readonly Economy _economy = new Economy();
 
-    public Commodity GetCommodity(CommodityType commodityName) =>
-        _economy.GetCommodity(commodityName);
+    public void LoadEconomy() =>
+        _economy.LoadCommodities();
+
+    public Commodity GetCommodity(string commodityId) =>
+        _economy.GetCommodity(commodityId);
 }
