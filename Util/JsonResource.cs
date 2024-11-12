@@ -20,7 +20,4 @@ public class JsonResource
         var json = JObject.Parse(content);
         return json;
     }
-    
-    // Read in file from res:// path
-    // Do newtonsofty things?
 }
