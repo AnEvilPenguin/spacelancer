@@ -4,7 +4,8 @@
     {
       "station": "UA01_S01",
       "listings": [
-        {"commodity": "EnergyCell", "transaction": "Sell"}
+        {"commodity": "EnergyCell", "transaction": "Sell"},
+        {"commodity": "Microcontroller", "transaction": "Buy", "price": 160}
       ]
     },
     {
