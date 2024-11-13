@@ -2,6 +2,7 @@ using Godot;
 using Spacelancer.Components.NPCs;
 using Spacelancer.Controllers;
 using Spacelancer.Scenes.Stations;
+using Spacelancer.Scenes.Transitions;
 using Spacelancer.Universe;
 
 namespace Spacelancer.Scenes.Systems;
@@ -12,6 +13,12 @@ public partial class Sunrise : Node2D
 	{
 		var system = Global.Universe.GetSystem("UA01");
 		
+		BuildStations(system);
+		BuildJumpGates(system);
+	}
+
+	private void BuildStations(SolarSystem system)
+	{
 		var stations = system.GetStations();
 		
 		foreach (var spaceStation in stations)
@@ -24,7 +31,7 @@ public partial class Sunrise : Node2D
 	{
 		var location = stationConfig.Location;
 		
-		var stationNode = Station.GetInstance(stationConfig.Type);
+		var stationNode = Station.GetNewInstance(stationConfig.Type);
 		
 		stationNode.Position = location.Position;
 		stationNode.Rotation = Mathf.DegToRad(location.RotationDegrees);
@@ -44,4 +51,17 @@ public partial class Sunrise : Node2D
 		
 		AddChild(stationNode);
 	}
+
+	private void BuildJumpGates(SolarSystem system) =>
+		system.GetJumpGateDestinations()
+			.ForEach((systemId) =>
+			{
+				var destination = Global.Universe.GetSystem(systemId);
+
+				var gate = JumpGate.GetNewInstance();
+				gate.Name = destination.Name;
+				gate.Position = new Vector2(0, 7000);
+				
+				AddChild(gate);
+			});
 }

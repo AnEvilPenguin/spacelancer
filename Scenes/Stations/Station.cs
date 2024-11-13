@@ -22,7 +22,7 @@ public partial class Station : Node2D
 	
 	private readonly List<NonPlayerCharacter> _nonPlayerCharacters = new List<NonPlayerCharacter>();
 
-	public static Node2D GetInstance(StationType stationType)
+	public static Node2D GetNewInstance(StationType stationType)
 	{
 		var scene = stationType switch
 		{

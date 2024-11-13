@@ -22,7 +22,7 @@ public partial class Moonshot : Node2D
 	{
 		var location = stationConfig.Location;
 		
-		var stationNode = Station.GetInstance(stationConfig.Type);
+		var stationNode = Station.GetNewInstance(stationConfig.Type);
 		
 		stationNode.Position = location.Position;
 		stationNode.Rotation = Mathf.DegToRad(location.RotationDegrees);

@@ -2,11 +2,16 @@ using Godot;
 using Serilog;
 using Spacelancer.Components.Navigation;
 
-namespace Spacelancer.Scenes.JumpGate;
+namespace Spacelancer.Scenes.Transitions;
 
 public partial class JumpGate : Node2D
 {
+    private static readonly PackedScene Scene = GD.Load<PackedScene>("res://Scenes/Transitions/jump_gate.tscn");
+    
     private Area2D _entry;
+
+    public static JumpGate GetNewInstance() =>
+        Scene.Instantiate<JumpGate>();
 
     public override void _Ready()
     {

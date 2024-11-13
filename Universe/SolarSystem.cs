@@ -27,6 +27,9 @@ public sealed class SolarSystem : IEntity
     
     public void AddJumpGateLink(IEnumerable<string> destinations) =>
         _jumpGateDestinations.AddRange(destinations);
+    
+    public List<string> GetJumpGateDestinations() =>
+        new List<string>(_jumpGateDestinations);
 
     public void LoadStations()
     {

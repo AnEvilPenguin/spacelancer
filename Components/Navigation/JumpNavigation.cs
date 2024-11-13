@@ -1,5 +1,7 @@
 ﻿using Godot;
 using Serilog;
+using Spacelancer.Scenes.Transitions;
+using Spacelancer.Scenes.Player;
 
 namespace Spacelancer.Components.Navigation;
 
@@ -16,9 +18,9 @@ public class JumpNavigation : INavigationSoftware
     }
     public string Name => $"JumpNavigation - {_state}";
     
-    private readonly Scenes.Player.Player _player;
-    private readonly Scenes.JumpGate.JumpGate _origin;
-    private Scenes.JumpGate.JumpGate _exit;
+    private readonly Player _player;
+    private readonly JumpGate _origin;
+    private JumpGate _exit;
     private readonly string _destination;
     
     private Node2D _destinationNode;
@@ -28,7 +30,7 @@ public class JumpNavigation : INavigationSoftware
 
     private JumpState _state;
     
-    public JumpNavigation(Scenes.Player.Player ship, Scenes.JumpGate.JumpGate origin, string destination)
+    public JumpNavigation(Player ship, JumpGate origin, string destination)
     {
         _player = ship;
         _origin = origin;
@@ -104,7 +106,7 @@ public class JumpNavigation : INavigationSoftware
     {
         var oldSystem = _origin.GetParent<Node2D>();
         
-        _exit = _destinationNode.GetNode<Scenes.JumpGate.JumpGate>($"{oldSystem.Name}");
+        _exit = _destinationNode.GetNode<JumpGate>($"{oldSystem.Name}");
         _exitMarker = _exit.GetExitMarker();
         
         _destinationNode.Visible = true;

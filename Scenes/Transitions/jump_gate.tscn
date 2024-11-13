@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://dv5d275uoyl83"]
 
-[ext_resource type="Script" path="res://Scenes/JumpGate/JumpGate.cs" id="1_0rpia"]
+[ext_resource type="Script" path="res://Scenes/Transitions/JumpGate.cs" id="1_0rpia"]
 [ext_resource type="Texture2D" uid="uid://gmqsa67ro2nm" path="res://Assets/Placeholder Art/spaceStation_030.png" id="2_81tan"]
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_fetof"]

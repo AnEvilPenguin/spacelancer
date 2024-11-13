@@ -1,7 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://c4mljrynnxorl"]
+[gd_scene load_steps=3 format=3 uid="uid://c4mljrynnxorl"]
 
 [ext_resource type="Script" path="res://Scenes/Systems/Sunrise.cs" id="1_p6squ"]
-[ext_resource type="PackedScene" uid="uid://dv5d275uoyl83" path="res://Scenes/JumpGate/jump_gate.tscn" id="6_f21fx"]
 [ext_resource type="PackedScene" uid="uid://c5ncrwmqu6r64" path="res://Scenes/Spacelane/spacelane.tscn" id="6_pf0hb"]
 
 [node name="Sunrise" type="Node2D"]
@@ -25,6 +24,3 @@ Partner = NodePath("../Spacelane2b")
 position = Vector2(0, 6200)
 rotation = 3.14159
 Partner = NodePath("../Spacelane2a")
-
-[node name="Moonshot" parent="." instance=ExtResource("6_f21fx")]
-position = Vector2(0, 7000)
