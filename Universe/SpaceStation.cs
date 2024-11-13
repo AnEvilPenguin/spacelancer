@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json.Linq;
 using Spacelancer.Controllers;
 using Spacelancer.Economy;
 
@@ -11,41 +10,28 @@ public sealed class SpaceStation : IEntity
 {
     public string Id { get; }
     public string Name { get; }
-    private List<CommodityListing> _commodityListings { get; } = new List<CommodityListing>();
-    
+    public Location Location { get; }
 
-    public SpaceStation(string id, string name)
+    public SpaceStation(string id, string name, Location location)
     {
         Id = id;
         Name = name;
+        Location = location;
     }
 
-    public void AddMarketListings(JToken listings)
-    {
-        foreach (var listing in listings)
-        {
-            var commodityId = listing.Value<string>("commodity");
-            var transaction = listing.Value<string>("transaction");
-            var price = listing.Value<int>("price");
-            
-            var commodity = Global.Economy.GetCommodity(commodityId);
-            Enum.TryParse(transaction, out TransactionType transactionType);
-            
-            var newListing = new CommodityListing(commodity, transactionType, price);
-            _commodityListings.Add(newListing);
-        }
-    }
-
-    public List<CommodityListing> GetListings(TransactionType type) => 
-        _commodityListings.Where(l => l.Type == type)
+    public List<CommodityListing> GetListings(TransactionType type) =>
+        Global.Economy.
+            GetListings(Id)
+            .Where(l => l.Type == type)
             .ToList();
     
     public List<CommodityListing> GetListings() =>
-        new List<CommodityListing>(_commodityListings);
+        Global.Economy.
+            GetListings(Id);
 
     public int GetListingPrice(Commodity commodity)
     {
-        var listing = _commodityListings.FirstOrDefault(l => l.Commodity == commodity);
+        var listing = GetListings().FirstOrDefault(l => l.Commodity == commodity);
         
         if (listing != null)
             return listing.Price;

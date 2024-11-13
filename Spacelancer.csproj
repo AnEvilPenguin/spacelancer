@@ -12,8 +12,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Configuration\Commodities.json" />
+    <Content Include="Configuration\CommodityListings.json" />
     <Content Include="Configuration\Conversations\foo.json" />
     <Content Include="Configuration\Schemas\Commodities.json" />
+    <Content Include="Configuration\Schemas\CommodityListing.json" />
+    <Content Include="Configuration\Schemas\CommodityListings.json" />
+    <Content Include="Configuration\Schemas\Location.json" />
+    <Content Include="Configuration\Schemas\Station.json" />
     <Content Include="Configuration\Schemas\Stations.json" />
     <Content Include="Configuration\Schemas\Systems.json" />
     <Content Include="Configuration\Systems.json" />

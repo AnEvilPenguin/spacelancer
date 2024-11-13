@@ -6,30 +6,17 @@
       "displayName": "Sunrise Orbital Settlement",
       "stationType": "Generic",
       "affiliation": "Unaffiliated",
-      "listings": [
-        {
-          "commodity": "EnergyCell",
-          "transaction": "Sell"
-        }
-      ]
+      "location": {
+      }
     },
     {
       "id": "UA01_S02",
       "displayName": "Annika's Redoubt",
       "stationType": "Factory",
       "affiliation": "Unaffiliated",
-      "listings": [
-        {
-          "commodity": "Silicon",
-          "transaction": "Buy",
-          "price": 135
-        },
-        {
-          "commodity": "Microcontroller",
-          "transaction": "Sell",
-          "price": 116
-        }
-      ]
+      "location": {
+        "X": 7030
+      }
     }
   ]
 }

@@ -33,15 +33,12 @@ public sealed class SolarSystem : IEntity
         {
             var id = station.Value<string>("id");
             var name = station.Value<string>("displayName");
+            var location = Location.ConvertJTokenToLocation(station["location"]);
 
-            var newStation = new SpaceStation(id, name);
+            var newStation = new SpaceStation(id, name, location);
             
             _spaceStations.Add(id, newStation);
             _spaceStationLookup.Add(id, name);
-            
-            var listings = station["listings"];
-            if (listings != null)
-                newStation.AddMarketListings(listings);
         }
     }
 

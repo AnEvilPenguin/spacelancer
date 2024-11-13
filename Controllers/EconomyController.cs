@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Newtonsoft.Json.Linq;
 using Serilog;
 using Spacelancer.Economy;
 using Spacelancer.Util;
@@ -11,12 +13,20 @@ public class EconomyController
     private static readonly JsonResource CommodityLoader = new("res://Configuration/");
     
     private readonly Dictionary<string, Commodity> _commodities = new();
+    private readonly Dictionary<string, List<CommodityListing>> _commodityListings = new();
     
     public Commodity GetCommodity(string commodityId) =>
         _commodities[commodityId];
 
-    public void LoadEconomy() =>
+    public List<CommodityListing> GetListings(string stationId) =>
+        _commodityListings[stationId];
+
+    public void LoadEconomy()
+    {
         LoadCommodities();
+        LoadListings();
+    }
+        
     
     private void LoadCommodities()
     {
@@ -41,5 +51,45 @@ public class EconomyController
             
             _commodities.Add(id, commodity);
         }
+    }
+
+    private void LoadListings()
+    {
+        _commodityListings.Clear();
+        
+        var stations = CommodityLoader.GetTokenFromResource("CommodityListings", "stations");
+
+        foreach (var station in stations)
+        {
+            var id = station.Value<string>("station");
+            
+            var listings = station["listings"];
+            
+            var list = GetListings(listings);
+            _commodityListings.Add(id, list);
+        }
+    }
+
+    private List<CommodityListing> GetListings(JToken listings)
+    {
+        var output = new List<CommodityListing>();
+        
+        if (listings == null)
+            return output;
+
+        foreach (var listing in listings)
+        {
+            var commodityId = listing.Value<string>("commodity");
+            var transaction = listing.Value<string>("transaction");
+            var price = listing.Value<int>("price");
+            
+            var commodity = Global.Economy.GetCommodity(commodityId);
+            Enum.TryParse(transaction, out TransactionType transactionType);
+            
+            var newListing = new CommodityListing(commodity, transactionType, price);
+            output.Add(newListing);
+        }
+        
+        return output;
     }
 }

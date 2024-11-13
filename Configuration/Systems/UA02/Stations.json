@@ -6,18 +6,10 @@
       "displayName": "Brummbaer Station",
       "stationType": "Mine",
       "affiliation": "Unaffiliated",
-      "listings": [
-        {
-          "commodity": "EnergyCell",
-          "transaction": "Buy",
-          "price": 7
-        },
-        {
-          "commodity": "Silicon",
-          "transaction": "Sell",
-          "price": 45
-        }
-      ]
+      "location": {
+        "X": 0,
+        "Y": 700
+      }
     }
   ]
 }

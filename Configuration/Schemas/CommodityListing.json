@@ -1,0 +1,21 @@
+﻿{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "/Schemas/CommodityListing",
+  "type": "object",
+  "properties": {
+    "commodity": {
+      "type": "string",
+      "description": "The unique id of a commodity"
+    },
+    "transaction": {
+      "type": "string",
+      "description": "The type of listing",
+      "enum": ["Buy", "Sell"]
+    },
+    "price": {
+      "type": "integer",
+      "description": "The price at which the commodity is bought"
+    }
+  },
+  "required": ["commodity", "transaction"]
+}

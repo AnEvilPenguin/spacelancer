@@ -1,0 +1,19 @@
+﻿{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "description": "Positioning information for an entity",
+  "properties": {
+    "X": {
+      "description": "Position on X axis",
+      "type": "integer"
+    },
+    "Y": {
+      "description": "Position on Y axis",
+      "type": "integer"
+    },
+    "rotation": {
+      "description": "The rotation of the entity in degrees",
+      "type": "integer"
+    }
+  }
+}
