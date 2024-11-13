@@ -46,7 +46,7 @@
                 "transaction": {
                   "type": "string",
                   "description": "The type of listing",
-                  "enum": ["buy", "sell"]
+                  "enum": ["Buy", "Sell"]
                 },
                 "price": {
                   "type": "integer",

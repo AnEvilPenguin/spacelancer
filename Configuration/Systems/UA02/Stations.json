@@ -9,12 +9,12 @@
       "listings": [
         {
           "commodity": "EnergyCell",
-          "transaction": "buy",
+          "transaction": "Buy",
           "price": 7
         },
         {
           "commodity": "Silicon",
-          "transaction": "sell",
+          "transaction": "Sell",
           "price": 45
         }
       ]
