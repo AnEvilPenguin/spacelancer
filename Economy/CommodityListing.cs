@@ -2,38 +2,28 @@
 
 public sealed class CommodityListing
 {
-    public int BuyingPrice
+    public int Price
     {
         get
         {
-            if (_buyingPrice < 1)
-                return _commodity.DefaultPrice;
+            if (_price < 1)
+                return Commodity.DefaultPrice;
             
-            return _buyingPrice;
+            return _price;
         }
     }
 
-    public int SellingPrice {         
-        get
-        {
-            if (_sellingPrice < 1)
-                return _commodity.DefaultPrice;
-            
-            return _sellingPrice;
-        }
-    }
+    public readonly Commodity Commodity;
+    public readonly TransactionType Type;
     
     
-    private readonly Commodity _commodity;
-    
-    private readonly int _buyingPrice;
-    private readonly int _sellingPrice;
-    
-    public CommodityListing(Commodity commodity, int buyingPrice = 0, int sellingPrice = 0)
+    private readonly int _price;
+
+    public CommodityListing(Commodity commodity, TransactionType type, int price)
     {
-        _commodity = commodity;
+        Commodity = commodity;
         
-        _buyingPrice = buyingPrice;
-        _sellingPrice = sellingPrice;
+        Type = type;
+        _price = price;
     }
 }

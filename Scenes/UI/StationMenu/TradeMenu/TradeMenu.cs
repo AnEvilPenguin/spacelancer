@@ -5,18 +5,19 @@ using Godot;
 using Serilog;
 using Spacelancer.Economy;
 using Spacelancer.Components.Storage;
+using Spacelancer.Universe;
 
 namespace Spacelancer.Scenes.UI.StationMenu.TradeMenu;
 
 public partial class TradeMenu : CenterContainer
 {
-	private Stations.Station _selectedStation;
+	private SpaceStation _selectedStation;
 	private TradeList.TradeList _sellerTradeList;
 	private TradeList.TradeList _playerTradeList;
 	private TradeAction.TradeAction _tradeAction;
 	private TradeDescription.TradeDescription _tradeDescription;
 	
-	private readonly Dictionary<int, Tuple<Commodity, int>> _stationCommodities = new ();
+	private readonly Dictionary<int, CommodityListing> _stationCommodities = new ();
 	private readonly Dictionary<int, Tuple<CommodityStack, int>> _playerCommodities = new ();
 	
 	// Called when the node enters the scene tree for the first time.
@@ -49,14 +50,14 @@ public partial class TradeMenu : CenterContainer
 		_stationCommodities.Clear();
 	}
 
-	public void LoadMenu(Stations.Station station)
+	public void LoadMenu(SpaceStation station)
 	{
 		SetStationMenu(station);
 		SetPlayerMenu(Controllers.Global.Player.Hold);
 		UpdatePlayerCashLabel();
 	}
 
-	private void SetStationMenu(Stations.Station station)
+	private void SetStationMenu(SpaceStation station)
 	{
 		_sellerTradeList.ClearItemList();
 		_stationCommodities.Clear();
@@ -64,12 +65,12 @@ public partial class TradeMenu : CenterContainer
 		_selectedStation = station;
 		_sellerTradeList.SetTitle(station.Name);
 
-		var commodities = station.GetCommodityForSale();
+		var commodities = station.GetListings(TransactionType.Sell);
 
-		foreach (var tuple in commodities)
+		foreach (var listing in commodities)
 		{
-			var index = _sellerTradeList.AddItemToList(tuple.Item1, tuple.Item2);
-			_stationCommodities.Add(index, tuple);
+			var index = _sellerTradeList.AddItemToList(listing.Commodity, listing.Price);
+			_stationCommodities.Add(index, listing);
 		}
 	}
 
@@ -84,7 +85,7 @@ public partial class TradeMenu : CenterContainer
 		{
 			var stack = hold.GetFromCargoHold(item);
 			
-			var price = _selectedStation.GetCommodityToBuyPrice(stack.Commodity);
+			var price = _selectedStation.GetListingPrice(stack.Commodity);
 			
 			var index = _playerTradeList.AddItemToList(stack.Commodity, price);
 			_playerCommodities.Add(index, new Tuple<CommodityStack, int>(stack, price));
@@ -103,9 +104,9 @@ public partial class TradeMenu : CenterContainer
 	// Also consider what way round we want these named, probably want the player to be the focus
 	private void OnTradeSellSelected(int index)
 	{
-		var tuple = _stationCommodities[(int)index];
-		var commodity = tuple.Item1;
-		var price = tuple.Item2;
+		var listing = _stationCommodities[(int)index];
+		var commodity = listing.Commodity;
+		var price = listing.Price;
 		
 		var maxPurchaseCount = GetMaxCommodityPurchase(commodity, price);
 		

@@ -20,15 +20,16 @@ public class EconomyController
     
     private void LoadCommodities()
     {
+        _commodities.Clear();
         var rawCommodities = CommodityLoader.GetTokenFromResource("Commodities", "commodities");
 
         foreach (var rawCommodity in rawCommodities)
         {
-            var id = rawCommodity.Value<String>("id");
-            var name = rawCommodity.Value<String>("displayName");
+            var id = rawCommodity.Value<string>("id");
+            var name = rawCommodity.Value<string>("displayName");
             var price = rawCommodity.Value<int>("defaultPrice");
-            var description = rawCommodity.Value<String>("summary");
-            var rawSize = rawCommodity.Value<String>("size");
+            var description = rawCommodity.Value<string>("summary");
+            var rawSize = rawCommodity.Value<string>("size");
 
             if (!Enum.TryParse(rawSize, out CommoditySize size))
             {

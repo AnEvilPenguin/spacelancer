@@ -1,4 +1,5 @@
 using Godot;
+using Spacelancer.Controllers;
 
 namespace Spacelancer.Scenes.UI.StationMenu;
 
@@ -48,8 +49,10 @@ public partial class StationMenu : PanelContainer
 	{
 		HideMenus();
 		
+		var spaceStation = Global.Universe.GetSpaceStation(_selectedStation.Id);
+		
 		_tradeMenu.Visible = true;
-		_tradeMenu.LoadMenu(_selectedStation);
+		_tradeMenu.LoadMenu(spaceStation);
 	}
 
 	private void OnCommsButtonPressed()

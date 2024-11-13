@@ -8,7 +8,7 @@
       "affiliation": "Unaffiliated",
       "listings": [
         {
-          "commodity": "energyCell",
+          "commodity": "EnergyCell",
           "transaction": "Sell"
         }
       ]
@@ -20,12 +20,12 @@
       "affiliation": "Unaffiliated",
       "listings": [
         {
-          "commodity": "silicon",
+          "commodity": "Silicon",
           "transaction": "Buy",
           "price": 135
         },
         {
-          "commodity": "microcontroller",
+          "commodity": "Microcontroller",
           "transaction": "Sell",
           "price": 116
         }

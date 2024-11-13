@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using Spacelancer.Universe;
 using Spacelancer.Util;
-using Spacelancer.Controllers.Universe;
 
 namespace Spacelancer.Controllers;
 
@@ -14,6 +14,14 @@ public class UniverseController
     public SolarSystem GetSystem(string systemId) => 
         _systems[systemId];
 
+    public SpaceStation GetSpaceStation(string stationId)
+    {
+        var systemId = stationId.Split('_')[0];
+        var system = GetSystem(systemId);
+        
+        return system.GetStation(stationId);
+    }
+
     public void LoadUniverse()
     {
         LoadSystems();
@@ -21,6 +29,8 @@ public class UniverseController
 
     private void LoadSystems()
     {
+        _systems.Clear();
+        _systemNames.Clear();
         var systems = ConfigurationLoader.GetTokenFromResource("Systems", "systems");
 
         foreach (var system in systems)
@@ -28,7 +38,7 @@ public class UniverseController
             var id = system.Value<string>("id");
             var name = system.Value<string>("displayName");
 
-            var newSystem = new SolarSystem(name);
+            var newSystem = new SolarSystem(id, name);
 
             var jumpGates = system["jumpGates"];
             if (jumpGates != null)
@@ -36,6 +46,9 @@ public class UniverseController
             
             _systems.Add(id, newSystem);
             _systemNames.Add(name, id);
+            
+            // Consider doing this async
+            newSystem.LoadStations();
         }
     }
 }

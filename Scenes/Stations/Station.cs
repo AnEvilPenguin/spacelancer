@@ -2,13 +2,15 @@ using System;
 using System.Collections.Generic;
 using Godot;
 using Serilog;
-using Spacelancer.Components.Economy.Commodities;
 using Spacelancer.Components.NPCs;
+using Spacelancer.Economy;
 
 namespace Spacelancer.Scenes.Stations;
 
 public partial class Station : Node2D
 {
+	public string Id;
+	
 	// We may need to consider making this docking range if we make a map and remote comms or something
 	private bool _playerInCommsRange = false;
 	private UI.StationMenu.StationMenu _menu;
