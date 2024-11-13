@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://ceiujmmg8wt2"]
+
+[ext_resource type="PackedScene" uid="uid://dtfjhrdepulhe" path="res://Scenes/Stations/station.tscn" id="1_k484t"]
+[ext_resource type="Texture2D" uid="uid://p8j5qfmaqx6n" path="res://Assets/Placeholder Art/spaceStation_017.png" id="2_s67ei"]
+
+[node name="Generic" type="Node2D"]
+
+[node name="Station" parent="." instance=ExtResource("1_k484t")]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_s67ei")
