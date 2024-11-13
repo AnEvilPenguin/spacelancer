@@ -4,6 +4,8 @@ using Godot;
 using Serilog;
 using Spacelancer.Components.NPCs;
 using Spacelancer.Economy;
+using Spacelancer.Scenes.UI.StationMenu;
+using Spacelancer.Universe;
 
 namespace Spacelancer.Scenes.Stations;
 
@@ -19,6 +21,19 @@ public partial class Station : Node2D
 	private readonly Dictionary<string, int> _commodityBuyPriceOverride = new Dictionary<string, int>();
 	
 	private readonly List<NonPlayerCharacter> _nonPlayerCharacters = new List<NonPlayerCharacter>();
+
+	public static Node2D GetInstance(StationType stationType)
+	{
+		var scene = stationType switch
+		{
+			StationType.Factory => GD.Load<PackedScene>("res://Scenes/Stations/factory.tscn"),
+			StationType.Mine => GD.Load<PackedScene>("res://Scenes/Stations/mine.tscn"),
+			_ => GD.Load<PackedScene>("res://Scenes/Stations/generic.tscn"),
+		};
+
+		return scene.Instantiate<Node2D>();
+	}
+		
 	
 	public override void _Ready()
 	{

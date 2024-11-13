@@ -1,25 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://jieb0e64hn06"]
+[gd_scene load_steps=3 format=3 uid="uid://jieb0e64hn06"]
 
 [ext_resource type="Script" path="res://Scenes/Systems/Moonshot.cs" id="1_3ewtp"]
-[ext_resource type="PackedScene" uid="uid://dtfjhrdepulhe" path="res://Scenes/Stations/station.tscn" id="2_l00op"]
-[ext_resource type="Texture2D" uid="uid://dmhck4k6k46jr" path="res://Assets/Placeholder Art/meteor_detailedLarge.png" id="3_c64uy"]
-[ext_resource type="Texture2D" uid="uid://drvo75puhse6v" path="res://Assets/Placeholder Art/spaceStation_027.png" id="4_lckp3"]
 [ext_resource type="PackedScene" uid="uid://dv5d275uoyl83" path="res://Scenes/JumpGate/jump_gate.tscn" id="5_lbwou"]
 
 [node name="Moonshot" type="Node2D"]
 script = ExtResource("1_3ewtp")
-
-[node name="Silicon Mine" parent="." instance=ExtResource("2_l00op")]
-position = Vector2(0, 629)
-
-[node name="Sprite2D" type="Sprite2D" parent="Silicon Mine"]
-scale = Vector2(6, 6)
-texture = ExtResource("3_c64uy")
-
-[node name="Sprite2D2" type="Sprite2D" parent="Silicon Mine"]
-position = Vector2(7, -237)
-rotation = 1.5708
-texture = ExtResource("4_lckp3")
 
 [node name="Sunrise" parent="." instance=ExtResource("5_lbwou")]
 position = Vector2(0, -500)

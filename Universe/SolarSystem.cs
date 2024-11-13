@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Spacelancer.Util;
 
 namespace Spacelancer.Universe;
@@ -21,6 +22,9 @@ public sealed class SolarSystem : IEntity
     public SpaceStation GetStation(string stationId) => 
         _spaceStations[stationId];
     
+    public IEnumerable<SpaceStation> GetStations() => 
+        _spaceStations.Values;
+    
     public void AddJumpGateLink(IEnumerable<string> destinations) =>
         _jumpGateDestinations.AddRange(destinations);
 
@@ -34,8 +38,10 @@ public sealed class SolarSystem : IEntity
             var id = station.Value<string>("id");
             var name = station.Value<string>("displayName");
             var location = Location.ConvertJTokenToLocation(station["location"]);
+            
+            var stationType = Enum.Parse<StationType>(station.Value<string?>("stationType") ?? "Generic");
 
-            var newStation = new SpaceStation(id, name, location);
+            var newStation = new SpaceStation(id, name, location, stationType);
             
             _spaceStations.Add(id, newStation);
             _spaceStationLookup.Add(id, name);

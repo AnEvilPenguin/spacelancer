@@ -1,5 +1,8 @@
 using Godot;
 using Spacelancer.Components.NPCs;
+using Spacelancer.Controllers;
+using Spacelancer.Scenes.Stations;
+using Spacelancer.Universe;
 
 namespace Spacelancer.Scenes.Systems;
 
@@ -7,15 +10,38 @@ public partial class Sunrise : Node2D
 {
 	public override void _Ready()
 	{
-		var station1 = GetNode<Stations.Station>("Station1");
-		station1.Id = "UA01_S01";
+		var system = Global.Universe.GetSystem("UA01");
 		
-		var station2 = GetNode<Stations.Station>("Station2");
-		station2.Id = "UA01_S02";
+		var stations = system.GetStations();
+		
+		foreach (var spaceStation in stations)
+		{
+			BuildStation(spaceStation);
+		}
+	}
 
-		var foo = new NonPlayerCharacter("Foo");
-		foo.LoadDialog();
+	private void BuildStation(SpaceStation stationConfig)
+	{
+		var location = stationConfig.Location;
 		
-		station1.AddNpc(foo);
+		var stationNode = Station.GetInstance(stationConfig.Type);
+		
+		stationNode.Position = location.Position;
+		stationNode.Rotation = Mathf.DegToRad(location.RotationDegrees);
+		
+		var station = stationNode.GetNode<Station>("Station");
+		
+		station.Name = stationConfig.Name;
+		station.Id = stationConfig.Id;
+
+		if (stationConfig.Id == "UA01_S01")
+		{
+			var foo = new NonPlayerCharacter("Foo");
+			foo.LoadDialog();
+		
+			station.AddNpc(foo);
+		}
+		
+		AddChild(stationNode);
 	}
 }
