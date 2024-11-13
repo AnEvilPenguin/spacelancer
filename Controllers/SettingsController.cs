@@ -1,10 +1,10 @@
 ﻿using System.IO;
 using Newtonsoft.Json.Linq;
 using Serilog;
-using Spacelancer.Controllers.SettingsController.Settings;
+using Spacelancer.Controllers.Settings;
 using Spacelancer.Util;
 
-namespace Spacelancer.Controllers.SettingsController;
+namespace Spacelancer.Controllers;
 
 /// <summary>
 /// Manages the saving and loading of settings from file (or not).

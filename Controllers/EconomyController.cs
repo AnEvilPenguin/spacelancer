@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Serilog;
-using Spacelancer.Components.Economy.Commodities;
+using Spacelancer.Economy;
 using Spacelancer.Util;
 
 namespace Spacelancer.Controllers;

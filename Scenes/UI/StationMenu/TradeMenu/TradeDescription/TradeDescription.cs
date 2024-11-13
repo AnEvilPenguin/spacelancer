@@ -1,5 +1,5 @@
 using Godot;
-using Spacelancer.Components.Economy.Commodities;
+using Spacelancer.Economy;
 
 namespace Spacelancer.Scenes.UI.StationMenu.TradeMenu.TradeDescription;
 

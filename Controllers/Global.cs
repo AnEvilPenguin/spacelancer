@@ -14,7 +14,7 @@ public partial class Global : Node
     public static Scenes.Player.Player Player;
     
     internal Logger Logger;
-    internal SettingsController.SettingsController SettingsController;
+    internal SettingsController SettingsController;
 
     public override void _Ready()
     {
@@ -25,7 +25,7 @@ public partial class Global : Node
 
         // Logger needs to be loaded first, other things rely on it.
         Logger = Logger.Instance;
-        SettingsController = Controllers.SettingsController.SettingsController.Instance;
+        SettingsController = SettingsController.Instance;
 
         GetTree().AutoAcceptQuit = false;
     }

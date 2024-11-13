@@ -1,7 +1,7 @@
 ﻿using System;
 using Serilog;
 
-namespace Spacelancer.Components.Economy.Commodities;
+namespace Spacelancer.Economy;
 
 public class CommodityStack
 {

@@ -1,7 +1,7 @@
 ﻿using Serilog;
 using Serilog.Events;
 
-namespace Spacelancer.Controllers.SettingsController.Settings;
+namespace Spacelancer.Controllers.Settings;
 
 /// <summary>
 /// General settings. Log level, etc.
