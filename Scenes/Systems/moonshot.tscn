@@ -1,11 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://jieb0e64hn06"]
+[gd_scene load_steps=2 format=3 uid="uid://jieb0e64hn06"]
 
 [ext_resource type="Script" path="res://Scenes/Systems/Moonshot.cs" id="1_3ewtp"]
-[ext_resource type="PackedScene" uid="uid://dv5d275uoyl83" path="res://Scenes/JumpGate/jump_gate.tscn" id="5_lbwou"]
 
 [node name="Moonshot" type="Node2D"]
 script = ExtResource("1_3ewtp")
-
-[node name="Sunrise" parent="." instance=ExtResource("5_lbwou")]
-position = Vector2(0, -500)
-rotation = 3.14159

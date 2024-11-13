@@ -17,12 +17,16 @@
     <Content Include="Configuration\Schemas\Commodities.json" />
     <Content Include="Configuration\Schemas\CommodityListing.json" />
     <Content Include="Configuration\Schemas\CommodityListings.json" />
+    <Content Include="Configuration\Schemas\JumpGate.json" />
+    <Content Include="Configuration\Schemas\JumpGates.json" />
     <Content Include="Configuration\Schemas\Location.json" />
     <Content Include="Configuration\Schemas\Station.json" />
     <Content Include="Configuration\Schemas\Stations.json" />
     <Content Include="Configuration\Schemas\Systems.json" />
     <Content Include="Configuration\Systems.json" />
+    <Content Include="Configuration\Systems\UA01\JumpGates.json" />
     <Content Include="Configuration\Systems\UA01\Stations.json" />
+    <Content Include="Configuration\Systems\UA02\JumpGates.json" />
     <Content Include="Configuration\Systems\UA02\Stations.json" />
     <Content Include="Controllers\GameController\game_controller.tscn" />
   </ItemGroup>

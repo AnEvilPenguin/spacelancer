@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
+using Spacelancer.Controllers;
 using Spacelancer.Util;
 
 namespace Spacelancer.Universe;
@@ -9,14 +12,19 @@ public sealed class SolarSystem : IEntity
     public string Id { get; }
     public string Name { get; }
     
-    private readonly List<string> _jumpGateDestinations = new();
+    private readonly List<JumpGate> _jumpGates = new();
     private readonly Dictionary<string, SpaceStation> _spaceStations = new();
     private readonly Dictionary<string, string> _spaceStationLookup = new();
+    
+    private JsonResource _contentLoader;
+    
+    private readonly JToken _configuration;
 
-    public SolarSystem(string id, string name)
+    public SolarSystem(string id, string name, JToken configuration)
     {
         Id = id;
         Name = name;
+        _configuration = configuration;
     }
     
     public SpaceStation GetStation(string stationId) => 
@@ -25,16 +33,23 @@ public sealed class SolarSystem : IEntity
     public IEnumerable<SpaceStation> GetStations() => 
         _spaceStations.Values;
     
-    public void AddJumpGateLink(IEnumerable<string> destinations) =>
-        _jumpGateDestinations.AddRange(destinations);
-    
-    public List<string> GetJumpGateDestinations() =>
-        new List<string>(_jumpGateDestinations);
+    public List<JumpGate> GetJumpGates() =>
+        new (_jumpGates);
 
-    public void LoadStations()
+    public async Task LoadDependencies()
     {
-        var contentLoader = new JsonResource($"res://Configuration/Systems/{Id}");
-        var stations = contentLoader.GetTokenFromResource("Stations", "stations");
+        await Task.Factory.StartNew(() =>
+        {
+            _contentLoader = new JsonResource($"res://Configuration/Systems/{Id}");
+
+            LoadStations();
+            LoadJumpGates();
+        });
+    }
+
+    private void LoadStations()
+    {
+        var stations = _contentLoader.GetTokenFromResource("Stations", "stations");
 
         foreach (var station in stations)
         {
@@ -48,6 +63,21 @@ public sealed class SolarSystem : IEntity
             
             _spaceStations.Add(id, newStation);
             _spaceStationLookup.Add(id, name);
+        }
+    }
+
+    private void LoadJumpGates()
+    {
+        var gates = _contentLoader.GetTokenFromResource("JumpGates", "gates");
+
+        foreach (var gate in gates)
+        {
+            var systemId = gate.Value<string>("system");
+            var destination = Global.Universe.GetSystem(systemId);
+            var location = Location.ConvertJTokenToLocation(gate["location"]);
+            
+            var newGate = new JumpGate($"{Id}_{systemId}", destination.Name, location);
+            _jumpGates.Add(newGate);
         }
     }
 

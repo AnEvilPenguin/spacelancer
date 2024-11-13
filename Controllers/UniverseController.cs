@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Spacelancer.Universe;
 using Spacelancer.Util;
 
@@ -25,6 +27,7 @@ public class UniverseController
     public void LoadUniverse()
     {
         LoadSystems();
+        LoadSystemDependencies();
     }
 
     private void LoadSystems()
@@ -38,17 +41,20 @@ public class UniverseController
             var id = system.Value<string>("id");
             var name = system.Value<string>("displayName");
 
-            var newSystem = new SolarSystem(id, name);
-
-            var jumpGates = system["jumpGates"];
-            if (jumpGates != null)
-                newSystem.AddJumpGateLink(jumpGates.ToObject<IEnumerable<string>>());
+            var newSystem = new SolarSystem(id, name, system);
             
             _systems.Add(id, newSystem);
             _systemNames.Add(name, id);
-            
-            // Consider doing this async
-            newSystem.LoadStations();
         }
+    }
+    
+    private async void LoadSystemDependencies()
+    {
+        // Playing with parallelization.
+        // Probably unecessary
+        var tasks = _systems.Values
+            .ToList()
+            .Select(s => s.LoadDependencies());
+        await Task.WhenAll(tasks);
     }
 }

@@ -1,0 +1,11 @@
+﻿{
+  "$schema": "../../Schemas/JumpGates.json",
+  "gates": [
+    {
+      "system": "UA02",
+      "location": {
+        "Y": 7000
+      }
+    }
+  ]
+}

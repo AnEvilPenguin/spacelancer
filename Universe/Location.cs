@@ -14,7 +14,7 @@ public class Location
         return new Location
         {
             Position = new Vector2(jToken.Value<int>("X"), jToken.Value<int>("Y")),
-            RotationDegrees = jToken.Value<int>("RotationDegrees")
+            RotationDegrees = jToken.Value<int>("rotation")
         };
     }
 }

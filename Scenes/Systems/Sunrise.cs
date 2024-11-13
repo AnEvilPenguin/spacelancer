@@ -4,6 +4,7 @@ using Spacelancer.Controllers;
 using Spacelancer.Scenes.Stations;
 using Spacelancer.Scenes.Transitions;
 using Spacelancer.Universe;
+using JumpGate = Spacelancer.Scenes.Transitions.JumpGate;
 
 namespace Spacelancer.Scenes.Systems;
 
@@ -53,14 +54,15 @@ public partial class Sunrise : Node2D
 	}
 
 	private void BuildJumpGates(SolarSystem system) =>
-		system.GetJumpGateDestinations()
-			.ForEach((systemId) =>
+		system.GetJumpGates()
+			.ForEach(gateConfig =>
 			{
-				var destination = Global.Universe.GetSystem(systemId);
-
 				var gate = JumpGate.GetNewInstance();
-				gate.Name = destination.Name;
-				gate.Position = new Vector2(0, 7000);
+				var location = gateConfig.Location;
+				
+				gate.Name = gateConfig.Name;
+				gate.Position = location.Position;
+				gate.Rotation = Mathf.DegToRad(location.RotationDegrees);
 				
 				AddChild(gate);
 			});

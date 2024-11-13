@@ -1,0 +1,16 @@
+﻿{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "title": "Jump Gate",
+  "description": "An individual jump gate",
+  "properties": {
+    "system": {
+      "description": "The unique id that is used to identify the destination system",
+      "type": "string"
+    },
+    "location": {
+      "$ref": "Location.json"
+    }
+  },
+  "required": ["system", "location"]
+}
