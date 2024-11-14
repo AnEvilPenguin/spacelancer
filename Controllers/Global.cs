@@ -1,5 +1,6 @@
 using Godot;
-using Spacelancer.Controllers.EconomyController;
+
+namespace Spacelancer.Controllers;
 
 /// <summary>
 /// Auto-load class to enable us to manage controllers nicely
@@ -8,8 +9,9 @@ public partial class Global : Node
 {
     public static Global Instance;
     public static GameController GameController;
-    public static EconomyController EconomyController { get; } = new EconomyController();
-    public static Player Player;
+    public static EconomyController Economy { get; } = new();
+    public static UniverseController Universe { get; } = new();
+    public static Scenes.Player.Player Player;
     
     internal Logger Logger;
     internal SettingsController SettingsController;

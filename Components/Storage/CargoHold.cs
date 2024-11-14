@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Serilog;
-using Spacelancer.Components.Commodities;
+using Spacelancer.Economy;
 
 namespace Spacelancer.Components.Storage;
 

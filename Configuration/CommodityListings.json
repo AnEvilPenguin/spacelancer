@@ -1,0 +1,26 @@
+﻿{
+  "$schema": "./Schemas/CommodityListings.json",
+  "stations": [
+    {
+      "station": "UA01_S01",
+      "listings": [
+        {"commodity": "EnergyCell", "transaction": "Sell"},
+        {"commodity": "Microcontroller", "transaction": "Buy", "price": 160}
+      ]
+    },
+    {
+      "station": "UA01_S02",
+      "listings": [
+        {"commodity": "Silicon", "transaction": "Buy", "price": 135},
+        {"commodity": "Microcontroller", "transaction": "Sell", "price": 116}
+      ]
+    },
+    {
+      "station": "UA02_S01",
+      "listings": [
+        {"commodity": "EnergyCell", "transaction": "Buy", "price": 7},
+        {"commodity": "Silicon", "transaction": "Sell", "price": 45}
+      ]
+    }
+  ]
+}

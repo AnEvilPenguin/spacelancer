@@ -1,5 +1,8 @@
 ﻿using Godot;
 using Serilog;
+using Spacelancer.Controllers;
+using Spacelancer.Scenes.Transitions;
+using Spacelancer.Scenes.Player;
 
 namespace Spacelancer.Components.Navigation;
 
@@ -18,6 +21,7 @@ public class JumpNavigation : INavigationSoftware
     
     private readonly Player _player;
     private readonly JumpGate _origin;
+    private readonly string _originalSystem;
     private JumpGate _exit;
     private readonly string _destination;
     
@@ -33,6 +37,8 @@ public class JumpNavigation : INavigationSoftware
         _player = ship;
         _origin = origin;
         _destination = destination;
+
+        _originalSystem = origin.GetParent().Name;
         
         _originalSoftware = ship.NavComputer;
     }
@@ -87,8 +93,8 @@ public class JumpNavigation : INavigationSoftware
     {
         if (_destinationNode == null)
         {
-            _destinationNode = Global.GameController.LoadScene<Node2D>($"res://Scenes/Systems/{_origin.Name.ToString().ToLower()}.tscn");
-            _destinationNode.Visible = false;
+            var destinationId = Global.Universe.GetSystemId(_destination);
+            _destinationNode = Global.GameController.LoadSystem(destinationId);
         }
 
         if ((_player.GlobalPosition - _origin.GlobalPosition).Length() < 25)
@@ -102,17 +108,12 @@ public class JumpNavigation : INavigationSoftware
 
     private Vector2 ProcessTravellingVector()
     {
-        var oldSystem = _origin.GetParent<Node2D>();
-        
-        _exit = _destinationNode.GetNode<JumpGate>($"{oldSystem.Name}");
+        _exit = _destinationNode.GetNode<JumpGate>($"{_originalSystem}");
         _exitMarker = _exit.GetExitMarker();
         
         _destinationNode.Visible = true;
-        oldSystem.Visible = false;
         
         _player.GlobalPosition = _exit.GlobalPosition;
-        
-        Global.GameController.UnloadScene(oldSystem);
         
         SetState(JumpState.Exiting);
         

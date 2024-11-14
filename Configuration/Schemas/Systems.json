@@ -1,0 +1,40 @@
+﻿{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "systems": {
+      "title": "Systems",
+      "description": "Defines (solar) systems that a player can visit",
+      "type": "array",
+      "items": {
+        "title": "System",
+        "description": "An individual system",
+        "properties": {
+          "id": {
+            "description": "The unique id that is used to identify the system",
+            "type": "string"
+          },
+          "displayName": {
+            "description": "The name of the system that is shown to the player",
+            "type": "string"
+          },
+          "affiliation": {
+            "description": "The 'owner' of the system",
+            "type": "string"
+          },
+          "jumpGates": {
+            "description": "A list of system ids connected via Jump Gates",
+            "type": "array",
+            "items": {
+              "title": "Linked System",
+              "description": "The id of any system linked to via a jump gate",
+              "type": "string"
+            }
+          }
+        },
+        "required": ["id", "displayName", "affiliation"]
+      }
+    }
+  },
+  "required": ["systems"]
+}

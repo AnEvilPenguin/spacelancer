@@ -2,6 +2,8 @@
 using Godot;
 using Spacelancer.Components.Navigation;
 
+namespace Spacelancer.Scenes.Player;
+
 public partial class Player
 {
     private Label _rotationLabel;

@@ -1,0 +1,26 @@
+{
+  "$schema": "./Schemas/Commodities.json",
+  "commodities": [
+    {
+      "id": "EnergyCell",
+      "displayName": "Energy Cell",
+      "defaultPrice": 5,
+      "summary": "An energy cell is the most prolific thing in the universe",
+      "size": "Small"
+    },
+    {
+      "id": "Silicon",
+      "displayName": "Silicon",
+      "defaultPrice": 40,
+      "summary": "Silicon is used in the production of many electronic products",
+      "size": "Medium"
+    },
+    {
+      "id": "Microcontroller",
+      "displayName": "Microcontroller",
+      "defaultPrice": 80,
+      "summary": "A small computer based on a single chip, used to build more complex electronic components",
+      "size": "Small"
+    }
+  ]
+}

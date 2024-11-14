@@ -1,0 +1,15 @@
+﻿{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "stations": {
+      "title": "Stations",
+      "description": "Defines space stations that a player can visit",
+      "type": "array",
+      "items": {
+        "$ref": "Station.json"
+      }
+    }
+  },
+  "required": ["stations"]
+}

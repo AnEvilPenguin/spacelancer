@@ -1,5 +1,7 @@
 using Godot;
-using Spacelancer.Components.Commodities;
+using Spacelancer.Economy;
+
+namespace Spacelancer.Scenes.UI.StationMenu.TradeMenu.TradeDescription;
 
 public partial class TradeDescription : PanelContainer
 {

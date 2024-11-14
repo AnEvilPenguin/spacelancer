@@ -1,0 +1,33 @@
+﻿{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "title": "SpaceLane",
+  "description": "An individual space lane",
+  "properties": {
+    "id": {
+      "description": "The unique id that is used to identify the lane",
+      "type": "string"
+    },
+    "location1": {
+      "$ref": "Location.json",
+      "properties": {
+        "displayName": {
+          "type": "string",
+          "description": "Either a station Id or a standalone string"
+        }
+      },
+      "required": ["displayName"]
+    },
+    "location2": {
+      "$ref": "Location.json",
+      "properties": {
+        "displayName": {
+          "type": "string",
+          "description": "Either a station Id or a standalone string"
+        }
+      },
+      "required": ["displayName"]
+    }
+  },
+  "required": ["id", "location1", "location2"]
+}

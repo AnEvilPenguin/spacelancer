@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using Serilog;
+using Spacelancer.Scenes;
+
+namespace Spacelancer.Controllers;
 
 /// <summary>
 /// Handles loading and displaying of scenes and user interfaces.
@@ -17,6 +20,9 @@ public partial class GameController : Node
 
     private Dictionary<string, Node> _loadedScenes = new Dictionary<string, Node>();
     private Dictionary<ulong, string> _nodeToPathLookup = new Dictionary<ulong, string>();
+    
+    private BaseSystem _currentSystem;
+    private BaseSystem _previousSystem;
 
     public override void _Ready()
     {
@@ -30,6 +36,36 @@ public partial class GameController : Node
         LoadScene<Control>("res://Scenes/UI/MainMenu/main_menu.tscn");
         
         Log.Debug("Game controller loaded");
+    }
+
+    public void NewGame()
+    {
+        UnloadWorld2D();
+        
+        Global.Economy.LoadEconomy();
+        Global.Universe.LoadUniverse();
+        
+        LoadSystem("UA01");
+
+        Global.Player = LoadScene<Scenes.Player.Player>("res://Scenes/Player/player.tscn");
+    }
+
+    public Node2D LoadSystem(string systemId)
+    {
+        var newSystem = new BaseSystem();
+        newSystem.Id = systemId;
+
+        if (_currentSystem != null)
+        {
+            _currentSystem.Visible = false;
+            _currentSystem.QueueFree();
+        }
+        
+        _currentSystem = newSystem;
+        
+        _world2D.AddChild(newSystem);
+        
+        return _currentSystem; 
     }
 
     public T LoadScene<T>(string scenePath) where T : Node

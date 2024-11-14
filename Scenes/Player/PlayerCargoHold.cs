@@ -1,5 +1,7 @@
-﻿using Spacelancer.Components.Commodities;
-using Spacelancer.Components.Storage;
+﻿using Spacelancer.Components.Storage;
+using Spacelancer.Economy;
+
+namespace Spacelancer.Scenes.Player;
 
 public partial class Player
 {

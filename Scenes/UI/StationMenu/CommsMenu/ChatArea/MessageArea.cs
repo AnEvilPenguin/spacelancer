@@ -1,6 +1,7 @@
 using Godot;
-using System;
 using Spacelancer.Components.NPCs;
+
+namespace Spacelancer.Scenes.UI.StationMenu.CommsMenu.ChatArea;
 
 public partial class MessageArea : PanelContainer
 {

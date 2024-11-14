@@ -1,35 +1,37 @@
-using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Godot;
 using Serilog;
-using Spacelancer.Components.Commodities;
+using Spacelancer.Economy;
 using Spacelancer.Components.Storage;
+using Spacelancer.Universe;
+
+namespace Spacelancer.Scenes.UI.StationMenu.TradeMenu;
 
 public partial class TradeMenu : CenterContainer
 {
-	private Station _selectedStation;
-	private TradeList _sellerTradeList;
-	private TradeList _playerTradeList;
-	private TradeAction _tradeAction;
-	private TradeDescription _tradeDescription;
+	private SpaceStation _selectedStation;
+	private TradeList.TradeList _sellerTradeList;
+	private TradeList.TradeList _playerTradeList;
+	private TradeAction.TradeAction _tradeAction;
+	private TradeDescription.TradeDescription _tradeDescription;
 	
-	private readonly Dictionary<int, Tuple<Commodity, int>> _stationCommodities = new ();
+	private readonly Dictionary<int, CommodityListing> _stationCommodities = new ();
 	private readonly Dictionary<int, Tuple<CommodityStack, int>> _playerCommodities = new ();
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		_sellerTradeList = GetNode<TradeList>("%StationTradeList");
+		_sellerTradeList = GetNode<TradeList.TradeList>("%StationTradeList");
 		_sellerTradeList.ItemSelected += OnTradeSellSelected;
 		
-		_playerTradeList = GetNode<TradeList>("%PlayerTradeList");
+		_playerTradeList = GetNode<TradeList.TradeList>("%PlayerTradeList");
 		_playerTradeList.ItemSelected += OnTradeBuySelected;
 		_playerTradeList.SetTitle("Player");
 		
-		_tradeAction = GetNode<TradeAction>("%TradeAction");
-		_tradeDescription = GetNode<TradeDescription>("%TradeDescription");
+		_tradeAction = GetNode<TradeAction.TradeAction>("%TradeAction");
+		_tradeDescription = GetNode<TradeDescription.TradeDescription>("%TradeDescription");
 	}
 
 	public void ClearAction()
@@ -48,14 +50,14 @@ public partial class TradeMenu : CenterContainer
 		_stationCommodities.Clear();
 	}
 
-	public void LoadMenu(Station station)
+	public void LoadMenu(SpaceStation station)
 	{
 		SetStationMenu(station);
-		SetPlayerMenu(Global.Player.Hold);
+		SetPlayerMenu(Controllers.Global.Player.Hold);
 		UpdatePlayerCashLabel();
 	}
 
-	private void SetStationMenu(Station station)
+	private void SetStationMenu(SpaceStation station)
 	{
 		_sellerTradeList.ClearItemList();
 		_stationCommodities.Clear();
@@ -63,12 +65,12 @@ public partial class TradeMenu : CenterContainer
 		_selectedStation = station;
 		_sellerTradeList.SetTitle(station.Name);
 
-		var commodities = station.GetCommodityForSale();
+		var commodities = station.GetListings(TransactionType.Sell);
 
-		foreach (var tuple in commodities)
+		foreach (var listing in commodities)
 		{
-			var index = _sellerTradeList.AddItemToList(tuple.Item1, tuple.Item2);
-			_stationCommodities.Add(index, tuple);
+			var index = _sellerTradeList.AddItemToList(listing.Commodity, listing.Price);
+			_stationCommodities.Add(index, listing);
 		}
 	}
 
@@ -83,7 +85,7 @@ public partial class TradeMenu : CenterContainer
 		{
 			var stack = hold.GetFromCargoHold(item);
 			
-			var price = _selectedStation.GetCommodityToBuyPrice(stack.Commodity);
+			var price = _selectedStation.GetListingPrice(stack.Commodity);
 			
 			var index = _playerTradeList.AddItemToList(stack.Commodity, price);
 			_playerCommodities.Add(index, new Tuple<CommodityStack, int>(stack, price));
@@ -92,8 +94,8 @@ public partial class TradeMenu : CenterContainer
 
 	private int GetMaxCommodityPurchase(Commodity commodity, int price)
 	{
-		var canAfford = Global.Player.Credits / price;
-		var canStore = Global.Player.Hold.CheckCapacity(commodity);
+		var canAfford = Controllers.Global.Player.Credits / price;
+		var canStore = Controllers.Global.Player.Hold.CheckCapacity(commodity);
 		
 		return Math.Min(canStore, canAfford);
 	}
@@ -102,9 +104,9 @@ public partial class TradeMenu : CenterContainer
 	// Also consider what way round we want these named, probably want the player to be the focus
 	private void OnTradeSellSelected(int index)
 	{
-		var tuple = _stationCommodities[(int)index];
-		var commodity = tuple.Item1;
-		var price = tuple.Item2;
+		var listing = _stationCommodities[(int)index];
+		var commodity = listing.Commodity;
+		var price = listing.Price;
 		
 		var maxPurchaseCount = GetMaxCommodityPurchase(commodity, price);
 		
@@ -118,7 +120,7 @@ public partial class TradeMenu : CenterContainer
 			
 			// TODO check enough money
 			
-			var player = Global.Player;
+			var player = Controllers.Global.Player;
 			var hold = player.Hold;
 
 			var totalPrice = price * quantity;
@@ -155,7 +157,7 @@ public partial class TradeMenu : CenterContainer
 		{
 			Log.Debug("Selling {Quantity} {Commodity} at {Price}", quantity, commodity.Name, price);
 			
-			var player = Global.Player;
+			var player = Controllers.Global.Player;
 			var hold = player.Hold;
 			
 			var currentStack = hold.GetFromCargoHold(commodity.Name);
@@ -182,5 +184,5 @@ public partial class TradeMenu : CenterContainer
 	}
 
 	private void UpdatePlayerCashLabel() =>
-		_playerTradeList.SetTitle($"Player - {Global.Player.Credits} Credits");
+		_playerTradeList.SetTitle($"Player - {Controllers.Global.Player.Credits} Credits");
 }

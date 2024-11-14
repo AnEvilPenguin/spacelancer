@@ -394,8 +394,23 @@ FodyWeavers.xsd
 *.msm
 *.msp
 
+# Rider default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/contentModel.xml
+/.idea.Spacelancer.iml
+/modules.xml
+/projectSettingsUpdater.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+
 # JetBrains Rider
 *.sln.iml
+.idea/
 
 # Godot 4+ specific ignores
 .godot/

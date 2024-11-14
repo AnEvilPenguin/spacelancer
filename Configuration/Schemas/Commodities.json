@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "commodities": {
+      "title": "Commodities",
+      "description": "Defines products that a player can buy or sell for the sole purpose of trade and making money",
+      "type": "array",
+      "items": {
+        "title": "Commodity",
+        "type": "object",
+        "description": "An individual commodity",
+        "properties": {
+          "id": {
+            "description": "The unique id that is used to identify the commodity",
+            "type": "string"
+          },
+          "displayName": {
+            "description": "The name of the product that is shown to the player",
+            "type": "string"
+          },
+          "defaultPrice": {
+            "description": "The price of the product if a station does not define a more specific one",
+            "type": "integer"
+          },
+          "summary": {
+            "description": "The description of the product given to the player",
+            "type": "string"
+          },
+          "size": {
+            "description": "The size of the commodity",
+            "type": "string",
+            "enum": [
+              "Small",
+              "Medium",
+              "Large",
+              "XLarge"
+            ]
+          }
+        },
+        "required": ["id", "displayName", "defaultPrice", "summary", "size"]
+      }
+    }
+  },
+  "required": ["commodities"]
+}

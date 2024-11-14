@@ -1,5 +1,7 @@
 ﻿using System.IO;
 
+namespace Spacelancer.Util;
+
 internal static class Constants
 {
     public static readonly string FolderPath = Path.Combine(

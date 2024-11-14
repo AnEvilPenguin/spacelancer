@@ -2,23 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using Serilog;
+using Spacelancer.Universe;
 using Spacelancer.Util;
 
 namespace Spacelancer.Components.NPCs;
 
-public class NonPlayerCharacter
+public class NonPlayerCharacter : IEntity
 {
-    public string Name { get; private set; }
-    private readonly List<Dialog> _dialogList = new List<Dialog>();
-
-    public NonPlayerCharacter(string name)
+    public string Id { get; }
+    public string Name { get; }
+    public string Summary { get; }
+    public string Affiliation { get; }
+    
+    private readonly List<Dialog> _dialogList = new();
+    
+    public NonPlayerCharacter(string id, string name, string summary, string affiliation)
     {
+        Id = id;
         Name = name;
+        Summary = summary;
+        Affiliation = affiliation;
     }
 
-    public void LoadDialog()
+    public void LoadDialog(string locationId)
     {
-        var dialogs = JsonResource.LoadFromResource(Name.ToLower())?.GetValue("Dialog");
+        _dialogList.Clear();
+        
+        JsonResource conversationLoader = new($"res://Configuration/Conversations/{locationId}");
+        var dialogs = conversationLoader.LoadFromResource(Id)?.GetValue("Dialog");
 		
         if (dialogs == null)
             return;

@@ -2,19 +2,39 @@ using System;
 using System.Collections.Generic;
 using Godot;
 using Serilog;
-using Spacelancer.Components.Commodities;
 using Spacelancer.Components.NPCs;
+using Spacelancer.Economy;
+using Spacelancer.Scenes.UI.StationMenu;
+using Spacelancer.Universe;
+using Spacelancer.Util;
+
+namespace Spacelancer.Scenes.Stations;
 
 public partial class Station : Node2D
 {
+	public string Id;
+	
 	// We may need to consider making this docking range if we make a map and remote comms or something
 	private bool _playerInCommsRange = false;
-	private StationMenu _menu;
+	private UI.StationMenu.StationMenu _menu;
 	
 	private readonly List<Tuple<Commodity, int>> _commoditiesForSale = new List<Tuple<Commodity, int>>();
 	private readonly Dictionary<string, int> _commodityBuyPriceOverride = new Dictionary<string, int>();
 	
 	private readonly List<NonPlayerCharacter> _nonPlayerCharacters = new List<NonPlayerCharacter>();
+
+	public static Node2D GetNewInstance(StationType stationType)
+	{
+		var scene = stationType switch
+		{
+			StationType.Factory => GD.Load<PackedScene>("res://Scenes/Stations/factory.tscn"),
+			StationType.Mine => GD.Load<PackedScene>("res://Scenes/Stations/mine.tscn"),
+			_ => GD.Load<PackedScene>("res://Scenes/Stations/generic.tscn"),
+		};
+
+		return scene.Instantiate<Node2D>();
+	}
+		
 	
 	public override void _Ready()
 	{
@@ -22,6 +42,8 @@ public partial class Station : Node2D
 		
 		stationBorder.BodyEntered += OnStationAreaEntered;
 		stationBorder.BodyExited += OnStationAreaExited;
+		
+		LoadNpcs();
 	}
 
 	public override void _Process(double delta)
@@ -32,13 +54,35 @@ public partial class Station : Node2D
 		if (Input.IsKeyPressed(Key.C) && (_menu == null || !_menu.Visible))
 		{
 			Log.Debug("Comms initiated with {StationName}", Name);
-			_menu = Global.GameController.LoadScene<StationMenu>("res://Scenes/UI/StationMenu/station_menu.tscn");
+			_menu = Controllers.Global.GameController.LoadScene<UI.StationMenu.StationMenu>("res://Scenes/UI/StationMenu/station_menu.tscn");
 			_menu.ShowMenu(this);
 		}
 	}
 
-	public void AddNpc(NonPlayerCharacter npc) =>
-		_nonPlayerCharacters.Add(npc);
+	public void LoadNpcs()
+	{
+		_nonPlayerCharacters.Clear();
+
+		var npcReader = new JsonResource($"res://Configuration/Stations/{Id}");
+		var npcs = npcReader.GetTokenFromResource("Npcs", "characters");
+		
+		if (npcs == null)
+		{
+			Log.Warning("No NPCs found for {systemId}:{systemName}", Id, Name);
+			return;
+		}
+		
+		foreach (var npcConfig in npcs)
+		{
+			var id = npcConfig.Value<string>("id");
+			var name = npcConfig.Value<string>("displayName");
+			var summary = npcConfig.Value<string>("summary");
+			var affiliation = npcConfig.Value<string>("affiliation");
+			
+			var newNpc = new NonPlayerCharacter(id, name, summary, affiliation);
+			_nonPlayerCharacters.Add(newNpc);
+		}
+	}
 	
 	public List<NonPlayerCharacter> GetNonPlayerCharacters() => 
 		new List<NonPlayerCharacter>(_nonPlayerCharacters);
@@ -75,12 +119,12 @@ public partial class Station : Node2D
 
 	private void OnStationAreaEntered(Node2D body)
 	{
-		if (body is Player)
+		if (body is Player.Player)
 		{
 			_playerInCommsRange = true;
 			Log.Debug("Player in comms range of {StationName}", Name);
 			
-			var label = Global.GameController.TempStationLabel;
+			var label = Controllers.Global.GameController.TempStationLabel;
 			label.Text = $"Press C to talk to {Name}";
 			label.Visible = true;
 		}
@@ -88,12 +132,12 @@ public partial class Station : Node2D
 
 	private void OnStationAreaExited(Node2D body)
 	{
-		if (body is Player)
+		if (body is Player.Player)
 		{
 			_playerInCommsRange = false;
 			Log.Debug("Player left comms range of {StationName}", Name);
 			
-			var label = Global.GameController.TempStationLabel;
+			var label = Controllers.Global.GameController.TempStationLabel;
 			label.Visible = false;
 		}
 	}

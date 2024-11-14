@@ -1,6 +1,8 @@
-using Godot;
 using System;
+using Godot;
 using Serilog;
+
+namespace Spacelancer.Scenes.UI.StationMenu.IconButton;
 
 [Tool]
 public partial class IconButton : CenterContainer

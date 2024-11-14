@@ -1,0 +1,15 @@
+﻿{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "gates": {
+      "title": "Gates",
+      "description": "Defines Jump Gates that a player can transition through",
+      "type": "array",
+      "items": {
+        "$ref": "JumpGate.json"
+      }
+    }
+  },
+  "required": ["gates"]
+}

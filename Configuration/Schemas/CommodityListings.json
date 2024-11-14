@@ -1,0 +1,33 @@
+﻿{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "stations": {
+      "title": "Stations",
+      "description": "An array of stations and their listings",
+      "type": "array",
+      "items": {
+        "title": "station",
+        "description": "The station in question",
+        "type": "object",
+        "properties": {
+          "station": {
+            "title": "stationId",
+            "description": "The unique identifier of the station",
+            "type": "string"
+          },
+          "listings": {
+            "type": "array",
+            "description": "An array containing all listings for the station",
+            "items": {
+              "$ref": "CommodityListing.json",
+              "type": "object"
+            }
+          }
+        },
+        "required": ["station", "listings"]
+      }
+    }
+  },
+  "required": ["stations"]
+}

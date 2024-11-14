@@ -1,5 +1,8 @@
 using Godot;
 using Serilog;
+using Spacelancer.Controllers;
+
+namespace Spacelancer.Scenes.UI;
 
 public partial class MainMenu : CenterContainer
 {
@@ -54,7 +57,7 @@ public partial class MainMenu : CenterContainer
 
 	private void ConfigureQuitButton()
 	{
-        _quitButton = GetNode<Button>("%QuitButton");
+		_quitButton = GetNode<Button>("%QuitButton");
 
 		_quitButton.Pressed += () =>
 		{
@@ -62,9 +65,9 @@ public partial class MainMenu : CenterContainer
 
 			// We want to send the quit notification so that other components
 			//     get the chance to shut down cleanly.
-            GetTree().Root.PropagateNotification((int)NotificationWMCloseRequest);
-        };
-    }
+			GetTree().Root.PropagateNotification((int)NotificationWMCloseRequest);
+		};
+	}
 
 	private void ConfigureNewGameButton()
 	{
@@ -73,12 +76,9 @@ public partial class MainMenu : CenterContainer
 		_newGameButton.Pressed += () =>
 		{
 			Log.Debug("New Game via Main Menu");
-			_gameController.UnloadWorld2D();
+			_gameController.NewGame();
 			
-			_gameController.LoadScene<Node2D>("res://Scenes/Systems/sunrise.tscn");
-			Global.Player = _gameController.LoadScene<Player>("res://Scenes/Player/player.tscn");
 			Visible = false;
-			
 			GetTree().Paused = false;
 		};
 	}

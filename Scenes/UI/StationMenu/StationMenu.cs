@@ -1,18 +1,19 @@
 using Godot;
-using System;
-using Serilog;
+using Spacelancer.Controllers;
+
+namespace Spacelancer.Scenes.UI.StationMenu;
 
 public partial class StationMenu : PanelContainer
 {
-	private Station _selectedStation;
+	private Stations.Station _selectedStation;
 
-	private IconButton _playerButton;
-	private IconButton _commsButton;
-	private IconButton _equipmentButton;
-	private IconButton _shipyardButton;
+	private IconButton.IconButton _playerButton;
+	private IconButton.IconButton _commsButton;
+	private IconButton.IconButton _equipmentButton;
+	private IconButton.IconButton _shipyardButton;
 	
-	private CommsMenu _commsMenu;
-	private TradeMenu _tradeMenu;
+	private CommsMenu.CommsMenu _commsMenu;
+	private TradeMenu.TradeMenu _tradeMenu;
 
 	public override void _Ready()
 	{
@@ -24,7 +25,7 @@ public partial class StationMenu : PanelContainer
 		ProcessMode = ProcessModeEnum.Always;
 	}
 
-	public void ShowMenu(Station station)
+	public void ShowMenu(Stations.Station station)
 	{
 		Visible = true;
 		GetTree().Paused = true;
@@ -48,8 +49,10 @@ public partial class StationMenu : PanelContainer
 	{
 		HideMenus();
 		
+		var spaceStation = Global.Universe.GetSpaceStation(_selectedStation.Id);
+		
 		_tradeMenu.Visible = true;
-		_tradeMenu.LoadMenu(_selectedStation);
+		_tradeMenu.LoadMenu(spaceStation);
 	}
 
 	private void OnCommsButtonPressed()
@@ -57,31 +60,36 @@ public partial class StationMenu : PanelContainer
 		HideMenus();
 		
 		_commsMenu.Visible = true;
-		_commsMenu.LoadNonPlayerCharacters(_selectedStation.GetNonPlayerCharacters());
+
+		var npcs = _selectedStation.GetNonPlayerCharacters();
+
+		npcs.ForEach(npc => npc.LoadDialog(_selectedStation.Id));
+		
+		_commsMenu.LoadNonPlayerCharacters(npcs);
 	}
 
 	private void AttachButtons()
 	{
-		var leaveButton = GetNode<IconButton>("%ExitButton");
+		var leaveButton = GetNode<IconButton.IconButton>("%ExitButton");
 		leaveButton.Pressed += OnLeaveButtonPressed;
 		
-		var tradeButton = GetNode<IconButton>("%TradeButton");
+		var tradeButton = GetNode<IconButton.IconButton>("%TradeButton");
 		tradeButton.Pressed += OnTradeButtonPressed;
 		
-		_playerButton = GetNode<IconButton>("%PlayerButton");
+		_playerButton = GetNode<IconButton.IconButton>("%PlayerButton");
 		_playerButton.Pressed += HideMenus;
 		
-		_commsButton = GetNode<IconButton>("%BarButton");
+		_commsButton = GetNode<IconButton.IconButton>("%BarButton");
 		_commsButton.Pressed += OnCommsButtonPressed;
 		
-		_equipmentButton = GetNode<IconButton>("%EquipmentButton");
-		_shipyardButton = GetNode<IconButton>("%ShipyardButton");
+		_equipmentButton = GetNode<IconButton.IconButton>("%EquipmentButton");
+		_shipyardButton = GetNode<IconButton.IconButton>("%ShipyardButton");
 	}
 
 	private void AttachMenus()
 	{
-		_commsMenu = GetNode<CommsMenu>("%CommsMenu");
-		_tradeMenu = GetNode<TradeMenu>("%TradeMenu");
+		_commsMenu = GetNode<CommsMenu.CommsMenu>("%CommsMenu");
+		_tradeMenu = GetNode<TradeMenu.TradeMenu>("%TradeMenu");
 		
 		HideMenus();
 	}
