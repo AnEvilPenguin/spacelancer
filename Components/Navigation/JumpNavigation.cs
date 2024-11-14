@@ -21,6 +21,7 @@ public class JumpNavigation : INavigationSoftware
     
     private readonly Player _player;
     private readonly JumpGate _origin;
+    private readonly string _originalSystem;
     private JumpGate _exit;
     private readonly string _destination;
     
@@ -36,6 +37,8 @@ public class JumpNavigation : INavigationSoftware
         _player = ship;
         _origin = origin;
         _destination = destination;
+
+        _originalSystem = origin.GetParent().Name;
         
         _originalSoftware = ship.NavComputer;
     }
@@ -105,13 +108,10 @@ public class JumpNavigation : INavigationSoftware
 
     private Vector2 ProcessTravellingVector()
     {
-        var oldSystem = _origin.GetParent<Node2D>();
-        
-        _exit = _destinationNode.GetNode<JumpGate>($"{oldSystem.Name}");
+        _exit = _destinationNode.GetNode<JumpGate>($"{_originalSystem}");
         _exitMarker = _exit.GetExitMarker();
         
         _destinationNode.Visible = true;
-        oldSystem.Visible = false;
         
         _player.GlobalPosition = _exit.GlobalPosition;
         

@@ -52,24 +52,13 @@ public partial class GameController : Node
 
     public Node2D LoadSystem(string systemId)
     {
-        if (_previousSystem != null && _previousSystem.Id == systemId)
-        {
-            (_currentSystem, _previousSystem) = (_previousSystem, _currentSystem);
-            _previousSystem.Visible = false;
-            _currentSystem.Visible = true;
-            return _currentSystem;
-        }
-        
         var newSystem = new BaseSystem();
         newSystem.Id = systemId;
 
         if (_currentSystem != null)
         {
-            if (_previousSystem != null)
-                _previousSystem.QueueFree();
-            
-            _previousSystem = _currentSystem;
-            _previousSystem.Visible = false;
+            _currentSystem.Visible = false;
+            _currentSystem.QueueFree();
         }
         
         _currentSystem = newSystem;

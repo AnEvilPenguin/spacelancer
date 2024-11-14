@@ -43,8 +43,6 @@ public partial class JumpGate : Node2D
     {
         if (player.NavComputer is JumpNavigation)
             return;
-
-        var system = GetParent();
 		
         var computer = new JumpNavigation(player, this, Name);
         player.NavComputer = computer;
