@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using Serilog;
+using Spacelancer.Scenes;
 
 namespace Spacelancer.Controllers;
 
@@ -19,6 +20,9 @@ public partial class GameController : Node
 
     private Dictionary<string, Node> _loadedScenes = new Dictionary<string, Node>();
     private Dictionary<ulong, string> _nodeToPathLookup = new Dictionary<ulong, string>();
+    
+    private BaseSystem _currentSystem;
+    private BaseSystem _previousSystem;
 
     public override void _Ready()
     {
@@ -40,9 +44,39 @@ public partial class GameController : Node
         
         Global.Economy.LoadEconomy();
         Global.Universe.LoadUniverse();
-			
-        LoadScene<Node2D>("res://Scenes/Systems/sunrise.tscn");
+        
+        LoadSystem("UA01");
+
         Global.Player = LoadScene<Scenes.Player.Player>("res://Scenes/Player/player.tscn");
+    }
+
+    public Node2D LoadSystem(string systemId)
+    {
+        if (_previousSystem != null && _previousSystem.Id == systemId)
+        {
+            (_currentSystem, _previousSystem) = (_previousSystem, _currentSystem);
+            _previousSystem.Visible = false;
+            _currentSystem.Visible = true;
+            return _currentSystem;
+        }
+        
+        var newSystem = new BaseSystem();
+        newSystem.Id = systemId;
+
+        if (_currentSystem != null)
+        {
+            if (_previousSystem != null)
+                _previousSystem.QueueFree();
+            
+            _previousSystem = _currentSystem;
+            _previousSystem.Visible = false;
+        }
+        
+        _currentSystem = newSystem;
+        
+        _world2D.AddChild(newSystem);
+        
+        return _currentSystem; 
     }
 
     public T LoadScene<T>(string scenePath) where T : Node

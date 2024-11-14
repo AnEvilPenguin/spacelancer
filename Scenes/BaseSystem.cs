@@ -1,18 +1,21 @@
 using Godot;
-using Spacelancer.Components.NPCs;
 using Spacelancer.Controllers;
 using Spacelancer.Scenes.Stations;
 using Spacelancer.Universe;
 using JumpGate = Spacelancer.Scenes.Transitions.JumpGate;
 using Lane = Spacelancer.Scenes.Spacelane.Spacelane;
 
-namespace Spacelancer.Scenes.Systems;
+namespace Spacelancer.Scenes;
 
-public partial class Sunrise : Node2D
+public partial class BaseSystem : Node2D
 {
+	public string Id;
+	
 	public override void _Ready()
 	{
-		var system = Global.Universe.GetSystem("UA01");
+		var system = Global.Universe.GetSystem(Id);
+		
+		Name = system.Name;
 		
 		BuildStations(system);
 		BuildJumpGates(system);

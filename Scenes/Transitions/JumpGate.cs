@@ -46,7 +46,7 @@ public partial class JumpGate : Node2D
 
         var system = GetParent();
 		
-        var computer = new JumpNavigation(player, this, system.Name);
+        var computer = new JumpNavigation(player, this, Name);
         player.NavComputer = computer;
     }
 }

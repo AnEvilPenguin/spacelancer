@@ -1,5 +1,6 @@
 ﻿using Godot;
 using Serilog;
+using Spacelancer.Controllers;
 using Spacelancer.Scenes.Transitions;
 using Spacelancer.Scenes.Player;
 
@@ -89,8 +90,8 @@ public class JumpNavigation : INavigationSoftware
     {
         if (_destinationNode == null)
         {
-            _destinationNode = Controllers.Global.GameController.LoadScene<Node2D>($"res://Scenes/Systems/{_origin.Name.ToString().ToLower()}.tscn");
-            _destinationNode.Visible = false;
+            var destinationId = Global.Universe.GetSystemId(_destination);
+            _destinationNode = Global.GameController.LoadSystem(destinationId);
         }
 
         if ((_player.GlobalPosition - _origin.GlobalPosition).Length() < 25)
@@ -113,8 +114,6 @@ public class JumpNavigation : INavigationSoftware
         oldSystem.Visible = false;
         
         _player.GlobalPosition = _exit.GlobalPosition;
-        
-        Controllers.Global.GameController.UnloadScene(oldSystem);
         
         SetState(JumpState.Exiting);
         

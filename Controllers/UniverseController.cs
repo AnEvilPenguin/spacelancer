@@ -15,6 +15,9 @@ public class UniverseController
     
     public SolarSystem GetSystem(string systemId) => 
         _systems[systemId];
+    
+    public string GetSystemId(string systemName) =>
+        _systemNames[systemName];
 
     public SpaceStation GetSpaceStation(string stationId)
     {
