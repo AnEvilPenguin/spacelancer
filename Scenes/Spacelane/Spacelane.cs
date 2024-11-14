@@ -7,8 +7,10 @@ namespace Spacelancer.Scenes.Spacelane;
 
 public partial class Spacelane : Node2D
 {
+	private static readonly PackedScene Scene = GD.Load<PackedScene>("res://Scenes/Spacelane/spacelane.tscn");
+	
 	[Export]
-	public Spacelane Partner { get; private set; }
+	public Spacelane Partner { get; set; }
 
 	private Area2D _border;
 	private Dictionary<ulong, LaneNavigation> _travelers = new Dictionary<ulong, LaneNavigation>();
@@ -20,6 +22,9 @@ public partial class Spacelane : Node2D
 	// Move at Speed X to destination
 	// Hand over control to Destination
 	// For future, queueing and/or handling premature drop out.
+
+	public static Spacelane GetNewInstance() =>
+		Scene.Instantiate<Spacelane>();
 	
 	public override void _Ready()
 	{

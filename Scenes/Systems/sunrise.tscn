@@ -1,26 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://c4mljrynnxorl"]
+[gd_scene load_steps=2 format=3 uid="uid://c4mljrynnxorl"]
 
 [ext_resource type="Script" path="res://Scenes/Systems/Sunrise.cs" id="1_p6squ"]
-[ext_resource type="PackedScene" uid="uid://c5ncrwmqu6r64" path="res://Scenes/Spacelane/spacelane.tscn" id="6_pf0hb"]
 
 [node name="Sunrise" type="Node2D"]
 script = ExtResource("1_p6squ")
-
-[node name="Spacelane1a" parent="." node_paths=PackedStringArray("Partner") instance=ExtResource("6_pf0hb")]
-rotation = -1.5708
-Partner = NodePath("../Spacelane1b")
-
-[node name="Spacelane1b" parent="." node_paths=PackedStringArray("Partner") instance=ExtResource("6_pf0hb")]
-position = Vector2(6200, 0)
-rotation = 1.5708
-Partner = NodePath("../Spacelane1a")
-
-[node name="Spacelane2a" parent="." node_paths=PackedStringArray("Partner") instance=ExtResource("6_pf0hb")]
-position = Vector2(0, 800)
-rotation = 0.0
-Partner = NodePath("../Spacelane2b")
-
-[node name="Spacelane2b" parent="." node_paths=PackedStringArray("Partner") instance=ExtResource("6_pf0hb")]
-position = Vector2(0, 6200)
-rotation = 3.14159
-Partner = NodePath("../Spacelane2a")

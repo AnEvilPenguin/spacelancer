@@ -16,7 +16,7 @@ public class LaneNavigation : INavigationSoftware
         Complete,
     }
     
-    public string Name => $"LaneNavigation - {_origin.Name} to {_destination.Name} - {_state}";
+    public string Name => $"LaneNavigation - {_origin.Name} - {_state}";
 
     private readonly Scenes.Player.Player _player;
     private readonly Scenes.Spacelane.Spacelane _origin;

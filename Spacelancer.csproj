@@ -20,11 +20,14 @@
     <Content Include="Configuration\Schemas\JumpGate.json" />
     <Content Include="Configuration\Schemas\JumpGates.json" />
     <Content Include="Configuration\Schemas\Location.json" />
+    <Content Include="Configuration\Schemas\SpaceLane.json" />
+    <Content Include="Configuration\Schemas\SpaceLanes.json" />
     <Content Include="Configuration\Schemas\Station.json" />
     <Content Include="Configuration\Schemas\Stations.json" />
     <Content Include="Configuration\Schemas\Systems.json" />
     <Content Include="Configuration\Systems.json" />
     <Content Include="Configuration\Systems\UA01\JumpGates.json" />
+    <Content Include="Configuration\Systems\UA01\SpaceLanes.json" />
     <Content Include="Configuration\Systems\UA01\Stations.json" />
     <Content Include="Configuration\Systems\UA02\JumpGates.json" />
     <Content Include="Configuration\Systems\UA02\Stations.json" />

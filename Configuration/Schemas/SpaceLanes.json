@@ -1,0 +1,15 @@
+﻿{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "lanes": {
+      "title": "Lanes",
+      "description": "Defines space lanes that a player can fly through",
+      "type": "array",
+      "items": {
+        "$ref": "SpaceLane.json"
+      }
+    }
+  },
+  "required": ["lanes"]
+}

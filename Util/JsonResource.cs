@@ -24,8 +24,8 @@ public class JsonResource
 
         if (file == null)
         {
-            Log.Error("Failed to load resource {path}", path);
-            throw new Exception("Failed to load resource");
+            Log.Debug("Failed to load resource {path}", path);
+            return new JObject();
         }
         
         string content = file.GetAsText();
@@ -42,8 +42,8 @@ public class JsonResource
 
         if (!content.TryGetValue(tokenName, out JToken token))
         {
-            Log.Error("Failed to get token {tokenName} from {resourceName}", tokenName, resourceName);
-            throw new Exception("Failed to get token from resource");
+            Log.Debug("Failed to get token {tokenName} from {resourceName}", tokenName, resourceName);
+            return null;
         }
         
         return token;
