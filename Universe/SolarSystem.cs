@@ -57,6 +57,12 @@ public sealed class SolarSystem : IEntity
     private void LoadStations()
     {
         var stations = _contentLoader.GetTokenFromResource("Stations", "stations");
+        
+        if (stations == null)
+        {
+            Log.Warning("No Stations found for {systemId}:{systemName}", Id, Name);
+            return;
+        }
 
         foreach (var station in stations)
         {

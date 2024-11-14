@@ -19,7 +19,8 @@
       "station": "UA02_S01",
       "listings": [
         {"commodity": "EnergyCell", "transaction": "Buy", "price": 7},
-        {"commodity": "Silicon", "transaction": "Sell", "price": 45}
+        {"commodity": "Silicon", "transaction": "Sell", "price": 45},
+        {"commodity": "Ore", "transaction": "Sell", "price": 25}
       ]
     }
   ]

@@ -14,8 +14,15 @@
       "displayName": "Moonshot",
       "affiliation": "Independent",
       "jumpGates": [
-        "UA01"
+        "UA01",
+        "UA03"
       ]
+    },
+    {
+      "id": "UA03",
+      "displayName": "Trifecta",
+      "affiliation": "Independent",
+      "jumpGates": ["UA02"]
     }
   ]
 }
