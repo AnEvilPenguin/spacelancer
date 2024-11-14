@@ -33,7 +33,9 @@
     <Content Include="Configuration\Systems\UA01\SpaceLanes.json" />
     <Content Include="Configuration\Systems\UA01\Stations.json" />
     <Content Include="Configuration\Systems\UA02\JumpGates.json" />
+    <Content Include="Configuration\Systems\UA02\SpaceLanes.json" />
     <Content Include="Configuration\Systems\UA02\Stations.json" />
+    <Content Include="Configuration\Systems\UA03\JumpGates.json" />
     <Content Include="Controllers\GameController\game_controller.tscn" />
   </ItemGroup>
 </Project>

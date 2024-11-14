@@ -41,7 +41,7 @@ public partial class JumpGate : Node2D
     
     private void TakeControlOfShip(Player.Player player)
     {
-        if (player.NavComputer is JumpNavigation)
+        if (player.NavComputer is not PlayerNavigation)
             return;
 		
         var computer = new JumpNavigation(player, this, Name);

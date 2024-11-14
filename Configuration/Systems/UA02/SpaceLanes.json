@@ -1,0 +1,30 @@
+﻿{
+  "$schema": "../../Schemas/SpaceLanes.json",
+  "lanes": [
+    {
+      "id": "UA02_L01",
+      "location1": {
+        "displayName": "Sunrise Jump Gate"
+      },
+      "location2": {
+        "displayName": "UA02_S01",
+        "Y": 6200
+      }
+    },
+    {
+      "id": "UA02_L02",
+      "location1": {
+        "displayName": "UA02_S01",
+        "X": 400,
+        "Y": 7600,
+        "rotation": -43
+      },
+      "location2": {
+        "displayName": "Trifecta Jump Gate",
+        "X": 6400,
+        "Y": 13400,
+        "rotation": 137
+      }
+    }
+  ]
+}

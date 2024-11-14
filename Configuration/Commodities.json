@@ -21,6 +21,13 @@
       "defaultPrice": 80,
       "summary": "A small computer based on a single chip, used to build more complex electronic components",
       "size": "Small"
+    },
+    {
+      "id": "Ore",
+      "displayName": "Ore",
+      "defaultPrice": 15,
+      "summary": "Raw metallic ore that can be refines into more useful materials",
+      "size": "Medium"
     }
   ]
 }

@@ -7,6 +7,14 @@
         "Y": -500,
         "rotation": 180
       }
+    },
+    {
+      "system": "UA03",
+      "location": {
+        "X": 7000,
+        "Y": 14000,
+        "rotation": -43
+      }
     }
   ]
 }
