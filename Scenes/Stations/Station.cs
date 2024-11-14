@@ -12,6 +12,7 @@ namespace Spacelancer.Scenes.Stations;
 
 public partial class Station : Node2D
 {
+	[Export]
 	public string Id;
 	
 	// We may need to consider making this docking range if we make a map and remote comms or something
@@ -22,19 +23,7 @@ public partial class Station : Node2D
 	private readonly Dictionary<string, int> _commodityBuyPriceOverride = new Dictionary<string, int>();
 	
 	private readonly List<NonPlayerCharacter> _nonPlayerCharacters = new List<NonPlayerCharacter>();
-
-	public static Node2D GetNewInstance(StationType stationType)
-	{
-		var scene = stationType switch
-		{
-			StationType.Factory => GD.Load<PackedScene>("res://Scenes/Stations/factory.tscn"),
-			StationType.Mine => GD.Load<PackedScene>("res://Scenes/Stations/mine.tscn"),
-			_ => GD.Load<PackedScene>("res://Scenes/Stations/generic.tscn"),
-		};
-
-		return scene.Instantiate<Node2D>();
-	}
-		
+	
 	
 	public override void _Ready()
 	{

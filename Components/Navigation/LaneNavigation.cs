@@ -121,7 +121,12 @@ public class LaneNavigation : INavigationSoftware
             return proposed.LimitLength(150);
         }
         
-        return proposed.LimitLength(750);
+        if (proposed.Length() < 1000)
+        {
+            return proposed.LimitLength(750);
+        }
+        
+        return proposed.LimitLength(2500);
     }
 
     private Vector2 ProcessExitingVector()

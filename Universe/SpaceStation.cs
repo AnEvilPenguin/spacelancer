@@ -11,14 +11,12 @@ public sealed class SpaceStation : IEntity
     public string Id { get; }
     public string Name { get; }
     public Location Location { get; }
-    public StationType Type { get; }
 
-    public SpaceStation(string id, string name, Location location, StationType type)
+    public SpaceStation(string id, string name, Location location)
     {
         Id = id;
         Name = name;
         Location = location;
-        Type = type;
     }
 
     public List<CommodityListing> GetListings(TransactionType type) =>
