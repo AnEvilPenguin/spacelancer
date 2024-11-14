@@ -6,6 +6,9 @@ namespace Spacelancer.Scenes.Transitions;
 
 public partial class JumpGate : Node2D
 {
+    [Export]
+    public string DestinationId {get; private set; }
+    
     private static readonly PackedScene Scene = GD.Load<PackedScene>("res://Scenes/Transitions/jump_gate.tscn");
     
     private Area2D _entry;

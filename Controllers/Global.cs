@@ -34,6 +34,8 @@ public partial class Global : Node
     {
         if (what != NotificationWMCloseRequest)
             return;
+        
+        Universe.UnloadSystemInstances();
 
         Logger.StopLogger();
         GetTree().Quit();

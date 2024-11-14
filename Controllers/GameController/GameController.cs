@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using Serilog;
-using Spacelancer.Scenes;
+using Spacelancer.Scenes.SolarSystems;
+using Spacelancer.Scenes.Player;
+using Spacelancer.Scenes.Stations;
 
 namespace Spacelancer.Controllers;
 
@@ -35,6 +37,8 @@ public partial class GameController : Node
 
         LoadScene<Control>("res://Scenes/UI/MainMenu/main_menu.tscn");
         
+        Global.Universe.LoadSystemScenes();
+        
         Log.Debug("Game controller loaded");
     }
 
@@ -43,22 +47,23 @@ public partial class GameController : Node
         UnloadWorld2D();
         
         Global.Economy.LoadEconomy();
-        Global.Universe.LoadUniverse();
         
-        LoadSystem("UA01");
-
-        Global.Player = LoadScene<Scenes.Player.Player>("res://Scenes/Player/player.tscn");
+        Global.Player = LoadScene<Player>("res://Scenes/Player/player.tscn");
+        
+        var system = LoadSystem("UA01");
+        
+        var station = system.GetChildren().OfType<Station>().FirstOrDefault();
+        if (station != null)
+            Global.Player.Position = station.Position;
     }
 
-    public Node2D LoadSystem(string systemId)
+    public BaseSystem LoadSystem(string systemId)
     {
-        var newSystem = new BaseSystem();
-        newSystem.Id = systemId;
+        var newSystem = Global.Universe.GetSystemInstance(systemId);
 
         if (_currentSystem != null)
         {
-            _currentSystem.Visible = false;
-            _currentSystem.QueueFree();
+            _world2D.RemoveChild(_currentSystem);
         }
         
         _currentSystem = newSystem;

@@ -18,8 +18,13 @@ public class EconomyController
     public Commodity GetCommodity(string commodityId) =>
         _commodities[commodityId];
 
-    public List<CommodityListing> GetListings(string stationId) =>
-        _commodityListings[stationId];
+    public List<CommodityListing> GetListings(string stationId)
+    {
+        if(_commodityListings.TryGetValue(stationId, out var commodityListings))
+            return commodityListings;
+        
+        return new List<CommodityListing>();
+    }
 
     public void LoadEconomy()
     {

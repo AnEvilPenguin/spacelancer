@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://p4jn4ttdsr4u"]
+
+[ext_resource type="PackedScene" uid="uid://dvmxdf7xe21e5" path="res://Scenes/SolarSystems/base_system.tscn" id="1_dxe5i"]
+[ext_resource type="PackedScene" uid="uid://cvwti3lf0ogd2" path="res://Scenes/Stations/factory.tscn" id="2_lo2xu"]
+[ext_resource type="PackedScene" uid="uid://dv5d275uoyl83" path="res://Scenes/Transitions/jump_gate.tscn" id="3_olxj2"]
+[ext_resource type="PackedScene" uid="uid://c5ncrwmqu6r64" path="res://Scenes/Spacelane/spacelane.tscn" id="4_yglqn"]
+
+[node name="Trifecta" instance=ExtResource("1_dxe5i")]
+Id = "UA03"
+
+[node name="Moonshot" parent="." index="0" instance=ExtResource("3_olxj2")]
+position = Vector2(12000, 12000)
+rotation = 2.36318
+DestinationId = "UA02"
+
+[node name="Spacelane" parent="." index="1" node_paths=PackedStringArray("Partner") instance=ExtResource("4_yglqn")]
+position = Vector2(13000, 13000)
+rotation = -0.785398
+Partner = NodePath("../Spacelane2")
+
+[node name="Spacelane2" parent="." index="2" node_paths=PackedStringArray("Partner") instance=ExtResource("4_yglqn")]
+position = Vector2(30996, 31000)
+rotation = 2.35619
+Partner = NodePath("../Spacelane")
+
+[node name="Danoher Station" parent="." index="3" instance=ExtResource("2_lo2xu")]
+position = Vector2(32000, 32000)
+Id = "UA03_S01"
