@@ -13,17 +13,23 @@ namespace Spacelancer.Controllers;
 
 public class UniverseController
 {
-    private static readonly JsonResource ConfigurationLoader = new("res://Configuration/");
-
     private readonly Dictionary<string, SpaceStation> _spaceStations = new();
     private readonly Dictionary<string, string> _systemNames = new();
-    private readonly Dictionary<string, BaseSystem> _systemInstances = new();
+    private readonly Dictionary<string, PackedScene> _systemScenes = new();
     
     public string GetSystemId(string systemName) =>
         _systemNames[systemName];
-    
-    public BaseSystem GetSystemInstance(string systemId) =>
-        _systemInstances[systemId];
+
+    public BaseSystem GetSystemInstance(string systemId)
+    {
+        if (!_systemScenes.TryGetValue(systemId, out var system))
+        {
+            Log.Warning($"System ID {systemId} not found");
+            return null;
+        }
+        
+        return system.Instantiate<BaseSystem>();
+    }
     
     public SpaceStation GetSpaceStation(string stationId) => 
         _spaceStations[stationId];
@@ -62,18 +68,12 @@ public class UniverseController
             
             LoadStations(system);
             
-            _systemInstances.Add(system.Id, system);
+            _systemScenes.Add(system.Id, scene);
             _systemNames.Add(system.Name, system.Id);
             
+            system.QueueFree();
+            
             fileName = dir.GetNext();
-        }
-    }
-
-    public void UnloadSystemInstances()
-    {
-        foreach (var instance in _systemInstances.Values)
-        {
-            instance.QueueFree();
         }
     }
 
