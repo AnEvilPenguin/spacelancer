@@ -42,14 +42,6 @@ public partial class Sunrise : Node2D
 		
 		station.Name = stationConfig.Name;
 		station.Id = stationConfig.Id;
-
-		if (stationConfig.Id == "UA01_S01")
-		{
-			var foo = new NonPlayerCharacter("Foo");
-			foo.LoadDialog();
-		
-			station.AddNpc(foo);
-		}
 		
 		AddChild(stationNode);
 	}

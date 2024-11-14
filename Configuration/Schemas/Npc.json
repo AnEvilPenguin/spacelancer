@@ -1,0 +1,25 @@
+﻿{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "title": "Non-player Character",
+  "description": "An individual character that a player can interact with",
+  "properties": {
+    "id": {
+      "description": "The unique id that is used to identify the NPC",
+      "type": "string"
+    },
+    "displayName": {
+      "description": "The name of the NPC that is shown to the player",
+      "type": "string"
+    },
+    "summary": {
+      "description": "A description of the NPC that is shown in the NPC profile",
+      "type": "string"
+    },
+    "affiliation": {
+      "description": "The affiliation of the NPC",
+      "type": "string"
+    }
+  },
+  "required": ["id", "displayName", "summary", "affiliation"]
+}

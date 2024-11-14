@@ -60,7 +60,12 @@ public partial class StationMenu : PanelContainer
 		HideMenus();
 		
 		_commsMenu.Visible = true;
-		_commsMenu.LoadNonPlayerCharacters(_selectedStation.GetNonPlayerCharacters());
+
+		var npcs = _selectedStation.GetNonPlayerCharacters();
+
+		npcs.ForEach(npc => npc.LoadDialog(_selectedStation.Id));
+		
+		_commsMenu.LoadNonPlayerCharacters(npcs);
 	}
 
 	private void AttachButtons()

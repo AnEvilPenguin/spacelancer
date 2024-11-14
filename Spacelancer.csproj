@@ -13,18 +13,21 @@
   <ItemGroup>
     <Content Include="Configuration\Commodities.json" />
     <Content Include="Configuration\CommodityListings.json" />
-    <Content Include="Configuration\Conversations\foo.json" />
+    <Content Include="Configuration\Conversations\UA01_S01\C01.json" />
     <Content Include="Configuration\Schemas\Commodities.json" />
     <Content Include="Configuration\Schemas\CommodityListing.json" />
     <Content Include="Configuration\Schemas\CommodityListings.json" />
     <Content Include="Configuration\Schemas\JumpGate.json" />
     <Content Include="Configuration\Schemas\JumpGates.json" />
     <Content Include="Configuration\Schemas\Location.json" />
+    <Content Include="Configuration\Schemas\Npc.json" />
+    <Content Include="Configuration\Schemas\Npcs.json" />
     <Content Include="Configuration\Schemas\SpaceLane.json" />
     <Content Include="Configuration\Schemas\SpaceLanes.json" />
     <Content Include="Configuration\Schemas\Station.json" />
     <Content Include="Configuration\Schemas\Stations.json" />
     <Content Include="Configuration\Schemas\Systems.json" />
+    <Content Include="Configuration\Stations\UA01_S01\Npcs.json" />
     <Content Include="Configuration\Systems.json" />
     <Content Include="Configuration\Systems\UA01\JumpGates.json" />
     <Content Include="Configuration\Systems\UA01\SpaceLanes.json" />

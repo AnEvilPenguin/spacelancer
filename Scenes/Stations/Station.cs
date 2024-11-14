@@ -6,6 +6,7 @@ using Spacelancer.Components.NPCs;
 using Spacelancer.Economy;
 using Spacelancer.Scenes.UI.StationMenu;
 using Spacelancer.Universe;
+using Spacelancer.Util;
 
 namespace Spacelancer.Scenes.Stations;
 
@@ -41,6 +42,8 @@ public partial class Station : Node2D
 		
 		stationBorder.BodyEntered += OnStationAreaEntered;
 		stationBorder.BodyExited += OnStationAreaExited;
+		
+		LoadNpcs();
 	}
 
 	public override void _Process(double delta)
@@ -56,8 +59,30 @@ public partial class Station : Node2D
 		}
 	}
 
-	public void AddNpc(NonPlayerCharacter npc) =>
-		_nonPlayerCharacters.Add(npc);
+	public void LoadNpcs()
+	{
+		_nonPlayerCharacters.Clear();
+
+		var npcReader = new JsonResource($"res://Configuration/Stations/{Id}");
+		var npcs = npcReader.GetTokenFromResource("Npcs", "characters");
+		
+		if (npcs == null)
+		{
+			Log.Warning("No NPCs found for {systemId}:{systemName}", Id, Name);
+			return;
+		}
+		
+		foreach (var npcConfig in npcs)
+		{
+			var id = npcConfig.Value<string>("id");
+			var name = npcConfig.Value<string>("displayName");
+			var summary = npcConfig.Value<string>("summary");
+			var affiliation = npcConfig.Value<string>("affiliation");
+			
+			var newNpc = new NonPlayerCharacter(id, name, summary, affiliation);
+			_nonPlayerCharacters.Add(newNpc);
+		}
+	}
 	
 	public List<NonPlayerCharacter> GetNonPlayerCharacters() => 
 		new List<NonPlayerCharacter>(_nonPlayerCharacters);

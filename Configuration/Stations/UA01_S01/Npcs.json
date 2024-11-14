@@ -1,0 +1,11 @@
+﻿{
+  "$schema": "../../Schemas/Npcs.json",
+  "characters": [
+    {
+      "id": "C01",
+      "displayName": "Foo",
+      "summary": "Hi I'm Foo\n\nI love pottery and eating bees.",
+      "affiliation": "Unaffiliated"
+    }
+  ]
+}
