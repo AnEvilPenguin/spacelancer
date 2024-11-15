@@ -1,0 +1,17 @@
+[gd_scene load_steps=6 format=3 uid="uid://xbtqo4gmnhny"]
+
+[ext_resource type="Script" path="res://Scenes/Transitions/SpaceLane.cs" id="1_vdd4v"]
+[ext_resource type="Texture2D" uid="uid://c320b4nt81wdn" path="res://Assets/Placeholder Art/spaceStation_029.png" id="2_wy850"]
+[ext_resource type="Texture2D" uid="uid://b6te8s3aeuomr" path="res://Assets/Placeholder Art/spaceBuilding_016.png" id="3_a6g2u"]
+[ext_resource type="Texture2D" uid="uid://dye35iughyw8e" path="res://Assets/Placeholder Art/bar_round_small_square.png" id="4_eouna"]
+[ext_resource type="Texture2D" uid="uid://dnl23yii5gk4h" path="res://Assets/Placeholder Art/red_bar_round_small_square.png" id="5_bqj5d"]
+
+[node name="SpaceLane" type="Node2D"]
+script = ExtResource("1_vdd4v")
+Position2 = Vector2(2000, 0)
+MainTexture = ExtResource("2_wy850")
+IntermediateTexture = ExtResource("3_a6g2u")
+GoLight = ExtResource("4_eouna")
+StopLight = ExtResource("5_bqj5d")
+_ready = true
+_regenerate = false
