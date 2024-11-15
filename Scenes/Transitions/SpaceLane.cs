@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 namespace Spacelancer.Scenes.Transitions;
@@ -21,19 +23,30 @@ public partial class SpaceLane : Node2D
 	[Export] 
 	private int Spacing = 1000;
 	
-	private Node2D _pair1;
-	private Node2D _pair2;
+	private List<LanePart> _laneParts = new();
+	
+	private LaneEntrance _pair1;
+	private LaneEntrance _pair2;
+	
+	[Export]
+	private Vector2 _offset = new(150, 0);
 
 	[Export] private bool _regenerate = true;
 	
-	// TODO Debug Distance labels
-	// TODO Place intermediate Rings
+	// TODO docking area
+	// TODO navigation software
 	// TODO Get Names From IDs?
+	
+	// FIXME consider just specifying number of rings to set distance
+	// Rotation effectvely handled by the parent node
+	
+	// FIXME split down into logical classes
+	// FIXME look at setters and getters to implement export logic rather than tool class
+	// https://docs.godotengine.org/en/latest/tutorials/scripting/gdscript/gdscript_basics.html#properties-setters-and-getters
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		Regenerate();
 		UpdateNodes();
 	}
 
@@ -42,17 +55,14 @@ public partial class SpaceLane : Node2D
 	{
 		if (!Engine.IsEditorHint())
 			return;
-			
-		UpdateNodes();
+
+		if (_regenerate || _pair1.Position != Position1 || _pair2.Position != Position2)
+			UpdateNodes();
 	}
 
 	private void UpdateNodes()
 	{
-		if(_regenerate)
-			Regenerate();
-		
-		if (_pair1.Position == Position1 && _pair2.Position == Position2)
-			return;
+		Regenerate();
 		
 		_pair1.Position = Position1;
 		_pair2.Position = Position2;
@@ -68,86 +78,20 @@ public partial class SpaceLane : Node2D
 
 	private void Regenerate()
 	{
-		if(_pair1 != null)
-			_pair1.QueueFree();
+		_laneParts.ForEach(p => p.QueueFree());
+		_laneParts.Clear();
 		
-		if (_pair2 != null)
-			_pair2.QueueFree();
-		
-		_pair1 = GeneratePair(Position1, "pair1");
-		_pair2 = GeneratePair(Position2, "pair2");
+		_pair1 = new LaneEntrance(Position1, _offset, MainTexture, GoLight, StopLight);
+		_pair2 = new LaneEntrance(Position2, _offset, MainTexture, GoLight, StopLight);
 		
 		AddChild(_pair1);
 		AddChild(_pair2);
 		
 		RotateAway(_pair1, _pair2);
+
+		GenerateIntermediates();
 		
 		_regenerate = false;
-	}
-
-	private Node2D GeneratePair(Vector2 position, string name)
-	{
-		var pair = new Node2D();
-		pair.Position = position;
-		pair.Name = name;
-
-		var offset = new Vector2(150, 0);
-		
-		var entrance = GenerateEntrance(offset, "entrance");
-		var exit = GenerateExit(-offset, "exit");
-		
-		pair.AddChild(entrance);
-		pair.AddChild(exit);
-		
-		return pair;
-	}
-
-	private Node2D GenerateEntrance(Vector2 position, string name)
-	{
-		var node = GenerateMainNode(position, name);
-		
-		GenerateLights(node, new Vector2(110, 0), GoLight);
-		
-		return node;
-	}
-
-	private Node2D GenerateExit(Vector2 position, string name)
-	{
-		var node = GenerateMainNode(position, name);
-		
-		GenerateLights(node, new Vector2(110, 0), StopLight);
-		
-		return node;
-	}
-
-	private void GenerateLights(Node2D node, Vector2 position, Texture2D lightTexture)
-	{
-		node.AddChild(GenerateLight(position, lightTexture));
-		node.AddChild(GenerateLight(-position, lightTexture));
-	}
-
-	private Sprite2D GenerateLight(Vector2 position, Texture2D texture)
-	{
-		var sprite = new Sprite2D();
-		sprite.Texture = texture;
-		sprite.ZIndex = -2;
-		sprite.Position = position;
-		
-		return sprite;
-	}
-
-	private Node2D GenerateMainNode(Vector2 position, string name)
-	{
-		var newNode = new Node2D();
-		newNode.Position = position;
-		newNode.Name = name;
-
-		var sprite = new Sprite2D();
-		sprite.Texture = MainTexture;
-		
-		newNode.AddChild(sprite);
-		
-		return newNode;
 	}
 
 	private void RotateAway(Node2D object1, Node2D object2)
@@ -164,7 +108,42 @@ public partial class SpaceLane : Node2D
 
 	private void GenerateIntermediates()
 	{
+		var distance = _pair2.Position - _pair1.Position;
+
+		_laneParts.Add(_pair1);
+
+		LanePart previous = _pair1;
+
+		while (distance.Length() > Spacing)
+		{
+			var chunk = distance.LimitLength(Spacing);
+
+			var newPosition = previous.Position + chunk;
+			var node = new LaneNode(newPosition, IntermediateTexture, _offset);
+			node.Rotation = _pair1.Rotation;
+			
+			_laneParts.Add(node);
+			AddChild(node);
+			
+			node.TowardsPair1 = previous;
+			previous.TowardsPair2 = node;
+
+			previous = node;
+			distance -= chunk;
+		}
 		
+		previous.TowardsPair2 = _pair2;
+		_pair2.TowardsPair1 = previous;
+		
+		_laneParts.Add(_pair2);
+		
+		
+		// split position down into batches of 1000 length
+		// Generate a pair of intermediaries per batch
+		// Place batch
+		// link neighbours together
+			// towardsPair1
+			// towardsPair2
 	}
 
 	private void DebugLabels()

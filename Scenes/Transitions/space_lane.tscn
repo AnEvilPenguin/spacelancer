@@ -8,10 +8,9 @@
 
 [node name="SpaceLane" type="Node2D"]
 script = ExtResource("1_vdd4v")
-Position2 = Vector2(2000, 0)
+Position2 = Vector2(3000, 0)
 MainTexture = ExtResource("2_wy850")
 IntermediateTexture = ExtResource("3_a6g2u")
 GoLight = ExtResource("4_eouna")
 StopLight = ExtResource("5_bqj5d")
-_ready = true
 _regenerate = false
