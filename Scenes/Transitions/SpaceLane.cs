@@ -17,12 +17,12 @@ public partial class SpaceLane : Node2D
 	public Texture2D GoLight { get; private set; }
 	[Export]
 	public Texture2D StopLight { get; private set; }
+
+	[Export] 
+	private int Spacing = 1000;
 	
 	private Node2D _pair1;
 	private Node2D _pair2;
-
-	[Export]
-	private bool _ready = false;
 
 	[Export] private bool _regenerate = true;
 	
@@ -35,8 +35,6 @@ public partial class SpaceLane : Node2D
 	{
 		Regenerate();
 		UpdateNodes();
-		
-		_ready = true;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -46,7 +44,6 @@ public partial class SpaceLane : Node2D
 			return;
 			
 		UpdateNodes();
-		_ready = true;
 	}
 
 	private void UpdateNodes()
@@ -177,7 +174,16 @@ public partial class SpaceLane : Node2D
 		
 		var distance = (_pair1.Position - _pair2.Position).Length();
 		
-		// TODO if distance not a multiple of 1000 (2000?) make labels red and log a GD error
+		label1.AddThemeColorOverride("font_color", Colors.White);
+		label2.AddThemeColorOverride("font_color", Colors.White);
+		
+		// We're happy with some inaccuracy here.
+		if ((int)distance % Spacing != 0)
+		{
+			GD.PrintErr($"Spacing mismatch for {Name}");
+			label1.AddThemeColorOverride("font_color", Colors.Red);
+			label2.AddThemeColorOverride("font_color", Colors.Red);
+		}
 		
 		label1.Text = $"distance: {distance:0.0}";
 		label2.Text = $"distance: {distance:0.0}";
