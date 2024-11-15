@@ -17,9 +17,9 @@ public partial class SpaceLane : Node2D
 	public Texture2D GoLight { get; private set; }
 	[Export]
 	public Texture2D StopLight { get; private set; }
-
-	private Node2D _entrance1;
-	private Node2D _exit1;
+	
+	private Node2D _pair1;
+	private Node2D _pair2;
 
 	[Export]
 	private bool _ready = false;
@@ -54,13 +54,13 @@ public partial class SpaceLane : Node2D
 		if(_regenerate)
 			Regenerate();
 		
-		if (_entrance1.Position == Position1 && _exit1.Position == Position2)
+		if (_pair1.Position == Position1 && _pair2.Position == Position2)
 			return;
 		
-		_entrance1.Position = Position1;
-		_exit1.Position = Position2;
+		_pair1.Position = Position1;
+		_pair2.Position = Position2;
 		
-		RotateAway(_entrance1, _exit1);
+		RotateAway(_pair1, _pair2);
 
 		if (Engine.IsEditorHint())
 		{
@@ -71,18 +71,38 @@ public partial class SpaceLane : Node2D
 
 	private void Regenerate()
 	{
-		if(_entrance1 != null)
-			_entrance1.QueueFree();
+		if(_pair1 != null)
+			_pair1.QueueFree();
 		
-		if (_exit1 != null)
-			_exit1.QueueFree();
+		if (_pair2 != null)
+			_pair2.QueueFree();
 		
-		_entrance1 = GenerateEntrance(Position1, "entrance1");
-		_exit1 = GenerateExit(Position2, "entrance2");
+		_pair1 = GeneratePair(Position1, "pair1");
+		_pair2 = GeneratePair(Position2, "pair2");
 		
-		RotateAway(_entrance1, _exit1);
+		AddChild(_pair1);
+		AddChild(_pair2);
+		
+		RotateAway(_pair1, _pair2);
 		
 		_regenerate = false;
+	}
+
+	private Node2D GeneratePair(Vector2 position, string name)
+	{
+		var pair = new Node2D();
+		pair.Position = position;
+		pair.Name = name;
+
+		var offset = new Vector2(150, 0);
+		
+		var entrance = GenerateEntrance(offset, "entrance");
+		var exit = GenerateExit(-offset, "exit");
+		
+		pair.AddChild(entrance);
+		pair.AddChild(exit);
+		
+		return pair;
 	}
 
 	private Node2D GenerateEntrance(Vector2 position, string name)
@@ -129,7 +149,6 @@ public partial class SpaceLane : Node2D
 		sprite.Texture = MainTexture;
 		
 		newNode.AddChild(sprite);
-		AddChild(newNode);
 		
 		return newNode;
 	}
@@ -153,12 +172,12 @@ public partial class SpaceLane : Node2D
 
 	private void DebugLabels()
 	{
-		var label1 = GetDebugLabel(_entrance1);
-		var label2 = GetDebugLabel(_exit1);
+		var label1 = GetDebugLabel(_pair1);
+		var label2 = GetDebugLabel(_pair2);
 		
-		var distance = (_entrance1.Position - _exit1.Position).Length();
+		var distance = (_pair1.Position - _pair2.Position).Length();
 		
-		GD.Print($"distance: {distance:0.0}");
+		// TODO if distance not a multiple of 1000 (2000?) make labels red and log a GD error
 		
 		label1.Text = $"distance: {distance:0.0}";
 		label2.Text = $"distance: {distance:0.0}";
@@ -175,7 +194,7 @@ public partial class SpaceLane : Node2D
 		}
 		
 		label.RotationDegrees = 90;
-		label.Position = new Vector2(175, -50);
+		label.Position = new Vector2(12, -50);
 		
 		return label;
 	}
