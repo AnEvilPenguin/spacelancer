@@ -1,5 +1,6 @@
 ﻿using Godot;
 using Serilog;
+using Spacelancer.Scenes.Player;
 
 
 namespace Spacelancer.Components.Navigation;
@@ -18,9 +19,9 @@ public class LaneNavigation : INavigationSoftware
     
     public string Name => $"LaneNavigation - {_origin.Name} - {_state}";
 
-    private readonly Scenes.Player.Player _player;
-    private readonly Scenes.Spacelane.Spacelane _origin;
-    private readonly Scenes.Spacelane.Spacelane _destination;
+    private readonly Player _player;
+    private readonly Node2D _origin;
+    private readonly Node2D _destination;
 
     private readonly INavigationSoftware _originalSoftware;
     
@@ -28,7 +29,7 @@ public class LaneNavigation : INavigationSoftware
     
     // FIXME develop interface/class for space ships?
     // Could consider having some sort of sensor range to fire off events for nearby objects?
-    public LaneNavigation(Scenes.Player.Player ship, Scenes.Spacelane.Spacelane origin, Scenes.Spacelane.Spacelane destination)
+    public LaneNavigation(Player ship, Node2D origin, Node2D destination)
     {
         _player = ship;
         _origin = origin;

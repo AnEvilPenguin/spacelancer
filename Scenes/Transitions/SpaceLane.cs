@@ -97,10 +97,13 @@ public partial class SpaceLane : Node2D
 		_laneParts.ForEach(p => p.QueueFree());
 		_laneParts.Clear();
 		
-		var distance = Position.X + (_spacing * (_ringCount + 1));
+		var distance = _spacing * (_ringCount + 1);
 		
-		_pair1 = new LaneEntrance(Position, _offset, MainTexture, GoLight, StopLight);
+		_pair1 = new LaneEntrance(Vector2.Zero, _offset, MainTexture, GoLight, StopLight);
 		_pair2 = new LaneEntrance(new Vector2(distance, 0), _offset, MainTexture, GoLight, StopLight);
+
+		_pair1.Partner = _pair2;
+		_pair2.Partner = _pair1;
 		
 		AddChild(_pair1);
 		AddChild(_pair2);
