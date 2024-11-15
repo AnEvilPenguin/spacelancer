@@ -20,12 +20,9 @@ public partial class LaneNode : LanePart
         GenerateRing(offset, ringTexture);
         GenerateRing(-offset, ringTexture);
     }
-
-    // Potentially required for Godot?
-    public LaneNode()
-    {
-        throw new System.NotImplementedException();
-    }
+    
+    // Required for the editor
+    public LaneNode() {}
 
     private void GenerateMarker()
     {

@@ -7,10 +7,7 @@ namespace Spacelancer.Scenes.Transitions;
 [Tool]
 public partial class SpaceLane : Node2D
 {
-	[Export]
-	public Vector2 Position1 { get; private set; }
-	[Export]
-	public Vector2 Position2 { get; private set; }
+	[ExportGroup("Textures")]
 	[Export]
 	public Texture2D MainTexture { get; private set; }
 	[Export]
@@ -20,52 +17,71 @@ public partial class SpaceLane : Node2D
 	[Export]
 	public Texture2D StopLight { get; private set; }
 
-	[Export] 
-	private int Spacing = 1000;
+	[ExportGroup("Generation")] 
+	[Export] private int _spacing
+	{
+		get => _spacingValue;
+		set
+		{
+			_spacingValue = value; 
+			_regenerate = true;
+		}
+	}
+	private int _spacingValue = 1000;
+
+	[Export] private int _ringCount 
+	{ 
+		get => _ringCountValue;
+		set {
+			_ringCountValue = value;
+			_regenerate = true; 
+		}
+	}
+
+	private int _ringCountValue = 0;
 	
 	private List<LanePart> _laneParts = new();
 	
 	private LaneEntrance _pair1;
 	private LaneEntrance _pair2;
-	
-	[Export]
-	private Vector2 _offset = new(150, 0);
 
-	[Export] private bool _regenerate = true;
+	[Export]
+	private Vector2 _offset
+	{
+		get => _offsetValue;
+		set
+		{
+			_offsetValue = value;
+			_regenerate = true;
+		}
+	} 
+	private Vector2 _offsetValue = new(150, 0);
+
+	private bool _regenerate = true;
 	
 	// TODO docking area
 	// TODO navigation software
 	// TODO Get Names From IDs?
-	
-	// FIXME consider just specifying number of rings to set distance
-	// Rotation effectvely handled by the parent node
-	
-	// FIXME split down into logical classes
-	// FIXME look at setters and getters to implement export logic rather than tool class
-	// https://docs.godotengine.org/en/latest/tutorials/scripting/gdscript/gdscript_basics.html#properties-setters-and-getters
-	
-	// Called when the node enters the scene tree for the first time.
+		// If stationIds has name use that
+		// else if JumpGates has id use that
+		// else use name
+
 	public override void _Ready()
 	{
 		UpdateNodes();
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (!Engine.IsEditorHint())
+		if (!Engine.IsEditorHint() || !_regenerate)
 			return;
-
-		if (_regenerate || _pair1.Position != Position1 || _pair2.Position != Position2)
-			UpdateNodes();
+		
+		UpdateNodes();
 	}
 
 	private void UpdateNodes()
 	{
 		Regenerate();
-		
-		_pair1.Position = Position1;
-		_pair2.Position = Position2;
 		
 		RotateAway(_pair1, _pair2);
 
@@ -81,15 +97,17 @@ public partial class SpaceLane : Node2D
 		_laneParts.ForEach(p => p.QueueFree());
 		_laneParts.Clear();
 		
-		_pair1 = new LaneEntrance(Position1, _offset, MainTexture, GoLight, StopLight);
-		_pair2 = new LaneEntrance(Position2, _offset, MainTexture, GoLight, StopLight);
+		var distance = Position.X + (_spacing * (_ringCount + 1));
+		
+		_pair1 = new LaneEntrance(Position, _offset, MainTexture, GoLight, StopLight);
+		_pair2 = new LaneEntrance(new Vector2(distance, 0), _offset, MainTexture, GoLight, StopLight);
 		
 		AddChild(_pair1);
 		AddChild(_pair2);
 		
 		RotateAway(_pair1, _pair2);
-
-		GenerateIntermediates();
+		
+		GenerateParts();
 		
 		_regenerate = false;
 	}
@@ -106,20 +124,16 @@ public partial class SpaceLane : Node2D
 		object2.Rotation = rot1;
 	}
 
-	private void GenerateIntermediates()
+	private void GenerateParts()
 	{
-		var distance = _pair2.Position - _pair1.Position;
-
 		_laneParts.Add(_pair1);
 
 		LanePart previous = _pair1;
 
-		while (distance.Length() > Spacing)
+		for (int i = 1; i <= _ringCount; i++)
 		{
-			var chunk = distance.LimitLength(Spacing);
-
-			var newPosition = previous.Position + chunk;
-			var node = new LaneNode(newPosition, IntermediateTexture, _offset);
+			var position = new Vector2(i * _spacing, 0);
+			var node = new LaneNode(position, IntermediateTexture, _offset);
 			node.Rotation = _pair1.Rotation;
 			
 			_laneParts.Add(node);
@@ -129,7 +143,6 @@ public partial class SpaceLane : Node2D
 			previous.TowardsPair2 = node;
 
 			previous = node;
-			distance -= chunk;
 		}
 		
 		previous.TowardsPair2 = _pair2;
@@ -152,17 +165,6 @@ public partial class SpaceLane : Node2D
 		var label2 = GetDebugLabel(_pair2);
 		
 		var distance = (_pair1.Position - _pair2.Position).Length();
-		
-		label1.AddThemeColorOverride("font_color", Colors.White);
-		label2.AddThemeColorOverride("font_color", Colors.White);
-		
-		// We're happy with some inaccuracy here.
-		if ((int)distance % Spacing != 0)
-		{
-			GD.PrintErr($"Spacing mismatch for {Name}");
-			label1.AddThemeColorOverride("font_color", Colors.Red);
-			label2.AddThemeColorOverride("font_color", Colors.Red);
-		}
 		
 		label1.Text = $"distance: {distance:0.0}";
 		label2.Text = $"distance: {distance:0.0}";

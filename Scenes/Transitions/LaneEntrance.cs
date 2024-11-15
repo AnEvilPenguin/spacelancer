@@ -21,11 +21,8 @@ public partial class LaneEntrance : LanePart
         GenerateMainNode(-offset, mainTexture, stopLight);
     }
     
-    // Potentially required for Godot?
-    public LaneEntrance()
-    {
-        throw new System.NotImplementedException();
-    }
+    // Required for the editor
+    public LaneEntrance() {}
 
     private void GenerateMainNode(Vector2 position, Texture2D texture, Texture2D light)
     {
