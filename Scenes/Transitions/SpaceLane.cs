@@ -94,7 +94,10 @@ public partial class SpaceLane : Node2D
 
 	private void Regenerate()
 	{
-		_laneParts.ForEach(p => p.QueueFree());
+		foreach (var child in GetChildren())
+		{
+			child.QueueFree();
+		}
 		_laneParts.Clear();
 		
 		var distance = _spacing * (_ringCount + 1);
