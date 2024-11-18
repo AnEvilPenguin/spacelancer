@@ -109,7 +109,6 @@ public class LaneNavigation : INavigationSoftware
         if (proposed.Length() < 5)
         {
             SetState(LaneState.Exiting);
-            return proposed.LimitLength(10);
         }
         
         if (proposed.Length() < 100)
@@ -132,6 +131,9 @@ public class LaneNavigation : INavigationSoftware
 
     private Vector2 ProcessExitingVector()
     {
+        if ((_destination.GlobalPosition - _player.GlobalPosition).Length() > 150)
+            SetState(LaneState.Complete);
+        
         // TODO probably need to consider things like nearby ships in future.
         // Use boiding/flocking?
         var proposed = _player.GlobalPosition - _origin.GlobalPosition;
