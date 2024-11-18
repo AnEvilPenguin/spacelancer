@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Godot;
 using Serilog;
+using Spacelancer.Components.Equipment.Detection;
 using Spacelancer.Components.NPCs;
 using Spacelancer.Economy;
 using Spacelancer.Scenes.UI.StationMenu;
@@ -24,6 +25,7 @@ public partial class Station : Node2D
 	
 	private readonly List<NonPlayerCharacter> _nonPlayerCharacters = new List<NonPlayerCharacter>();
 	
+	private IdentificationFriendFoe _iff;
 	
 	public override void _Ready()
 	{
@@ -31,6 +33,9 @@ public partial class Station : Node2D
 		
 		stationBorder.BodyEntered += OnStationAreaEntered;
 		stationBorder.BodyExited += OnStationAreaExited;
+		
+		var detection = new SensorDetection(Name, "TODO", SensorDetectionType.Station, this);
+		_iff = new IdentificationFriendFoe(this, detection);
 		
 		LoadNpcs();
 	}

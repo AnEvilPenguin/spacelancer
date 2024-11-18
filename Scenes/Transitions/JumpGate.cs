@@ -1,5 +1,6 @@
 using Godot;
 using Serilog;
+using Spacelancer.Components.Equipment.Detection;
 using Spacelancer.Components.Navigation;
 
 namespace Spacelancer.Scenes.Transitions;
@@ -13,6 +14,8 @@ public partial class JumpGate : Node2D
     
     private Area2D _entry;
 
+    private IdentificationFriendFoe _iff;
+
     public static JumpGate GetNewInstance() =>
         Scene.Instantiate<JumpGate>();
 
@@ -22,10 +25,14 @@ public partial class JumpGate : Node2D
 
         _entry.BodyEntered += OnJumpBorderEntered;
         _entry.BodyExited += OnJumpBorderExited;
+        
+        var detection = new SensorDetection($"{Name} Jump Gate", "Unaffiliated", SensorDetectionType.JumpGate, this);
+        _iff = new IdentificationFriendFoe(this, detection);
     }
     
     public Vector2 GetExitMarker() =>
         GetNode<Marker2D>("Exit").GlobalPosition;
+        
 
     private void OnJumpBorderEntered(Node body)
     {

@@ -1,4 +1,5 @@
 using Godot;
+using Spacelancer.Components.Equipment.Detection;
 using Spacelancer.Components.Navigation;
 
 namespace Spacelancer.Scenes.Transitions;
@@ -16,14 +17,14 @@ public partial class LaneEntrance : LanePart
     private Node2D _entrance;
     private Node2D _exit;
     
-    public override string GetName(Node2D caller)
-    {
-        return Name;
-    }
+    private IdentificationFriendFoe _iff;
     
     public LaneEntrance(Vector2 position, Vector2 offset, Texture2D mainTexture, Texture2D goLight, Texture2D stopLight)
     {
         Position = position;
+        
+        var detection = new SensorDetection(Name, "Unaffiliated", SensorDetectionType.SpaceLane, this);
+        _iff = new IdentificationFriendFoe(this, detection);
         
         _entrance = GenerateMainNode(offset, mainTexture, goLight, "Entrance");
         _exit = GenerateMainNode(-offset, mainTexture, stopLight, "Exit");

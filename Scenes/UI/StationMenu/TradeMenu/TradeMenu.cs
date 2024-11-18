@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using Serilog;
+using Spacelancer.Components.Equipment.Storage;
 using Spacelancer.Economy;
-using Spacelancer.Components.Storage;
 using Spacelancer.Universe;
 
 namespace Spacelancer.Scenes.UI.StationMenu.TradeMenu;
