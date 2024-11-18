@@ -3,13 +3,13 @@
 [ext_resource type="PackedScene" uid="uid://dvmxdf7xe21e5" path="res://Scenes/SolarSystems/base_system.tscn" id="1_sustg"]
 [ext_resource type="PackedScene" uid="uid://bypgwt1e04ww0" path="res://Scenes/Stations/mine.tscn" id="2_dwxgd"]
 [ext_resource type="PackedScene" uid="uid://dv5d275uoyl83" path="res://Scenes/Transitions/jump_gate.tscn" id="3_tvm70"]
-[ext_resource type="PackedScene" uid="uid://c5ncrwmqu6r64" path="res://Scenes/Spacelane/spacelane.tscn" id="4_sbl4q"]
+[ext_resource type="PackedScene" uid="uid://xbtqo4gmnhny" path="res://Scenes/Transitions/space_lane.tscn" id="5_6vxd6"]
 
 [node name="Moonshot" instance=ExtResource("1_sustg")]
 Id = "UA02"
 
 [node name="Brummbaer Station" parent="." index="0" instance=ExtResource("2_dwxgd")]
-position = Vector2(32000, 32000)
+position = Vector2(32000, 31500)
 Id = "UA02_S01"
 
 [node name="Sunrise" parent="." index="1" instance=ExtResource("3_tvm70")]
@@ -22,22 +22,12 @@ position = Vector2(56000, 56000)
 rotation = -0.785398
 DestinationId = "UA03"
 
-[node name="Sunrise Jump Gate -> Brummbaer Station" parent="." index="3" node_paths=PackedStringArray("Partner") instance=ExtResource("4_sbl4q")]
+[node name="Sunrise Jump Gate -> Brummbaer Station" parent="." index="3" instance=ExtResource("5_6vxd6")]
 position = Vector2(32000, 5000)
-rotation = 0.0
-Partner = NodePath("../Brummbaer Station -> Sunrise Jump Gate")
+rotation = 1.5708
+_ringCount = 11
 
-[node name="Brummbaer Station -> Sunrise Jump Gate" parent="." index="4" node_paths=PackedStringArray("Partner") instance=ExtResource("4_sbl4q")]
-position = Vector2(32000, 30000)
-rotation = 3.14159
-Partner = NodePath("../Sunrise Jump Gate -> Brummbaer Station")
-
-[node name="Brummbaer Station -> Trifecta Jump Gate" parent="." index="5" node_paths=PackedStringArray("Partner") instance=ExtResource("4_sbl4q")]
+[node name="Brummbaer Station -> Trifecta Jump Gate" parent="." index="4" instance=ExtResource("5_6vxd6")]
 position = Vector2(33477, 33564)
-rotation = -0.785398
-Partner = NodePath("../Trifecta Jump Gate -> Brummbaer Station")
-
-[node name="Trifecta Jump Gate -> Brummbaer Station" parent="." index="6" node_paths=PackedStringArray("Partner") instance=ExtResource("4_sbl4q")]
-position = Vector2(54500, 54500)
-rotation = 2.35619
-Partner = NodePath("../Brummbaer Station -> Trifecta Jump Gate")
+rotation = 0.785398
+_ringCount = 14

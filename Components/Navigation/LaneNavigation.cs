@@ -1,5 +1,6 @@
 ﻿using Godot;
 using Serilog;
+using Spacelancer.Scenes.Player;
 
 
 namespace Spacelancer.Components.Navigation;
@@ -13,14 +14,15 @@ public class LaneNavigation : INavigationSoftware
         Entering,
         Travelling,
         Exiting,
+        Disrupted,
         Complete,
     }
     
     public string Name => $"LaneNavigation - {_origin.Name} - {_state}";
 
-    private readonly Scenes.Player.Player _player;
-    private readonly Scenes.Spacelane.Spacelane _origin;
-    private readonly Scenes.Spacelane.Spacelane _destination;
+    private readonly Player _player;
+    private readonly Node2D _origin;
+    private readonly Node2D _destination;
 
     private readonly INavigationSoftware _originalSoftware;
     
@@ -28,7 +30,7 @@ public class LaneNavigation : INavigationSoftware
     
     // FIXME develop interface/class for space ships?
     // Could consider having some sort of sensor range to fire off events for nearby objects?
-    public LaneNavigation(Scenes.Player.Player ship, Scenes.Spacelane.Spacelane origin, Scenes.Spacelane.Spacelane destination)
+    public LaneNavigation(Player ship, Node2D origin, Node2D destination)
     {
         _player = ship;
         _origin = origin;
@@ -48,13 +50,15 @@ public class LaneNavigation : INavigationSoftware
             LaneState.Entering => ProcessEnteringVector(),
             LaneState.Travelling => ProcessTravelingVector(),
             LaneState.Exiting => ProcessExitingVector(),
+            LaneState.Disrupted => ProcessDisruptedVector(),
             LaneState.Complete => ProcessCompleteVector(),
             _ => Vector2.Zero
         };
 
-    public void ExitLane()
+    public void DisruptTravel()
     {
-        SetState(LaneState.Complete);
+        SetState(LaneState.Disrupted);
+        Log.Debug("Nav disrupted at {Location}", _player.GlobalPosition);
     }
 
     private Vector2 ProcessInitializingVector()
@@ -108,7 +112,6 @@ public class LaneNavigation : INavigationSoftware
         if (proposed.Length() < 5)
         {
             SetState(LaneState.Exiting);
-            return proposed.LimitLength(10);
         }
         
         if (proposed.Length() < 100)
@@ -131,6 +134,9 @@ public class LaneNavigation : INavigationSoftware
 
     private Vector2 ProcessExitingVector()
     {
+        if ((_destination.GlobalPosition - _player.GlobalPosition).Length() > 150)
+            SetState(LaneState.Complete);
+        
         // TODO probably need to consider things like nearby ships in future.
         // Use boiding/flocking?
         var proposed = _player.GlobalPosition - _origin.GlobalPosition;
@@ -138,10 +144,26 @@ public class LaneNavigation : INavigationSoftware
         return proposed.LimitLength(50);
     }
 
+    private Vector2 ProcessDisruptedVector()
+    {
+        var proposed = _player.Velocity;
+
+        // slowly veer off to left
+        proposed += proposed.Orthogonal() / 10;
+        
+        var length = proposed.Length();
+        
+        if (length <= 50)
+            SetState(LaneState.Complete);
+        
+        // slow down 
+        return proposed.LimitLength(length * 0.9f);
+    }
+
     private Vector2 ProcessCompleteVector()
     {
         RestoreOriginalSoftware();
-        return Vector2.Zero;
+        return _player.Velocity;
     }
 
     private void SetState(LaneState newState)
@@ -150,8 +172,6 @@ public class LaneNavigation : INavigationSoftware
         _state = newState;
     }
     
-    private void RestoreOriginalSoftware()
-    {
+    private void RestoreOriginalSoftware() =>
         _player.NavComputer = _originalSoftware;
-    }
 }

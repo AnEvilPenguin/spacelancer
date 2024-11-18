@@ -64,6 +64,7 @@ public partial class GameController : Node
         if (_currentSystem != null)
         {
             _world2D.RemoveChild(_currentSystem);
+            _currentSystem.QueueFree();
         }
         
         _currentSystem = newSystem;

@@ -35,7 +35,7 @@ public partial class Global : Node
         if (what != NotificationWMCloseRequest)
             return;
         
-        Universe.UnloadSystemInstances();
+        Global.GameController.UnloadWorld2D();
 
         Logger.StopLogger();
         GetTree().Quit();
