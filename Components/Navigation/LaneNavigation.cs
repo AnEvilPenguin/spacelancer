@@ -172,8 +172,6 @@ public class LaneNavigation : INavigationSoftware
         _state = newState;
     }
     
-    private void RestoreOriginalSoftware()
-    {
+    private void RestoreOriginalSoftware() =>
         _player.NavComputer = _originalSoftware;
-    }
 }
