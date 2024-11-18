@@ -34,4 +34,5 @@ Partner = NodePath("../Sunrise Orbital Settlement -> Moonshot Jump Gate")
 
 [node name="SpaceLane" parent="." index="5" instance=ExtResource("6_kctin")]
 position = Vector2(17000, 16000)
-_ringCount = 21
+_spacing = 2000
+_ringCount = 10

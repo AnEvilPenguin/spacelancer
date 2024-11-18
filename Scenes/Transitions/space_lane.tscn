@@ -12,4 +12,4 @@ MainTexture = ExtResource("2_wy850")
 IntermediateTexture = ExtResource("3_a6g2u")
 GoLight = ExtResource("4_eouna")
 StopLight = ExtResource("5_bqj5d")
-_ringCount = 1
+_spacing = 2000
