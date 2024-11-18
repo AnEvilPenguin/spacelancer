@@ -5,8 +5,9 @@ namespace Spacelancer.Scenes.Transitions;
 
 public partial class LaneEntrance : LanePart
 {
-    public override Node2D TowardsPair1 { get; set; }
-    public override Node2D TowardsPair2 { get; set; }
+    public override LanePart TowardsPair1 { get; set; }
+    public override LanePart TowardsPair2 { get; set; }
+    public override bool IsDisrupted { get; protected set; }
 
     public LaneEntrance Partner;
 

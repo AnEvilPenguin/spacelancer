@@ -1,11 +1,15 @@
 using Godot;
+using Serilog;
+using Spacelancer.Components.Navigation;
 
 namespace Spacelancer.Scenes.Transitions;
 
 public partial class LaneNode : LanePart
 {
-    public override Node2D TowardsPair1 { get; set; }
-    public override Node2D TowardsPair2 { get; set; }
+    public override LanePart TowardsPair1 { get; set; }
+    public override LanePart TowardsPair2 { get; set; }
+    public override bool IsDisrupted { get; protected set; }
+
     public override string GetName(Node2D caller)
     {
         throw new System.NotImplementedException();
@@ -17,8 +21,8 @@ public partial class LaneNode : LanePart
         
         GenerateMarker();
         
-        GenerateRing(offset, ringTexture);
-        GenerateRing(-offset, ringTexture);
+        GenerateRing(offset, ringTexture, RingDirection.Pair2);
+        GenerateRing(-offset, ringTexture, RingDirection.Pair1);
     }
     
     // Required for the editor
@@ -31,14 +35,27 @@ public partial class LaneNode : LanePart
         AddChild(marker);
     }
 
-    private void GenerateRing(Vector2 position, Texture2D texture)
+    private void GenerateRing(Vector2 position, Texture2D texture, RingDirection direction)
     {
-        var ring = new Node2D();
-        ring.Position = position;
+        var ring = new LaneRing(position, texture, direction);
 
-        var sprite = new Sprite2D();
-        sprite.Texture = texture;
-        ring.AddChild(sprite);
+        // TODO health and actually disrupt our rings
+        ring.Area2D.BodyEntered += (Node2D body) =>
+        {
+            if (body is not Player.Player player)
+                return;
+            
+            if (player.NavComputer is not LaneNavigation navigation)
+                return;
+            
+            bool nextRingDisrupted = direction == RingDirection.Pair1 ?
+                    TowardsPair1.IsDisrupted : TowardsPair2.IsDisrupted;
+            
+            if (!nextRingDisrupted)
+                return;
+            
+            navigation.DisruptTravel();
+        };
         
         AddChild(ring);
     }

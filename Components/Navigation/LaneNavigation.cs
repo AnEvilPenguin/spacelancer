@@ -14,6 +14,7 @@ public class LaneNavigation : INavigationSoftware
         Entering,
         Travelling,
         Exiting,
+        Disrupted,
         Complete,
     }
     
@@ -49,13 +50,15 @@ public class LaneNavigation : INavigationSoftware
             LaneState.Entering => ProcessEnteringVector(),
             LaneState.Travelling => ProcessTravelingVector(),
             LaneState.Exiting => ProcessExitingVector(),
+            LaneState.Disrupted => ProcessDisruptedVector(),
             LaneState.Complete => ProcessCompleteVector(),
             _ => Vector2.Zero
         };
 
-    public void ExitLane()
+    public void DisruptTravel()
     {
-        SetState(LaneState.Complete);
+        SetState(LaneState.Disrupted);
+        Log.Debug("Nav disrupted at {Location}", _player.GlobalPosition);
     }
 
     private Vector2 ProcessInitializingVector()
@@ -139,6 +142,22 @@ public class LaneNavigation : INavigationSoftware
         var proposed = _player.GlobalPosition - _origin.GlobalPosition;
         
         return proposed.LimitLength(50);
+    }
+
+    private Vector2 ProcessDisruptedVector()
+    {
+        var proposed = _player.Velocity;
+
+        // slowly veer off to left
+        proposed += proposed.Orthogonal() / 10;
+        
+        var length = proposed.Length();
+        
+        if (length <= 50)
+            SetState(LaneState.Complete);
+        
+        // slow down 
+        return proposed.LimitLength(length * 0.9f);
     }
 
     private Vector2 ProcessCompleteVector()
