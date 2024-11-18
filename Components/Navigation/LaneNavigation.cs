@@ -163,7 +163,7 @@ public class LaneNavigation : INavigationSoftware
     private Vector2 ProcessCompleteVector()
     {
         RestoreOriginalSoftware();
-        return Vector2.Zero;
+        return _player.Velocity;
     }
 
     private void SetState(LaneState newState)
