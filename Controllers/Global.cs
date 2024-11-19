@@ -7,6 +7,8 @@ namespace Spacelancer.Controllers;
 /// </summary>
 public partial class Global : Node
 {
+    public static bool IsClosing = false;
+    
     public static Global Instance;
     public static GameController GameController;
     public static EconomyController Economy { get; } = new();
@@ -37,6 +39,9 @@ public partial class Global : Node
     {
         if (what != NotificationWMCloseRequest)
             return;
+
+        // consider pausing game?
+        IsClosing = true;
         
         if (GameController != null)
             GameController.UnloadWorld2D();
