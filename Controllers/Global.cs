@@ -35,9 +35,12 @@ public partial class Global : Node
         if (what != NotificationWMCloseRequest)
             return;
         
-        Global.GameController.UnloadWorld2D();
+        if (GameController != null)
+            GameController.UnloadWorld2D();
 
-        Logger.StopLogger();
+        if (Logger != null)
+            Logger.StopLogger();
+        
         GetTree().Quit();
     }
 }
