@@ -34,8 +34,8 @@ public partial class GameController : Node
         _gui = GetNode<Control>("%GUI");
         
         TempStationLabel = _gui.GetNode<Label>("Comms Label");
-
-        LoadScene<Control>("res://Scenes/UI/MainMenu/main_menu.tscn");
+        
+        Global.UserInterface.Initialize();
         
         Global.Universe.LoadSystemScenes();
         
@@ -49,6 +49,8 @@ public partial class GameController : Node
         Global.Economy.LoadEconomy();
         
         Global.Player = LoadScene<Player>("res://Scenes/Player/player.tscn");
+        
+        Global.UserInterface.ShowSensorDisplay();
         
         var system = LoadSystem("UA01");
         

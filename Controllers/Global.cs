@@ -11,6 +11,7 @@ public partial class Global : Node
     public static GameController GameController;
     public static EconomyController Economy { get; } = new();
     public static UniverseController Universe { get; } = new();
+    public static UiController UserInterface { get; private set; }
     public static Scenes.Player.Player Player;
     
     internal Logger Logger;
@@ -26,6 +27,8 @@ public partial class Global : Node
         // Logger needs to be loaded first, other things rely on it.
         Logger = Logger.Instance;
         SettingsController = SettingsController.Instance;
+
+        UserInterface = new UiController();
 
         GetTree().AutoAcceptQuit = false;
     }

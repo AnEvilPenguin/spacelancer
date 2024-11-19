@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using Serilog;
+using Spacelancer.Controllers;
 
 namespace Spacelancer.Components.Equipment.Detection;
 
@@ -8,8 +11,14 @@ namespace Spacelancer.Components.Equipment.Detection;
 
 public partial class Sensor : Node2D
 {
+    public event SensorLostEventHandler SensorLost;
+    public delegate void SensorLostEventHandler(object sender, SensorLostEventArgs e);
+    
+    public event SensorDetectionEventHandler SensorDetection; 
+    public delegate void SensorDetectionEventHandler(object sender, SensorDetectionEventArgs e);
+    
     private readonly Dictionary<ulong, SensorDetection> _detectedObjects = new();
-
+    
     public Sensor(float radius)
     {
         var area2D = new Area2D();
@@ -27,6 +36,9 @@ public partial class Sensor : Node2D
 
     public Sensor() {}
 
+    public IEnumerable<SensorDetection> GetDetections() =>
+        _detectedObjects.Values;
+
     private void ConfigureDetectionArea(Area2D area)
     {
         area.AreaEntered += OnBodyEntered;
@@ -35,13 +47,23 @@ public partial class Sensor : Node2D
 
     private void OnBodyEntered(Area2D body)
     {
+        // Ignore Areas not associated with IFF
         if (body is not ISensorDetectable detectableBody) 
             return;
         
-        if (body.GetInstanceId() == GetParent().GetInstanceId())
+        // Ignore own IFF
+        if (body.GetParent().GetInstanceId() == GetParent().GetInstanceId())
             return;
+
+        var detection = detectableBody.Detect();
         
-        _detectedObjects.Add(detectableBody.GetInstanceId(), detectableBody.Detect());
+        _detectedObjects.Add(detectableBody.GetInstanceId(), detection);
+        
+        var raiseEvent = SensorDetection;
+
+        if (raiseEvent != null)
+            raiseEvent(this, new SensorDetectionEventArgs(detection));
+        
     }
 
     private void OnBodyExited(Area2D body)
@@ -61,5 +83,10 @@ public partial class Sensor : Node2D
         }
         
         _detectedObjects.Remove(id);
+        
+        var raiseEvent = SensorLost;
+
+        if (raiseEvent != null)
+            raiseEvent(this, new SensorLostEventArgs(id));
     }
 }
