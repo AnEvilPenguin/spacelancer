@@ -81,12 +81,15 @@ public partial class Sensor : Node2D
             Log.Error("Sensor detected object {Id} not found in lookup", id);
             return;
         }
+
+        var detection = _detectedObjects[id];
+        var detectionId = detection.Body.GetInstanceId();
         
         _detectedObjects.Remove(id);
         
         var raiseEvent = SensorLost;
 
         if (raiseEvent != null)
-            raiseEvent(this, new SensorLostEventArgs(id));
+            raiseEvent(this, new SensorLostEventArgs(detectionId));
     }
 }
