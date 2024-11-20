@@ -15,7 +15,7 @@ public class LaneNavigation : INavigationSoftware
         Travelling,
         Exiting,
         Disrupted,
-        Complete,
+        Complete
     }
     
     public string Name => $"LaneNavigation - {_origin.Name} - {_state}";

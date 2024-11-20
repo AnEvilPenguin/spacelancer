@@ -124,6 +124,9 @@ public partial class Station : Node2D, INavigable
 			return dist1 < dist2 ? cur : acc;
 		});
 
+	public string GetName(Vector2 _) =>
+		Name;
+
 	private void OnStationAreaEntered(Node2D body)
 	{
 		if (body is Player.Player)
