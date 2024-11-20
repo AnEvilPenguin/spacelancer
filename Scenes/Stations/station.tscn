@@ -14,3 +14,29 @@ script = ExtResource("1_0mx2q")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("CircleShape2D_d1dre")
+
+[node name="Markers" type="Node2D" parent="."]
+
+[node name="TopLeft" type="Marker2D" parent="Markers"]
+position = Vector2(-400, -400)
+
+[node name="TopCenter" type="Marker2D" parent="Markers"]
+position = Vector2(0, -550)
+
+[node name="TopRight" type="Marker2D" parent="Markers"]
+position = Vector2(400, -400)
+
+[node name="CenterLeft" type="Marker2D" parent="Markers"]
+position = Vector2(-550, 0)
+
+[node name="CenterRight" type="Marker2D" parent="Markers"]
+position = Vector2(550, 0)
+
+[node name="BottomLeft" type="Marker2D" parent="Markers"]
+position = Vector2(-400, 400)
+
+[node name="BottomCenter" type="Marker2D" parent="Markers"]
+position = Vector2(0, 550)
+
+[node name="BottomRight" type="Marker2D" parent="Markers"]
+position = Vector2(400, 400)
