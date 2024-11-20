@@ -1,5 +1,6 @@
 using Godot;
 using Serilog;
+using Spacelancer.Components.Equipment.Detection;
 using Spacelancer.Components.Navigation;
 
 namespace Spacelancer.Scenes.Transitions;
@@ -9,15 +10,18 @@ public partial class LaneNode : LanePart
     public override LanePart TowardsPair1 { get; set; }
     public override LanePart TowardsPair2 { get; set; }
     public override bool IsDisrupted { get; protected set; }
-
-    public override string GetName(Node2D caller)
-    {
-        throw new System.NotImplementedException();
-    }
+    
+    private IdentificationFriendFoe _iff;
 
     public LaneNode(Vector2 position, Texture2D ringTexture, Vector2 offset)
     {
         Position = position;
+
+        // FIXME figure out how to get this to provide a varying name
+        // Probably change SensorDetection name to an interface with a GetName(callee)
+        // Or something like that.
+        var detection = new SensorDetection(GetInstanceId(), Name, "Unaffiliated", SensorDetectionType.SpaceLaneNode, this);
+        _iff = new IdentificationFriendFoe(this, detection);
         
         GenerateMarker();
         
@@ -27,7 +31,7 @@ public partial class LaneNode : LanePart
     
     // Required for the editor
     public LaneNode() {}
-
+    
     private void GenerateMarker()
     {
         var marker = new Marker2D();

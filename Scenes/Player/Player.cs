@@ -1,5 +1,4 @@
 using Godot;
-using Spacelancer.Components.Navigation;
 
 namespace Spacelancer.Scenes.Player;
 
@@ -7,11 +6,12 @@ public partial class Player : CharacterBody2D
 {
 	public const float MaxSpeed = 150.0f;
 
-	public INavigationSoftware NavComputer;
+	private SensorPointer _pointer;
 
 	public override void _Ready()
 	{
-		NavComputer = new PlayerNavigation(this);
+		_pointer = GetNode<SensorPointer>("SensorPointer");
+		SetDefaultEquipment();
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -27,6 +27,12 @@ public partial class Player : CharacterBody2D
 		
 		MoveAndSlide();
 	}
+	
+	public void SetPointerTarget(Node2D target) =>
+		_pointer.SetTarget(target);
+	
+	public void ClearPointerTarget() =>
+		_pointer.ClearTarget();
 
 	private void ProcessVelocity()
 	{

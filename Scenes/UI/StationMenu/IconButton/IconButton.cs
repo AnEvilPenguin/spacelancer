@@ -1,6 +1,8 @@
 using System;
 using Godot;
 using Serilog;
+using Spacelancer.Util;
+using Spacelancer.Util.Shaders;
 
 namespace Spacelancer.Scenes.UI.StationMenu.IconButton;
 
@@ -17,15 +19,14 @@ public partial class IconButton : CenterContainer
 	private Color _iconColor = new Color(0.8f, 0.8f, 0.8f);
 	
 	private TextureButton _textureButton;
-	private ShaderMaterial _material;
-	// Called when the node enters the scene tree for the first time.
+	private readonly ShaderMaterial _material = CustomShaders.GetSimpleColorShader();
+
 	public override void _Ready()
 	{
 		_textureButton = GetNode<TextureButton>("TextureButton");
 
 		_textureButton.Pressed += OnButtonPressed;
-		
-		GenerateUniqueShaderMaterial();
+		_textureButton.Material = _material;
 			
 		try
 		{
@@ -55,19 +56,6 @@ public partial class IconButton : CenterContainer
 		_textureButton.TextureNormal = _iconTexture;
 		
 		_material.Set("shader_parameter/color1", _iconColor);
-	}
-
-	private void GenerateUniqueShaderMaterial()
-	{
-		if (_textureButton == null)
-			return;
-		
-		_material = new ShaderMaterial();
-		
-		var shader = GD.Load("res://Scenes/UI/StationMenu/IconButton/icon_shader.gdshader").Duplicate(true) as Shader;
-		_material.Shader = shader;
-		
-		_textureButton.Material = _material;
 	}
 
 	private void OnButtonPressed() =>

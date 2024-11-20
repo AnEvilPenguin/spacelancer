@@ -4,7 +4,7 @@ using System.Linq;
 using Serilog;
 using Spacelancer.Economy;
 
-namespace Spacelancer.Components.Storage;
+namespace Spacelancer.Components.Equipment.Storage;
 
 public class CargoHold
 {

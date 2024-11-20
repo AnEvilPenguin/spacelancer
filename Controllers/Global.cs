@@ -7,10 +7,13 @@ namespace Spacelancer.Controllers;
 /// </summary>
 public partial class Global : Node
 {
+    public static bool IsClosing = false;
+    
     public static Global Instance;
     public static GameController GameController;
     public static EconomyController Economy { get; } = new();
     public static UniverseController Universe { get; } = new();
+    public static UiController UserInterface { get; private set; }
     public static Scenes.Player.Player Player;
     
     internal Logger Logger;
@@ -27,6 +30,8 @@ public partial class Global : Node
         Logger = Logger.Instance;
         SettingsController = SettingsController.Instance;
 
+        UserInterface = new UiController();
+
         GetTree().AutoAcceptQuit = false;
     }
 
@@ -34,10 +39,16 @@ public partial class Global : Node
     {
         if (what != NotificationWMCloseRequest)
             return;
-        
-        Global.GameController.UnloadWorld2D();
 
-        Logger.StopLogger();
+        // consider pausing game?
+        IsClosing = true;
+        
+        if (GameController != null)
+            GameController.UnloadWorld2D();
+
+        if (Logger != null)
+            Logger.StopLogger();
+        
         GetTree().Quit();
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using Spacelancer.Components.Equipment.Detection;
 
 namespace Spacelancer.Scenes.Transitions;
 
@@ -190,5 +191,10 @@ public partial class SpaceLane : Node2D
 		label.Position = new Vector2(12, -50);
 		
 		return label;
+	}
+
+	public string Detect(Node2D callee)
+	{
+		throw new System.NotImplementedException();
 	}
 }
