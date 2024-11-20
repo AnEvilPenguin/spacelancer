@@ -24,6 +24,8 @@ public partial class IdentificationFriendFoe : Area2D, ISensorDetectable
         AddChild(collisionShape2D);
     }
 
+    public IdentificationFriendFoe() {}
+
     public SensorDetection Detect() =>
         _detection;
 }

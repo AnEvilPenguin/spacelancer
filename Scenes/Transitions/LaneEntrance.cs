@@ -1,10 +1,12 @@
+using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using Spacelancer.Components.Equipment.Detection;
 using Spacelancer.Components.Navigation;
 
 namespace Spacelancer.Scenes.Transitions;
 
-public partial class LaneEntrance : LanePart
+public partial class LaneEntrance : LanePart, INavigable
 {
     public override LanePart TowardsPair1 { get; set; }
     public override LanePart TowardsPair2 { get; set; }
@@ -18,6 +20,8 @@ public partial class LaneEntrance : LanePart
     private Node2D _exit;
     
     private IdentificationFriendFoe _iff;
+
+    private List<Marker2D> _markers = new();
     
     public LaneEntrance(Vector2 position, Vector2 offset, Texture2D mainTexture, Texture2D goLight, Texture2D stopLight)
     {
@@ -30,6 +34,7 @@ public partial class LaneEntrance : LanePart
         _exit = GenerateMainNode(-offset, mainTexture, stopLight, "Exit");
         
         GenerateDockingArea(_entrance);
+        GenerateMarkers();
     }
     
     // Required for the editor
@@ -71,6 +76,26 @@ public partial class LaneEntrance : LanePart
         return sprite;
     }
 
+    private void GenerateMarkers()
+    {
+        _markers.ForEach(m => m.QueueFree());
+        _markers.Clear();
+        
+        _markers.Add(GenerateMarker(new Vector2(300, -300), "Top"));
+        _markers.Add(GenerateMarker(new Vector2(0, -300), "Middle"));
+        _markers.Add(GenerateMarker(new Vector2(-300, -300), "Bottom"));
+    }
+
+    private Marker2D GenerateMarker(Vector2 position, string name)
+    {
+        var marker = new Marker2D();
+        marker.Name = name;
+        marker.Position = position;
+        
+        AddChild(marker);
+        return marker;
+    }
+
     private void GenerateDockingArea(Node2D node)
     {
         var dockingArea = new Area2D();
@@ -102,10 +127,20 @@ public partial class LaneEntrance : LanePart
     {
         if (player.NavComputer is not PlayerNavigation)
             return;
-		
-        // FIXME deal with exiting the lane and clear up old lanes
         
         var computer = new LaneNavigation(player, _entrance, Partner.GetExitNode());
         player.NavComputer = computer;
     }
+
+    public Marker2D GetNearestMarker(Vector2 position) =>
+        _markers.Aggregate((acc, cur) =>
+        {
+            var dist1 = (position - cur.GlobalPosition).Length();
+            var dist2 = (position - acc.GlobalPosition).Length();
+			
+            return dist1 < dist2 ? cur : acc;
+        });
+
+    public string GetName(Vector2 _) =>
+        Name;
 }
