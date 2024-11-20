@@ -52,6 +52,11 @@ public class PlayerNavigation : INavigationSoftware
 
         // TODO clamp left and right (Y axis)
         // TODO clamp reverse (negative X)
+
+        if (Input.IsActionJustPressed("AutoPilotDestination"))
+            ProcessAutoPilotDestination();
+        
+        // TODO if press F2/F3 transfer control to an Autopilot
 		
         var acceleration = direction.Rotated(_player.Rotation);
 
@@ -71,5 +76,16 @@ public class PlayerNavigation : INavigationSoftware
         var y = Mathf.MoveToward(velocity.Y, 0.0f, 1);
 		
         return new Vector2(x, y);
+    }
+
+    private void ProcessAutoPilotDestination()
+    {
+        var target = _player.GetTarget();
+        
+        if (target.Body is not INavigable navigable)
+            return;
+        
+        var newNav = new SystemAutoNavigation(_player, navigable, this);
+        _player.NavComputer = newNav;
     }
 }
