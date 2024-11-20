@@ -5,7 +5,6 @@ namespace Spacelancer.Scenes.Player;
 public partial class Player : CharacterBody2D
 {
 	public const float MaxSpeed = 150.0f;
-
 	private SensorPointer _pointer;
 
 	public override void _Ready()
@@ -27,12 +26,6 @@ public partial class Player : CharacterBody2D
 		
 		MoveAndSlide();
 	}
-	
-	public void SetPointerTarget(Node2D target) =>
-		_pointer.SetTarget(target);
-	
-	public void ClearPointerTarget() =>
-		_pointer.ClearTarget();
 
 	private void ProcessVelocity()
 	{
@@ -46,4 +39,10 @@ public partial class Player : CharacterBody2D
 		DebugVelocity();
 		DebugSpeed(Velocity.Length());
 	}
+	
+	private void SetPointerTarget(Node2D target) =>
+		_pointer.SetTarget(target);
+	
+	private void ClearPointerTarget() =>
+		_pointer.ClearTarget();
 }
