@@ -20,7 +20,7 @@ public partial class LaneNode : LanePart
         // FIXME figure out how to get this to provide a varying name
         // Probably change SensorDetection name to an interface with a GetName(callee)
         // Or something like that.
-        var detection = new SensorDetection(Name, "Unaffiliated", SensorDetectionType.SpaceLaneNode, this);
+        var detection = new SensorDetection(GetInstanceId(), Name, "Unaffiliated", SensorDetectionType.SpaceLaneNode, this);
         _iff = new IdentificationFriendFoe(this, detection);
         
         GenerateMarker();

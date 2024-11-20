@@ -51,13 +51,14 @@ public partial class Sensor : Node2D
         if (body is not ISensorDetectable detectableBody) 
             return;
         
-        // Ignore own IFF
-        if (body.GetParent().GetInstanceId() == GetParent().GetInstanceId())
-            return;
-
         var detection = detectableBody.Detect();
+        var id = detection.Id;
         
-        _detectedObjects.Add(detectableBody.GetInstanceId(), detection);
+        // Ignore own IFF
+        if (id == GetParent().GetInstanceId())
+            return;
+        
+        _detectedObjects.Add(id, detection);
         
         var raiseEvent = SensorDetection;
 
@@ -71,25 +72,23 @@ public partial class Sensor : Node2D
         if (body is not ISensorDetectable detectableBody) 
             return;
         
-        if (body.GetInstanceId() == GetParent().GetInstanceId())
+        var detection = detectableBody.Detect();
+        var id = detection.Id;
+        
+        if (id == GetParent().GetInstanceId())
             return;
-
-        var id = detectableBody.GetInstanceId();
 
         if (!_detectedObjects.ContainsKey(id))
         {
             Log.Error("Sensor detected object {Id} not found in lookup", id);
             return;
         }
-
-        var detection = _detectedObjects[id];
-        var detectionId = detection.Body.GetInstanceId();
         
         _detectedObjects.Remove(id);
         
         var raiseEvent = SensorLost;
 
         if (raiseEvent != null)
-            raiseEvent(this, new SensorLostEventArgs(detectionId));
+            raiseEvent(this, new SensorLostEventArgs(id));
     }
 }

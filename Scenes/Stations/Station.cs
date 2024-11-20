@@ -34,7 +34,7 @@ public partial class Station : Node2D
 		stationBorder.BodyEntered += OnStationAreaEntered;
 		stationBorder.BodyExited += OnStationAreaExited;
 		
-		var detection = new SensorDetection(Name, "TODO", SensorDetectionType.Station, this);
+		var detection = new SensorDetection(GetInstanceId(), Name, "TODO", SensorDetectionType.Station, this);
 		_iff = new IdentificationFriendFoe(this, detection);
 		
 		LoadNpcs();

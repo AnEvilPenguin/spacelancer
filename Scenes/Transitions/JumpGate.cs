@@ -26,7 +26,7 @@ public partial class JumpGate : Node2D
         _entry.BodyEntered += OnJumpBorderEntered;
         _entry.BodyExited += OnJumpBorderExited;
         
-        var detection = new SensorDetection($"{Name} Jump Gate", "Unaffiliated", SensorDetectionType.JumpGate, this);
+        var detection = new SensorDetection(GetInstanceId(),$"{Name} Jump Gate", "Unaffiliated", SensorDetectionType.JumpGate, this);
         _iff = new IdentificationFriendFoe(this, detection);
     }
     

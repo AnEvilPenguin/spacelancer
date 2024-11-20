@@ -23,7 +23,7 @@ public partial class LaneEntrance : LanePart
     {
         Position = position;
         
-        var detection = new SensorDetection(Name, "Unaffiliated", SensorDetectionType.SpaceLane, this);
+        var detection = new SensorDetection(GetInstanceId(), Name, "Unaffiliated", SensorDetectionType.SpaceLane, this);
         _iff = new IdentificationFriendFoe(this, detection);
         
         _entrance = GenerateMainNode(offset, mainTexture, goLight, "Entrance");

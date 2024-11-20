@@ -30,7 +30,7 @@ public partial class Player
         _sensor.SensorLost += (sender, args) =>
             Global.UserInterface.RemoveSensorDetection(args.Id);
 
-        var detection = new SensorDetection("Player", "Temp", SensorDetectionType.Ship, this);
+        var detection = new SensorDetection(GetInstanceId(), "Player", "Temp", SensorDetectionType.Ship, this);
         _iff = new IdentificationFriendFoe(this, detection);
         
         Hold = new CargoHold(CommoditySize.Medium, 100);
