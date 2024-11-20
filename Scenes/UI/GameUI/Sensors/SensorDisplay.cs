@@ -34,6 +34,8 @@ public partial class SensorDisplay : PanelContainer
 	
 	private DisplayType _displayType = DisplayType.Important;
 
+	private SensorDisplayComponent _selectedComponent;
+
 	public override void _Ready()
 	{
 		_updateTimer = GetNode<Timer>("%UpdateTimer");
@@ -114,6 +116,12 @@ public partial class SensorDisplay : PanelContainer
 		// component must enter scene before detection is set
 		component.Name = id.ToString();
 		component.SetSensorDetection(detection);
+
+		component.Selected += (Node2D selected) =>
+		{
+			_selectedComponent = component;
+			Global.Player.SetPointerTarget(selected);
+		};
 		
 		FilterControl(component);
 		
@@ -126,6 +134,9 @@ public partial class SensorDisplay : PanelContainer
 		// consider logging error?
 		if (!_objectControlLookup.Remove(id, out var control))
 			return;
+		
+		if (_selectedComponent == control)
+			Global.Player.ClearPointerTarget();
 		
 		control.Visible = false;
 		control.QueueFree();

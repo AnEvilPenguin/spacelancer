@@ -6,8 +6,11 @@ public partial class Player : CharacterBody2D
 {
 	public const float MaxSpeed = 150.0f;
 
+	private SensorPointer _pointer;
+
 	public override void _Ready()
 	{
+		_pointer = GetNode<SensorPointer>("SensorPointer");
 		SetDefaultEquipment();
 	}
 
@@ -24,6 +27,12 @@ public partial class Player : CharacterBody2D
 		
 		MoveAndSlide();
 	}
+	
+	public void SetPointerTarget(Node2D target) =>
+		_pointer.SetTarget(target);
+	
+	public void ClearPointerTarget() =>
+		_pointer.ClearTarget();
 
 	private void ProcessVelocity()
 	{
