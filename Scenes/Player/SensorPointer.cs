@@ -1,4 +1,5 @@
 using Godot;
+using Spacelancer.Util.Shaders;
 
 namespace Spacelancer.Scenes.Player;
 
@@ -15,6 +16,20 @@ public partial class SensorPointer : Node2D
 			UpdateDistance();
 		}
 	}
+
+	[Export]
+	private Color Color
+	{
+		get => _iconColor;
+		set
+		{
+			_iconColor = value;
+			_material.Set("shader_parameter/color1", _iconColor);
+		}
+	}
+	
+	private Color _iconColor;
+	private readonly ShaderMaterial _material = CustomShaders.GetSimpleColorShader();
 	
 	private int _distance;
 	private Node2D _target;
@@ -24,6 +39,10 @@ public partial class SensorPointer : Node2D
 	public override void _Ready()
 	{
 		_sprite = GetNode<Sprite2D>("Sprite2D");
+		_sprite.Material = _material;
+		
+		_material.Set("shader_parameter/color1", _iconColor);
+		
 		UpdateDistance();
 
 		Visible = false;

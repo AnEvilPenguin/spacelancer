@@ -6,6 +6,7 @@
 [node name="SensorPointer" type="Node2D"]
 script = ExtResource("1_ae7f2")
 Distance = 100
+Color = Color(0.5766, 0.85932, 0.93, 1)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(100, 0)

@@ -23,5 +23,6 @@ texture = ExtResource("1_3xo1u")
 [node name="Camera2D" type="Camera2D" parent="."]
 
 [node name="SensorPointer" parent="." instance=ExtResource("3_ij0uf")]
-rotation = 0.0
+visible = false
 Distance = 75
+Color = Color(0.6014, 0.87785, 0.97, 1)
