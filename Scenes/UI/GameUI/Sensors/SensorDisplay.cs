@@ -9,9 +9,21 @@ namespace Spacelancer.Scenes.UI.GameUI.Sensors;
 
 public partial class SensorDisplay : PanelContainer
 {
-	private readonly Dictionary<ulong, Control> _objectControlLookup = new();
-	private readonly List<Control> _objectControls = new();
-	private readonly List<SensorDetection> _objectDetections = new();
+	private enum DisplayType
+	{
+		Important,
+		Stations,
+		Navigation,
+		All
+	}
+	
+	private readonly Dictionary<ulong, SensorDisplayComponent> _objectControlLookup = new();
+	private readonly List<SensorDisplayComponent> _objectControls = new();
+
+	private readonly PackedScene _displayComponentScene =
+		GD.Load<PackedScene>("res://Scenes/UI/GameUI/Sensors/sensor_display_component.tscn");
+	
+	private Timer _updateTimer;
 	
 	private IconButton _important;
 	private IconButton _stations;
@@ -19,55 +31,55 @@ public partial class SensorDisplay : PanelContainer
 	private IconButton _all;
 
 	private VBoxContainer _objectList;
+	
+	private DisplayType _displayType = DisplayType.Important;
 
 	public override void _Ready()
 	{
+		_updateTimer = GetNode<Timer>("%UpdateTimer");
+		_updateTimer.Timeout += OnUpdateTimerTimeout;
+		
 		_important = GetNode<IconButton>("%Important");
-		_important.Pressed += () => _objectDetections.ForEach(d =>
-			{
-				// FIXME just make id a property of detection for ease of use
-				var id = d.Body.GetInstanceId();
-				var control = _objectControlLookup[id];
-
-				if (d.ReturnType is SensorDetectionType.Undetectable or SensorDetectionType.SpaceLaneNode)
-					control.Visible = false;
-				else
-					control.Visible = true;
-			});
+		_important.Pressed += () => { _displayType = DisplayType.Important; FilterAllControls(); };
 			
 		_stations = GetNode<IconButton>("%Stations");
-		_stations.Pressed += () => _objectDetections.ForEach(d =>
-			{
-				// FIXME just make id a property of detection for ease of use
-				var id = d.Body.GetInstanceId();
-				var control = _objectControlLookup[id];
-
-				if (d.ReturnType is SensorDetectionType.Station)
-					control.Visible = true;
-				else
-					control.Visible = false;
-			});
+		_stations.Pressed += () => { _displayType = DisplayType.Stations; FilterAllControls(); };
 		
 		_navigation = GetNode<IconButton>("%Navigation");
-		_navigation.Pressed += () => _objectDetections.ForEach(d =>
-			{
-				// FIXME just make id a property of detection for ease of use
-				var id = d.Body.GetInstanceId();
-				var control = _objectControlLookup[id];
-
-				if (d.ReturnType is SensorDetectionType.JumpGate or SensorDetectionType.SpaceLane)
-					control.Visible = true;
-				else
-					control.Visible = false;
-			});
+		_navigation.Pressed += () => { _displayType = DisplayType.Navigation; FilterAllControls(); };
 		
 		_all = GetNode<IconButton>("%All");
-		_all.Pressed += () => _objectControls.ForEach(c => c.Visible = true);
+		_all.Pressed += () => { _displayType = DisplayType.All; FilterAllControls(); };
 		
 		_objectList = GetNode<VBoxContainer>("%ObjectList");
 	}
 
-	public override void _Process(double delta)
+	private void FilterAllControls() =>
+		_objectControls.ForEach(FilterControl);
+
+	private void FilterControl(SensorDisplayComponent control)
+	{
+		switch (_displayType)
+		{
+			case DisplayType.Important:
+				control.Visible = control.DetectionType is not (SensorDetectionType.Undetectable or SensorDetectionType.SpaceLaneNode);
+				return;
+			
+			case DisplayType.Stations:
+				control.Visible = control.DetectionType is SensorDetectionType.Station;
+				return;
+			
+			case DisplayType.Navigation:
+				control.Visible = control.DetectionType is SensorDetectionType.JumpGate or SensorDetectionType.SpaceLane;
+				return;
+			
+			default:
+				control.Visible = true;
+				return;
+		}
+	}
+
+	private void OnUpdateTimerTimeout()
 	{
 		if (Global.IsClosing)
 			return;
@@ -82,28 +94,10 @@ public partial class SensorDisplay : PanelContainer
 		
 		_objectControls.ForEach(_objectList.RemoveChild);
 		
-		_objectDetections.Where(d => IsInstanceValid(d.Body))
-			.OrderBy(d => d.Body.GlobalPosition.DistanceTo(Global.Player.GlobalPosition))
+		_objectControls.Select(c => c.UpdateComponent())
+			.OrderBy(c => c.Distance)
 			.ToList()
-			.ForEach(d =>
-			{
-				var body = d.Body;
-				
-				var distance = body.GlobalPosition.DistanceTo(Global.Player.GlobalPosition);
-				
-				var component = _objectControlLookup[body.GetInstanceId()];
-				
-				UpdateComponent(component, distance);
-				_objectList.AddChild(component);
-			});
-		
-	}
-
-	private void UpdateComponent(Control control, float distance)
-	{
-		var distanceLabel = control.GetNode<Label>("distanceLabel");
-		
-		distanceLabel.Text = distance >= 2000 ? $"{distance / 1000 :0.0}K" : $"{distance:0}";
+			.ForEach(c => _objectList.AddChild(c));
 	}
 
 	public void AddItem(SensorDetection detection)
@@ -113,32 +107,18 @@ public partial class SensorDisplay : PanelContainer
 
 		if (_objectControlLookup.ContainsKey(id))
 			return;
-		
-		_objectDetections.Add(detection);
-		
-		// TODO proper component here
-		var component = new HBoxContainer();
-		
-		var nameLabel = new Label();
-		nameLabel.Name = "nameLabel";
-		nameLabel.Text = detection.Name;
-		
-		// TODO need to update this regularly
-		// Can we get the component to update itself?
-		var distanceLabel = new Label();
-		distanceLabel.Name = "distanceLabel";
-		var distance = body.GlobalPosition.DistanceTo(Global.Player.GlobalPosition) / 1000;
-		distanceLabel.Text = $"{distance:0}";
-		
-		component.AddChild(nameLabel);
-		component.AddChild(distanceLabel);
 
-		if (detection.ReturnType is SensorDetectionType.Undetectable or SensorDetectionType.SpaceLaneNode)
-			component.Visible = false;
+		var component = _displayComponentScene.Instantiate<SensorDisplayComponent>();
+		_objectList.AddChild(component);
+		
+		// component must enter scene before detection is set
+		component.Name = id.ToString();
+		component.SetSensorDetection(detection);
+		
+		FilterControl(component);
 		
 		_objectControlLookup.Add(id, component);
 		_objectControls.Add(component);
-		_objectList.AddChild(component);
 	}
 
 	public void RemoveItem(ulong id)
@@ -151,14 +131,5 @@ public partial class SensorDisplay : PanelContainer
 		control.QueueFree();
 		
 		_objectControls.Remove(control);
-		
-		var detection = _objectDetections
-			.First(d => d.Body.GetInstanceId() == id);
-		_objectDetections.Remove(detection);
 	}
-
-	// TODO remove component
-	// TODO change visibility based on type
-	// TODO update labels
-	// TODO sort by distance
 }
