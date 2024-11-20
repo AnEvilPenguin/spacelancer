@@ -152,20 +152,17 @@ public class LaneNavigation : INavigationSoftware
     private Vector2 ProcessDisruptedVector()
     {
         var proposed = _player.Velocity;
-
-        // FIXME limit to x degrees from original vector
-        // Currently spins out
         
         // slowly veer off to left
-        proposed += proposed.Orthogonal() / 10;
+        proposed += proposed.Orthogonal() / 50;
         
         var length = proposed.Length();
         
-        if (length <= 50)
+        if (length <= 25)
             SetState(LaneState.Complete);
         
         // slow down 
-        return proposed.LimitLength(length * 0.9f);
+        return proposed.LimitLength(length * 0.95f);
     }
 
     private Vector2 ProcessCompleteVector()
