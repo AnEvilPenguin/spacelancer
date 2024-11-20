@@ -8,7 +8,6 @@ using Spacelancer.Components.Navigation;
 using Spacelancer.Components.NPCs;
 using Spacelancer.Economy;
 using Spacelancer.Scenes.UI.StationMenu;
-using Spacelancer.Universe;
 using Spacelancer.Util;
 
 namespace Spacelancer.Scenes.Stations;
@@ -20,7 +19,7 @@ public partial class Station : Node2D, INavigable
 	
 	// We may need to consider making this docking range if we make a map and remote comms or something
 	private bool _playerInCommsRange = false;
-	private UI.StationMenu.StationMenu _menu;
+	private StationMenu _menu;
 	
 	private readonly List<Tuple<Commodity, int>> _commoditiesForSale = new List<Tuple<Commodity, int>>();
 	private readonly Dictionary<string, int> _commodityBuyPriceOverride = new Dictionary<string, int>();
