@@ -5,7 +5,7 @@ using Spacelancer.Components.Equipment.Detection;
 using Spacelancer.Controllers;
 using Spacelancer.Scenes.UI.StationMenu.IconButton;
 
-namespace Spacelancer.Scenes.UI.GameUI;
+namespace Spacelancer.Scenes.UI.GameUI.Sensors;
 
 public partial class SensorDisplay : PanelContainer
 {
@@ -124,6 +124,7 @@ public partial class SensorDisplay : PanelContainer
 		nameLabel.Text = detection.Name;
 		
 		// TODO need to update this regularly
+		// Can we get the component to update itself?
 		var distanceLabel = new Label();
 		distanceLabel.Name = "distanceLabel";
 		var distance = body.GlobalPosition.DistanceTo(Global.Player.GlobalPosition) / 1000;

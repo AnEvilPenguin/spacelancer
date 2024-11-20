@@ -2,6 +2,7 @@ using Godot;
 using Serilog;
 using Spacelancer.Components.Equipment.Detection;
 using Spacelancer.Scenes.UI.GameUI;
+using SensorDisplay = Spacelancer.Scenes.UI.GameUI.Sensors.SensorDisplay;
 
 namespace Spacelancer.Controllers;
 
@@ -14,7 +15,7 @@ public class UiController
         if (_sensorDisplay != null)
             return;
         
-        _sensorDisplay = Global.GameController.LoadScene<SensorDisplay>("res://Scenes/UI/GameUI/SensorDisplay.tscn");
+        _sensorDisplay = Global.GameController.LoadScene<SensorDisplay>("res://Scenes/UI/GameUI/Sensors/sensor_display.tscn");
         _sensorDisplay.Visible = false;
         
         Global.GameController.LoadScene<Control>("res://Scenes/UI/MainMenu/main_menu.tscn");
