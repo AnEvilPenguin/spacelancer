@@ -6,7 +6,7 @@ using Spacelancer.Components.Navigation;
 
 namespace Spacelancer.Scenes.Transitions;
 
-public partial class LaneEntrance : LanePart, INavigable
+public partial class LaneEntrance : LanePart, IDockable
 {
     public override LanePart TowardsPair1 { get; set; }
     public override LanePart TowardsPair2 { get; set; }
@@ -143,4 +143,7 @@ public partial class LaneEntrance : LanePart, INavigable
 
     public string GetName(Vector2 _) =>
         Name;
+
+    public INavigationSoftware GetDockComputer(Player.Player ship, INavigationSoftware next) =>
+        new LaneNavigation(ship, _entrance, Partner.GetExitNode(), next);
 }

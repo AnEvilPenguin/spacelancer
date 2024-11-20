@@ -13,6 +13,7 @@ public partial class Player
     public CargoHold Hold;
     
     public INavigationSoftware NavComputer;
+    private INavigationSoftware _defaultNavComputer;
 
     public int Credits = 500;
 
@@ -20,8 +21,6 @@ public partial class Player
 
     private IdentificationFriendFoe _iff;
     
-    
-
     public void SetTarget(ulong id)
     {
         _sensor.LockTarget(id);
@@ -49,6 +48,9 @@ public partial class Player
     public SensorDetection GetTarget() =>
         _sensor.GetLockedTarget();
 
+    public void ResetNavComputer() =>
+        NavComputer = _defaultNavComputer;
+
     private void SetDefaultEquipment()
     {
         _sensor = new Sensor(10_000f);
@@ -64,6 +66,7 @@ public partial class Player
         _iff = new IdentificationFriendFoe(this, detection);
         
         Hold = new CargoHold(CommoditySize.Medium, 100);
-        NavComputer = new PlayerNavigation(this);
+        _defaultNavComputer = new PlayerNavigation(this);
+        ResetNavComputer();
     }
 }

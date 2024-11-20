@@ -39,6 +39,15 @@ public class LaneNavigation : INavigationSoftware
         _originalSoftware = ship.NavComputer;
     }
 
+    public LaneNavigation(Player ship, Node2D origin, Node2D destination, INavigationSoftware nextSoftware)
+    {
+        _player = ship;
+        _origin = origin;
+        _destination = destination;
+        
+        _originalSoftware = nextSoftware;
+    }
+
     public float GetRotation(float maxRotation) =>
         _player.Velocity.Angle();
 

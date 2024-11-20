@@ -55,6 +55,8 @@ public class PlayerNavigation : INavigationSoftware
 
         if (Input.IsActionJustPressed("AutoPilotDestination"))
             ProcessAutoPilotDestination();
+        else if (Input.IsActionJustReleased("AutoPilotDock"))
+            ProcessAutoPilotDock();
         
         // TODO if press F2/F3 transfer control to an Autopilot
 		
@@ -86,6 +88,21 @@ public class PlayerNavigation : INavigationSoftware
             return;
         
         var newNav = new SystemAutoNavigation(_player, navigable, this);
+        _player.NavComputer = newNav;
+    }
+
+    private void ProcessAutoPilotDock()
+    {
+        var target = _player.GetTarget();
+        
+        if (target.Body is not IDockable navigable)
+            return;
+
+        var original = _player.NavComputer;
+        
+        var dockNav = navigable.GetDockComputer(_player, original);
+        
+        var newNav = new SystemAutoNavigation(_player, navigable, dockNav);
         _player.NavComputer = newNav;
     }
 }
