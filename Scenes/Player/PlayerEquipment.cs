@@ -1,4 +1,5 @@
 ﻿using Godot;
+using Serilog;
 using Spacelancer.Components.Equipment.Detection;
 using Spacelancer.Components.Equipment.Storage;
 using Spacelancer.Components.Navigation;
@@ -18,6 +19,35 @@ public partial class Player
     private Sensor _sensor;
 
     private IdentificationFriendFoe _iff;
+    
+    
+
+    public void SetTarget(ulong id)
+    {
+        _sensor.LockTarget(id);
+
+        var detection = _sensor.GetLockedTarget();
+
+        if (detection == null)
+        {
+            Log.Debug("Target with id '{id}' not found", id);
+            return;
+        }
+            
+        SetPointerTarget(detection.Body);
+        Global.UserInterface.SetSensorViewPortTarget(detection.Body);
+    }
+
+    public void ClearTarget()
+    {
+        _sensor.ClearLockedTarget();
+        
+        ClearPointerTarget();
+        Global.UserInterface.ClearSensorViewPortTarget();
+    }
+    
+    public SensorDetection GetTarget() =>
+        _sensor.GetLockedTarget();
 
     private void SetDefaultEquipment()
     {

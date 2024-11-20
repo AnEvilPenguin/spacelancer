@@ -19,6 +19,8 @@ public partial class Sensor : Node2D
     
     private readonly Dictionary<ulong, SensorDetection> _detectedObjects = new();
     
+    private SensorDetection _currentTarget;
+    
     public Sensor(float radius)
     {
         var area2D = new Area2D();
@@ -38,6 +40,21 @@ public partial class Sensor : Node2D
 
     public IEnumerable<SensorDetection> GetDetections() =>
         _detectedObjects.Values;
+
+    public void LockTarget(ulong id)
+    {
+        if (_detectedObjects.TryGetValue(id, out var o))
+            _currentTarget = o;
+    }
+    
+    public void LockTarget(SensorDetection target) => 
+        _currentTarget = target;
+        
+    public SensorDetection GetLockedTarget() =>
+        _currentTarget;
+    
+    public void ClearLockedTarget() =>
+        _currentTarget = null;
 
     private void ConfigureDetectionArea(Area2D area)
     {
@@ -83,6 +100,9 @@ public partial class Sensor : Node2D
             Log.Error("Sensor detected object {Id} not found in lookup", id);
             return;
         }
+        
+        if (_currentTarget != null && _currentTarget.Id == id)
+            ClearLockedTarget();
         
         _detectedObjects.Remove(id);
         
