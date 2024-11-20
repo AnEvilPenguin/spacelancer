@@ -42,8 +42,12 @@ public class LaneNavigation : INavigationSoftware
     public float GetRotation(float maxRotation) =>
         _player.Velocity.Angle();
 
-    public Vector2 GetVelocity(float maxSpeed) =>
-        _state switch
+    public Vector2 GetVelocity(float maxSpeed)
+    {
+        if (Input.IsActionJustPressed("AutoPilotCancel"))
+            DisruptTravel();
+        
+        return _state switch
         {
             LaneState.Initializing => ProcessInitializingVector(),
             LaneState.Approaching => ProcessApproachingVector(),
@@ -54,6 +58,7 @@ public class LaneNavigation : INavigationSoftware
             LaneState.Complete => ProcessCompleteVector(),
             _ => Vector2.Zero
         };
+    }
 
     public void DisruptTravel()
     {
@@ -148,6 +153,9 @@ public class LaneNavigation : INavigationSoftware
     {
         var proposed = _player.Velocity;
 
+        // FIXME limit to x degrees from original vector
+        // Currently spins out
+        
         // slowly veer off to left
         proposed += proposed.Orthogonal() / 10;
         

@@ -40,13 +40,19 @@ public class SystemAutoNavigation : INavigationSoftware
     public float GetRotation(float maxRotation) =>
         _player.Velocity.Angle();
 
-    public Vector2 GetVelocity(float maxSpeed) =>
-        _state switch
+    public Vector2 GetVelocity(float maxSpeed)
+    {
+        if (Input.IsActionJustPressed("AutoPilotCancel"))
+            SetState(NavigationState.Complete);
+        
+        return _state switch
         {
             NavigationState.Start => ProcessStarting(),
             NavigationState.Travelling => ProcessTravelling(maxSpeed),
             _ => ProcessComplete()
         };
+    }
+        
 
     private Vector2 ProcessStarting()
     {
