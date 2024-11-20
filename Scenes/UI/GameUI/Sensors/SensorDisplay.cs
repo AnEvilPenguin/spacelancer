@@ -121,6 +121,7 @@ public partial class SensorDisplay : PanelContainer
 		{
 			_selectedComponent = component;
 			Global.Player.SetPointerTarget(selected);
+			Global.UserInterface.SetSensorViewPortTarget(selected);
 		};
 		
 		FilterControl(component);
@@ -134,9 +135,13 @@ public partial class SensorDisplay : PanelContainer
 		// consider logging error?
 		if (!_objectControlLookup.Remove(id, out var control))
 			return;
-		
+
 		if (_selectedComponent == control)
+		{
 			Global.Player.ClearPointerTarget();
+			Global.UserInterface.ClearSensorViewPortTarget();
+		}
+			
 		
 		control.Visible = false;
 		control.QueueFree();
