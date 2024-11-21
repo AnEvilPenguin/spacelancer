@@ -1,7 +1,6 @@
 using System;
 using Godot;
 using Serilog;
-using Spacelancer.Util;
 using Spacelancer.Util.Shaders;
 
 namespace Spacelancer.Scenes.UI.StationMenu.IconButton;
@@ -11,6 +10,9 @@ public partial class IconButton : CenterContainer
 {
 	[Signal]
 	public delegate void PressedEventHandler();
+	
+	[Export]
+	public bool Disabled { get; set; } = false;
 	
 	[Export]
 	private Texture2D _iconTexture;
@@ -48,6 +50,12 @@ public partial class IconButton : CenterContainer
 		UpdateShader();
 	}
 
+	public void SetColor(Color color)
+	{
+		_iconColor = color;
+		_material.Set("shader_parameter/color1", _iconColor);
+	}
+
 	private void UpdateShader()
 	{
 		if (_iconTexture == null)
@@ -58,6 +66,12 @@ public partial class IconButton : CenterContainer
 		_material.Set("shader_parameter/color1", _iconColor);
 	}
 
-	private void OnButtonPressed() =>
+	private void OnButtonPressed()
+	{
+		if (Disabled)
+			return;
+		
 		EmitSignal(SignalName.Pressed);
+	}
+		
 }
