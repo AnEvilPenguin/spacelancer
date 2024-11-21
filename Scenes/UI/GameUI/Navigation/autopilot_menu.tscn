@@ -1,0 +1,48 @@
+[gd_scene load_steps=7 format=3 uid="uid://5dr17smqeojd"]
+
+[ext_resource type="PackedScene" uid="uid://k1xfbpv7ywee" path="res://Scenes/UI/StationMenu/IconButton/icon_button.tscn" id="1_fka0e"]
+[ext_resource type="Script" path="res://Scenes/UI/GameUI/Navigation/AutopilotMenu.cs" id="1_nvg0a"]
+[ext_resource type="Texture2D" uid="uid://c8fofnr6voa03" path="res://Assets/Icons/paper-plane-solid.svg" id="2_j5ymn"]
+[ext_resource type="Texture2D" uid="uid://c2ifbwhkqo72" path="res://Assets/Icons/map-location-dot-solid.svg" id="3_4p7bh"]
+[ext_resource type="Texture2D" uid="uid://jtthw4hwkbpa" path="res://Assets/Icons/arrow-right-to-city-solid.svg" id="4_6n5x2"]
+[ext_resource type="Texture2D" uid="uid://8hteeysjig5p" path="res://Assets/Icons/otter-solid.svg" id="5_0ti3y"]
+
+[node name="AutopilotMenu" type="PanelContainer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -86.0
+offset_right = 86.0
+offset_bottom = 40.0
+grow_horizontal = 2
+script = ExtResource("1_nvg0a")
+_activeColor = Color(0.807843, 0.835294, 0.403922, 1)
+_availableColor = Color(0.364706, 0.894118, 0.886275, 1)
+_inactiveColor = Color(0.588235, 0.435294, 0.282353, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="FreeTravel" parent="HBoxContainer" instance=ExtResource("1_fka0e")]
+unique_name_in_owner = true
+layout_mode = 2
+_iconTexture = ExtResource("2_j5ymn")
+_iconColor = Color(0.809489, 0.834708, 0.403989, 1)
+
+[node name="AutoPilot" parent="HBoxContainer" instance=ExtResource("1_fka0e")]
+unique_name_in_owner = true
+layout_mode = 2
+_iconTexture = ExtResource("3_4p7bh")
+_iconColor = Color(0.365277, 0.89443, 0.887917, 1)
+
+[node name="Dock" parent="HBoxContainer" instance=ExtResource("1_fka0e")]
+unique_name_in_owner = true
+layout_mode = 2
+_iconTexture = ExtResource("4_6n5x2")
+_iconColor = Color(0.364706, 0.894118, 0.886275, 1)
+
+[node name="Formation" parent="HBoxContainer" instance=ExtResource("1_fka0e")]
+unique_name_in_owner = true
+layout_mode = 2
+_iconTexture = ExtResource("5_0ti3y")
+_iconColor = Color(0.59, 0.4366, 0.2832, 1)
