@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using System;
+using Godot;
 using Serilog;
 using Spacelancer.Controllers;
 using Spacelancer.Scenes.Transitions;
@@ -6,7 +7,7 @@ using Spacelancer.Scenes.Player;
 
 namespace Spacelancer.Components.Navigation;
 
-public class JumpNavigation : INavigationSoftware
+public class JumpNavigation : AutomatedNavigation
 {
     private enum JumpState
     {
@@ -17,7 +18,11 @@ public class JumpNavigation : INavigationSoftware
         Exiting,
         Complete
     }
-    public string Name => $"JumpNavigation - {_state}";
+
+    public override event EventHandler Complete;
+    public override event EventHandler Aborted;
+
+    public override string Name => $"JumpNavigation - {_state}";
     
     private readonly Player _player;
     private readonly JumpGate _origin;
@@ -40,13 +45,13 @@ public class JumpNavigation : INavigationSoftware
 
         _originalSystem = origin.GetParent().Name;
         
-        _originalSoftware = ship.NavComputer;
+        _originalSoftware = ship.NavSoftware;
     }
     
-    public float GetRotation(float maxRotation) =>
+    public override float GetRotation(float maxRotation) =>
         _player.Velocity.Angle();
 
-    public Vector2 GetVelocity(float maxSpeed) =>
+    public override Vector2 GetVelocity(float maxSpeed) =>
         _state switch
         {
             JumpState.Initializing => ProcessInitializingVector(),
@@ -57,6 +62,9 @@ public class JumpNavigation : INavigationSoftware
             JumpState.Complete => ProcessCompleteVector(),
             _ => Vector2.Zero
         };
+    
+    public override void DisruptTravel() =>
+        RaiseEvent(Aborted);
     
     private Vector2 ProcessInitializingVector()
     {
@@ -135,7 +143,7 @@ public class JumpNavigation : INavigationSoftware
     
     private Vector2 ProcessCompleteVector()
     {
-        RestoreOriginalSoftware();
+        RaiseEvent(Complete);
         return Vector2.Zero;
     }
     
@@ -144,7 +152,4 @@ public class JumpNavigation : INavigationSoftware
         Log.Debug("{Name} controlling {Ship} state change from {OldState} to {NewState}", Name, _player.Name, _state, newState);
         _state = newState;
     }
-    
-    private void RestoreOriginalSoftware() =>
-        _player.NavComputer = _originalSoftware;
 }

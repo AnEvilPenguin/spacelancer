@@ -125,11 +125,11 @@ public partial class LaneEntrance : LanePart, IDockable
 
     private void TakeControlOfShip(Player.Player player)
     {
-        if (player.NavComputer is not PlayerNavigation)
+        if (player.NavSoftware is not PlayerNavigation)
             return;
         
         var computer = new LaneNavigation(player, _entrance, Partner.GetExitNode());
-        player.NavComputer = computer;
+        player.NavComputer.SetAutomatedNavigation(computer);
     }
 
     public Marker2D GetNearestMarker(Vector2 position) =>

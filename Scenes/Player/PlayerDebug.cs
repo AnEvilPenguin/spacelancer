@@ -79,9 +79,9 @@ public partial class Player
         
         _navLabel.Text = $"{NavComputer.Name ?? "No Nav Computer"}";
         
-        if (NavComputer is null)
+        if (NavSoftware is null)
             _navLabel.AddThemeColorOverride("font_color", Colors.Red);
-        else if (NavComputer.GetType() == typeof(PlayerNavigation))
+        else if (NavSoftware.GetType() == typeof(PlayerNavigation))
             _navLabel.AddThemeColorOverride("font_color", Colors.Green);
         else
             _navLabel.AddThemeColorOverride("font_color", Colors.Orange);

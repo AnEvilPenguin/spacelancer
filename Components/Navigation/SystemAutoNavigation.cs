@@ -1,11 +1,15 @@
+using System;
 using Godot;
 using Serilog;
 using Spacelancer.Scenes.Player;
 
 namespace Spacelancer.Components.Navigation;
 
-public class SystemAutoNavigation : INavigationSoftware
+public class SystemAutoNavigation : AutomatedNavigation
 {
+    public override event EventHandler Complete;
+    public override event EventHandler Aborted;
+    
     private enum NavigationState
     {
         Start,
@@ -13,11 +17,10 @@ public class SystemAutoNavigation : INavigationSoftware
         Complete
     }
     
-    public string Name => $"{_destination.GetName(_player.GlobalPosition)} - {_state}";
+    public override string Name => $"{_destination.GetName(_player.GlobalPosition)} - {_state}";
     
     private readonly INavigable _destination;
     private readonly Player _player;
-    private readonly INavigationSoftware _nextNavigation;
 
     private Marker2D _destinationApproach;
     
@@ -27,20 +30,12 @@ public class SystemAutoNavigation : INavigationSoftware
     {
         _player = ship;
         _destination = destination;
-        _nextNavigation = _player.NavComputer;
-    }
-
-    public SystemAutoNavigation(Player ship, INavigable destination, INavigationSoftware nextNavigation)
-    {
-        _player = ship;
-        _destination = destination;
-        _nextNavigation = nextNavigation;
     }
     
-    public float GetRotation(float maxRotation) =>
+    public override float GetRotation(float maxRotation) =>
         _player.Velocity.Angle();
 
-    public Vector2 GetVelocity(float maxSpeed)
+    public override Vector2 GetVelocity(float maxSpeed)
     {
         if (Input.IsActionJustPressed("AutoPilotCancel"))
             SetState(NavigationState.Complete);
@@ -53,6 +48,10 @@ public class SystemAutoNavigation : INavigationSoftware
         };
     }
         
+    // At the moment we basically don't need to deal with this.
+    // If we implement warp or something we may need to revisit.
+    public override void DisruptTravel() =>
+        RaiseEvent(Aborted);
 
     private Vector2 ProcessStarting()
     {
@@ -87,7 +86,7 @@ public class SystemAutoNavigation : INavigationSoftware
 
     private Vector2 ProcessComplete()
     {
-        _player.NavComputer = _nextNavigation;
+        RaiseEvent(Complete);
         return Vector2.Zero;
     }
 

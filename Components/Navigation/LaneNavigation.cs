@@ -6,7 +6,7 @@ using Spacelancer.Scenes.Player;
 
 namespace Spacelancer.Components.Navigation;
 
-public class LaneNavigation : AutomatedNavigation, INavigationSoftware
+public class LaneNavigation : AutomatedNavigation
 {
     public override event EventHandler Complete;
     public override event EventHandler Aborted;
@@ -22,7 +22,7 @@ public class LaneNavigation : AutomatedNavigation, INavigationSoftware
         Complete
     }
     
-    public string Name => $"LaneNavigation - {_origin.Name} - {_state}";
+    public override string Name => $"LaneNavigation - {_origin.Name} - {_state}";
 
     private readonly Player _player;
     private readonly Node2D _origin;
@@ -40,7 +40,7 @@ public class LaneNavigation : AutomatedNavigation, INavigationSoftware
         _origin = origin;
         _destination = destination;
         
-        _originalSoftware = ship.NavComputer;
+        _originalSoftware = ship.NavSoftware;
     }
 
     public LaneNavigation(Player ship, Node2D origin, Node2D destination, INavigationSoftware nextSoftware)
@@ -52,10 +52,10 @@ public class LaneNavigation : AutomatedNavigation, INavigationSoftware
         _originalSoftware = nextSoftware;
     }
 
-    public float GetRotation(float maxRotation) =>
+    public override float GetRotation(float maxRotation) =>
         _player.Velocity.Angle();
 
-    public Vector2 GetVelocity(float maxSpeed)
+    public override Vector2 GetVelocity(float maxSpeed)
     {
         if (Input.IsActionJustPressed("AutoPilotCancel"))
             DisruptTravel();
@@ -172,10 +172,7 @@ public class LaneNavigation : AutomatedNavigation, INavigationSoftware
         var length = proposed.Length();
 
         if (length <= 25)
-        {
             RaiseEvent(Aborted);
-            SetState(LaneState.Complete);
-        }
         
         // slow down 
         return proposed.LimitLength(length * 0.95f);
@@ -183,7 +180,6 @@ public class LaneNavigation : AutomatedNavigation, INavigationSoftware
 
     private Vector2 ProcessCompleteVector()
     {
-        RestoreOriginalSoftware();
         RaiseEvent(Complete);
 
         return _player.Velocity;
@@ -193,14 +189,5 @@ public class LaneNavigation : AutomatedNavigation, INavigationSoftware
     {
         Log.Debug("{Name} controlling {Ship} state change from {OldState} to {NewState}", Name, _player.Name, _state, newState);
         _state = newState;
-    }
-    
-    private void RestoreOriginalSoftware() =>
-        _player.NavComputer = _originalSoftware;
-    
-    private void RaiseEvent(EventHandler handler)
-    {
-        var raiseEvent = handler;
-        raiseEvent?.Invoke(this, EventArgs.Empty);
     }
 }

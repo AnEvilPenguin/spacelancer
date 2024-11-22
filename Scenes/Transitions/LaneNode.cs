@@ -49,7 +49,7 @@ public partial class LaneNode : LanePart
             if (body is not Player.Player player)
                 return;
             
-            if (player.NavComputer is not LaneNavigation navigation)
+            if (player.NavSoftware is not LaneNavigation navigation)
                 return;
             
             bool nextRingDisrupted = direction == RingDirection.Pair1 ?
