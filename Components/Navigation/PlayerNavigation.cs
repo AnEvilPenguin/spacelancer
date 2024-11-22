@@ -88,8 +88,8 @@ public class PlayerNavigation : INavigationSoftware
         if (target.Body is not INavigable navigable)
             return;
         
-        var newNav = new SystemAutoNavigation(_player, navigable, this);
-        _player.NavComputer = newNav;
+        var newNav = new SystemAutoNavigation(_player, navigable);
+        _player.NavComputer.SetAutomatedNavigation(newNav);
     }
 
     private void ProcessAutoPilotDock()
@@ -101,9 +101,9 @@ public class PlayerNavigation : INavigationSoftware
 
         var original = _player.NavComputer;
         
-        var dockNav = navigable.GetDockComputer(_player, original);
+        var dockNav = navigable.GetDockComputer(_player);
         
-        var newNav = new SystemAutoNavigation(_player, navigable, dockNav);
-        _player.NavComputer = newNav;
+        var newNav = new SystemAutoNavigation(_player, navigable);
+        _player.NavComputer.SetAutomatedNavigation(newNav);
     }
 }
