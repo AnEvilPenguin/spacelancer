@@ -51,6 +51,7 @@ public partial class GameController : Node
         Global.Player = LoadScene<Player>("res://Scenes/Player/player.tscn");
         
         Global.UserInterface.ShowSensorDisplay();
+        Global.UserInterface.ShowAutopilotMenu();
         
         var system = LoadSystem("UA01");
         
