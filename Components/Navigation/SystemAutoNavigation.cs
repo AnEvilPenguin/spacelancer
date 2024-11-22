@@ -18,7 +18,8 @@ public class SystemAutoNavigation : AutomatedNavigation
     }
     
     public override string Name => $"{_destination.GetName(_player.GlobalPosition)} - {_state}";
-    
+    public override NavigationSoftwareType Type => NavigationSoftwareType.Navigation;
+
     private readonly INavigable _destination;
     private readonly Player _player;
 

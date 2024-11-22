@@ -8,7 +8,8 @@ public class PlayerNavigation : INavigationSoftware
 {
     
     public string Name { get => _name; }
-    
+    public NavigationSoftwareType Type => NavigationSoftwareType.Manual;
+
     private const string _name = "PlayerNavigation";
     private readonly Scenes.Player.Player _player;
 

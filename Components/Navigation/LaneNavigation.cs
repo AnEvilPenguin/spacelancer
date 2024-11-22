@@ -23,6 +23,7 @@ public class LaneNavigation : AutomatedNavigation
     }
     
     public override string Name => $"LaneNavigation - {_origin.Name} - {_state}";
+    public override NavigationSoftwareType Type => NavigationSoftwareType.Docking;
 
     private readonly Player _player;
     private readonly Node2D _origin;

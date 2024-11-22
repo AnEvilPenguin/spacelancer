@@ -23,7 +23,8 @@ public class JumpNavigation : AutomatedNavigation
     public override event EventHandler Aborted;
 
     public override string Name => $"JumpNavigation - {_state}";
-    
+    public override NavigationSoftwareType Type => NavigationSoftwareType.Docking;
+
     private readonly Player _player;
     private readonly JumpGate _origin;
     private readonly string _originalSystem;
@@ -33,7 +34,6 @@ public class JumpNavigation : AutomatedNavigation
     private Node2D _destinationNode;
     private Vector2 _exitMarker;
     
-    private readonly INavigationSoftware _originalSoftware;
 
     private JumpState _state;
     
@@ -44,8 +44,6 @@ public class JumpNavigation : AutomatedNavigation
         _destination = destination;
 
         _originalSystem = origin.GetParent().Name;
-        
-        _originalSoftware = ship.NavSoftware;
     }
     
     public override float GetRotation(float maxRotation) =>
