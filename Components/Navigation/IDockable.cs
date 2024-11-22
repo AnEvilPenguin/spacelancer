@@ -5,5 +5,5 @@ namespace Spacelancer.Components.Navigation;
 
 public interface IDockable : INavigable
 {
-    public INavigationSoftware GetDockComputer(Player ship, INavigationSoftware nextSoftware);
+    public INavigationSoftware GetDockComputer(Player ship);
 }

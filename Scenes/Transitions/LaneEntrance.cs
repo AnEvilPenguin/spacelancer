@@ -144,6 +144,6 @@ public partial class LaneEntrance : LanePart, IDockable
     public string GetName(Vector2 _) =>
         Name;
 
-    public INavigationSoftware GetDockComputer(Player.Player ship, INavigationSoftware next) =>
-        new LaneNavigation(ship, _entrance, Partner.GetExitNode(), next);
+    public INavigationSoftware GetDockComputer(Player.Player ship) =>
+        new LaneNavigation(ship, _entrance, Partner.GetExitNode());
 }

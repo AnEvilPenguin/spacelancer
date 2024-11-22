@@ -28,8 +28,6 @@ public class LaneNavigation : AutomatedNavigation
     private readonly Player _player;
     private readonly Node2D _origin;
     private readonly Node2D _destination;
-
-    private readonly INavigationSoftware _originalSoftware;
     
     private LaneState _state;
     
@@ -40,17 +38,6 @@ public class LaneNavigation : AutomatedNavigation
         _player = ship;
         _origin = origin;
         _destination = destination;
-        
-        _originalSoftware = ship.NavSoftware;
-    }
-
-    public LaneNavigation(Player ship, Node2D origin, Node2D destination, INavigationSoftware nextSoftware)
-    {
-        _player = ship;
-        _origin = origin;
-        _destination = destination;
-        
-        _originalSoftware = nextSoftware;
     }
 
     public override float GetRotation(float maxRotation) =>
