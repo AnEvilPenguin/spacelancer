@@ -35,6 +35,7 @@ public partial class Player
         }
             
         SetPointerTarget(detection.Body);
+        NavComputer.ProcessNewTarget(detection.Body);
         Global.UserInterface.SetSensorViewPortTarget(detection.Body);
     }
 
@@ -43,6 +44,7 @@ public partial class Player
         _sensor.ClearLockedTarget();
         
         ClearPointerTarget();
+        NavComputer.ClearTarget();
         Global.UserInterface.ClearSensorViewPortTarget();
     }
     
