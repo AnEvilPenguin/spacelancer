@@ -1,12 +1,13 @@
 using System;
+using Spacelancer.Components.Navigation;
 
 namespace Spacelancer.Scenes.UI.GameUI.Navigation;
 
 public class AutopilotSelectedEventArgs : EventArgs
 {
-    public AutopilotButtonType Button { get; init; }
+    public NavigationSoftwareType Button { get; init; }
 
-    public AutopilotSelectedEventArgs(AutopilotButtonType button)
+    public AutopilotSelectedEventArgs(NavigationSoftwareType button)
     {
         Button = button;
     }

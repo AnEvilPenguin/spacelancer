@@ -1,16 +1,9 @@
 using System.Collections.Generic;
 using Godot;
+using Spacelancer.Components.Navigation;
 using Spacelancer.Scenes.UI.StationMenu.IconButton;
 
 namespace Spacelancer.Scenes.UI.GameUI.Navigation;
-
-public enum AutopilotButtonType
-{
-	FreeTravel,
-	Autopilot,
-	Docking,
-	Formation
-}
 
 public partial class AutopilotMenu : PanelContainer
 {
@@ -38,18 +31,18 @@ public partial class AutopilotMenu : PanelContainer
 	public override void _Ready()
 	{
 		_freeTravel = GetNode<IconButton>("%FreeTravel");
-		_freeTravel.Pressed += () => OnButtonPressed(_freeTravel, AutopilotButtonType.FreeTravel);
+		_freeTravel.Pressed += () => OnButtonPressed(_freeTravel, NavigationSoftwareType.Manual);
 		
 		_autopilot = GetNode<IconButton>("%AutoPilot");
-		_autopilot.Pressed += () => OnButtonPressed(_autopilot, AutopilotButtonType.Autopilot);
+		_autopilot.Pressed += () => OnButtonPressed(_autopilot, NavigationSoftwareType.Navigation);
 		
 		_docking = GetNode<IconButton>("%Dock");
-		_docking.Pressed += () => OnButtonPressed(_docking, AutopilotButtonType.Docking);
+		_docking.Pressed += () => OnButtonPressed(_docking, NavigationSoftwareType.Docking);
 		
 		// TODO make this not an otter and get a better icon.
 		// Though it is a pretty sweet otter...
 		_formation = GetNode<IconButton>("%Formation");
-		_formation.Pressed += () => OnButtonPressed(_formation, AutopilotButtonType.Docking);
+		_formation.Pressed += () => OnButtonPressed(_formation, NavigationSoftwareType.Formation);
 		
 		_active = _freeTravel;
 		
@@ -59,49 +52,49 @@ public partial class AutopilotMenu : PanelContainer
 		_buttons.Add(_formation, false);
 	}
 
-	public void SetButtonAvailability(AutopilotButtonType button, bool availability)
+	public void SetButtonAvailability(NavigationSoftwareType button, bool availability)
 	{
 		switch (button)
 		{
-			case AutopilotButtonType.FreeTravel:
+			case NavigationSoftwareType.Manual:
 				_buttons[_freeTravel] = availability;
 				SetButtonColor(_freeTravel, availability ? _availableColor : _inactiveColor);
 				return;
 			
-			case AutopilotButtonType.Autopilot:
+			case NavigationSoftwareType.Navigation:
 				_buttons[_autopilot] = availability;
 				SetButtonColor(_autopilot, availability ? _availableColor : _inactiveColor);
 				return;
 			
-			case AutopilotButtonType.Docking:
+			case NavigationSoftwareType.Docking:
 				_buttons[_docking] = availability;
 				SetButtonColor(_docking, availability ? _availableColor : _inactiveColor);
 				return;
 			
-			case AutopilotButtonType.Formation:
+			case NavigationSoftwareType.Formation:
 				_buttons[_formation] = availability;
 				SetButtonColor(_formation, availability ? _availableColor : _inactiveColor);
 				return;
 		}
 	}
 
-	public void SetActive(AutopilotButtonType button)
+	public void SetActive(NavigationSoftwareType button)
 	{
 		var availability = _buttons[_active];
 		SetButtonColor(_active, availability ? _availableColor : _inactiveColor);
 
 		_active = button switch
 		{
-			AutopilotButtonType.FreeTravel => _freeTravel,
-			AutopilotButtonType.Autopilot => _autopilot,
-			AutopilotButtonType.Docking => _docking,
+			NavigationSoftwareType.Manual => _freeTravel,
+			NavigationSoftwareType.Navigation => _autopilot,
+			NavigationSoftwareType.Docking => _docking,
 			_ => _formation
 		};
 		
 		SetButtonColor(_active, _activeColor);
 	}
 
-	private void SelectButton(AutopilotButtonType button)
+	private void SelectButton(NavigationSoftwareType button)
 	{
 		SetActive(button);
 		
@@ -111,7 +104,7 @@ public partial class AutopilotMenu : PanelContainer
 			raiseEvent(this, new AutopilotSelectedEventArgs(button));
 	}
 
-	private void OnButtonPressed(IconButton button, AutopilotButtonType buttonType)
+	private void OnButtonPressed(IconButton button, NavigationSoftwareType buttonType)
 	{
 		if (_active == button || !_buttons[button])
 			return;
