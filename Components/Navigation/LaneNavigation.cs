@@ -1,12 +1,16 @@
-﻿using Godot;
+﻿using System;
+using Godot;
 using Serilog;
 using Spacelancer.Scenes.Player;
 
 
 namespace Spacelancer.Components.Navigation;
 
-public class LaneNavigation : INavigationSoftware
+public class LaneNavigation : AutomatedNavigation, INavigationSoftware
 {
+    public override event EventHandler Complete;
+    public override event EventHandler Aborted;
+    
     private enum LaneState
     {
         Initializing,
@@ -69,7 +73,7 @@ public class LaneNavigation : INavigationSoftware
         };
     }
 
-    public void DisruptTravel()
+    public override void DisruptTravel()
     {
         SetState(LaneState.Disrupted);
         Log.Debug("Nav disrupted at {Location}", _player.GlobalPosition);
@@ -166,9 +170,12 @@ public class LaneNavigation : INavigationSoftware
         proposed += proposed.Orthogonal() / 50;
         
         var length = proposed.Length();
-        
+
         if (length <= 25)
+        {
+            RaiseEvent(Aborted);
             SetState(LaneState.Complete);
+        }
         
         // slow down 
         return proposed.LimitLength(length * 0.95f);
@@ -177,6 +184,8 @@ public class LaneNavigation : INavigationSoftware
     private Vector2 ProcessCompleteVector()
     {
         RestoreOriginalSoftware();
+        RaiseEvent(Complete);
+
         return _player.Velocity;
     }
 
@@ -188,4 +197,10 @@ public class LaneNavigation : INavigationSoftware
     
     private void RestoreOriginalSoftware() =>
         _player.NavComputer = _originalSoftware;
+    
+    private void RaiseEvent(EventHandler handler)
+    {
+        var raiseEvent = handler;
+        raiseEvent?.Invoke(this, EventArgs.Empty);
+    }
 }

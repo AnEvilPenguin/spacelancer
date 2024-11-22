@@ -9,6 +9,4 @@ public interface INavigationSoftware
     public float GetRotation(float maxRotation);
     
     public Vector2 GetVelocity(float maxSpeed);
-    
-   
 }
