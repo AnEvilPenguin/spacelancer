@@ -54,28 +54,18 @@ public partial class AutopilotMenu : PanelContainer
 
 	public void SetButtonAvailability(NavigationSoftwareType button, bool availability)
 	{
-		switch (button)
+		var control = button switch
 		{
-			case NavigationSoftwareType.Manual:
-				_buttons[_freeTravel] = availability;
-				SetButtonColor(_freeTravel, availability ? _availableColor : _inactiveColor);
-				return;
-			
-			case NavigationSoftwareType.Navigation:
-				_buttons[_autopilot] = availability;
-				SetButtonColor(_autopilot, availability ? _availableColor : _inactiveColor);
-				return;
-			
-			case NavigationSoftwareType.Docking:
-				_buttons[_docking] = availability;
-				SetButtonColor(_docking, availability ? _availableColor : _inactiveColor);
-				return;
-			
-			case NavigationSoftwareType.Formation:
-				_buttons[_formation] = availability;
-				SetButtonColor(_formation, availability ? _availableColor : _inactiveColor);
-				return;
-		}
+			NavigationSoftwareType.Navigation => _autopilot,
+			NavigationSoftwareType.Docking => _docking,
+			NavigationSoftwareType.Formation => _formation,
+			_ => _freeTravel
+		};
+		
+		_buttons[control] = availability;
+		
+		if (_active != control)
+			SetButtonColor(control, availability ? _availableColor : _inactiveColor);
 	}
 
 	public void SetActive(NavigationSoftwareType button)
@@ -96,8 +86,6 @@ public partial class AutopilotMenu : PanelContainer
 
 	private void SelectButton(NavigationSoftwareType button)
 	{
-		SetActive(button);
-		
 		var raiseEvent = AutopilotSelected;
 		
 		if (raiseEvent != null)

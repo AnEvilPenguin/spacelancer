@@ -54,7 +54,7 @@ public partial class JumpGate : Node2D
         if (player.NavSoftware is not PlayerNavigation)
             return;
 		
-        var computer = new JumpNavigation(player, this, Name);
+        var computer = new JumpNavigation(this, Name);
         player.NavComputer.SetAutomatedNavigation(computer);
     }
 }

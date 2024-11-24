@@ -24,8 +24,7 @@ public class JumpNavigation : AutomatedNavigation
 
     public override string Name => $"JumpNavigation - {_state}";
     public override NavigationSoftwareType Type => NavigationSoftwareType.Docking;
-
-    private readonly Player _player;
+    
     private readonly JumpGate _origin;
     private readonly string _originalSystem;
     private JumpGate _exit;
@@ -37,26 +36,25 @@ public class JumpNavigation : AutomatedNavigation
 
     private JumpState _state;
     
-    public JumpNavigation(Player ship, JumpGate origin, string destination)
+    public JumpNavigation(JumpGate origin, string destination)
     {
-        _player = ship;
         _origin = origin;
         _destination = destination;
 
         _originalSystem = origin.GetParent().Name;
     }
     
-    public override float GetRotation(float maxRotation) =>
-        _player.Velocity.Angle();
+    public override float GetRotation(float maxRotation, float currentRotation, Vector2 currentVelocity) =>
+        currentVelocity.Angle();
 
-    public override Vector2 GetVelocity(float maxSpeed) =>
+    public override Vector2 GetVelocity(float maxSpeed, Vector2 currentPosition, Vector2 currentVelocity) =>
         _state switch
         {
-            JumpState.Initializing => ProcessInitializingVector(),
-            JumpState.Approaching => ProcessApproachingVector(),
-            JumpState.Entering => ProcessEnteringVector(),
+            JumpState.Initializing => ProcessInitializingVector(currentVelocity),
+            JumpState.Approaching => ProcessApproachingVector(currentPosition),
+            JumpState.Entering => ProcessEnteringVector(currentPosition, currentVelocity),
             JumpState.Travelling => ProcessTravellingVector(),
-            JumpState.Exiting => ProcessExitingVector(),
+            JumpState.Exiting => ProcessExitingVector(currentPosition),
             JumpState.Complete => ProcessCompleteVector(),
             _ => Vector2.Zero
         };
@@ -64,9 +62,9 @@ public class JumpNavigation : AutomatedNavigation
     public override void DisruptTravel() =>
         RaiseEvent(Aborted);
     
-    private Vector2 ProcessInitializingVector()
+    private Vector2 ProcessInitializingVector(Vector2 currentVelocity)
     {
-        var velocity = _player.Velocity;
+        var velocity = currentVelocity;
         
         var x = Mathf.MoveToward(velocity.X, 0.0f, 5);
         var y = Mathf.MoveToward(velocity.Y, 0.0f, 5);
@@ -82,9 +80,9 @@ public class JumpNavigation : AutomatedNavigation
         return newVelocity;
     }
 
-    private Vector2 ProcessApproachingVector()
+    private Vector2 ProcessApproachingVector(Vector2 currentPosition)
     {
-        var proposed = _origin.GlobalPosition - _player.GlobalPosition;
+        var proposed = _origin.GlobalPosition - currentPosition;
         
         if (proposed.Length() < 5)
         {
@@ -95,7 +93,7 @@ public class JumpNavigation : AutomatedNavigation
         return proposed.LimitLength(50);
     }
 
-    private Vector2 ProcessEnteringVector()
+    private Vector2 ProcessEnteringVector(Vector2 currentPosition, Vector2 currentVelocity)
     {
         if (_destinationNode == null)
         {
@@ -103,13 +101,13 @@ public class JumpNavigation : AutomatedNavigation
             _destinationNode = Global.GameController.LoadSystem(destinationId);
         }
 
-        if ((_player.GlobalPosition - _origin.GlobalPosition).Length() < 25)
+        if ((currentPosition - _origin.GlobalPosition).Length() < 25)
         {
             SetState(JumpState.Travelling);
             return Vector2.Zero;
         }
         
-        return _player.Velocity.LimitLength(5);
+        return currentVelocity.LimitLength(5);
     }
 
     private Vector2 ProcessTravellingVector()
@@ -119,16 +117,18 @@ public class JumpNavigation : AutomatedNavigation
         
         _destinationNode.Visible = true;
         
-        _player.GlobalPosition = _exit.GlobalPosition;
+        // FIXME we probably need a method of setting the target ship for cases like this
+        // new signal up for 'warp/teleport' or something
+        Global.Player.GlobalPosition = _exit.GlobalPosition;
         
         SetState(JumpState.Exiting);
         
         return Vector2.Zero;
     }
 
-    private Vector2 ProcessExitingVector()
+    private Vector2 ProcessExitingVector(Vector2 currentPosition)
     {
-        var proposed = _exitMarker - _player.GlobalPosition;
+        var proposed = _exitMarker - currentPosition;
         
         if (proposed.Length() < 5)
         {
@@ -147,7 +147,7 @@ public class JumpNavigation : AutomatedNavigation
     
     private void SetState(JumpState newState)
     {
-        Log.Debug("{Name} controlling {Ship} state change from {OldState} to {NewState}", Name, _player.Name, _state, newState);
+        Log.Debug("{Name} state change from {OldState} to {NewState}", Name, _state, newState);
         _state = newState;
     }
 }

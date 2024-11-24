@@ -15,9 +15,7 @@ public interface INavigationSoftware
     public string Name { get; }
     public NavigationSoftwareType Type { get; }
     
-    // FIXME consider taking in current rotation/position(?) to break dependency on ship
-    public float GetRotation(float maxRotation);
+    public float GetRotation(float maxRotation, float currentAngle, Vector2 currentVelocity);
     
-    // FIXME consider taking in current velocity/position to break dependency on ship
-    public Vector2 GetVelocity(float maxSpeed);
+    public Vector2 GetVelocity(float maxSpeed, Vector2 currentPosition, Vector2 currentVelocity);
 }

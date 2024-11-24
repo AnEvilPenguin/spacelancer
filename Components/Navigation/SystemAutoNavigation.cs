@@ -17,34 +17,37 @@ public class SystemAutoNavigation : AutomatedNavigation
         Complete
     }
     
-    public override string Name => $"{_destination.GetName(_player.GlobalPosition)} - {_state}";
+    public override string Name => _name;
+
+    private string _name = string.Empty;
+
     public override NavigationSoftwareType Type => NavigationSoftwareType.Navigation;
 
     private readonly INavigable _destination;
-    private readonly Player _player;
 
     private Marker2D _destinationApproach;
     
     private NavigationState _state = NavigationState.Start;
 
-    public SystemAutoNavigation(Player ship, INavigable destination)
+    public SystemAutoNavigation(INavigable destination)
     {
-        _player = ship;
         _destination = destination;
     }
     
-    public override float GetRotation(float maxRotation) =>
-        _player.Velocity.Angle();
+    public override float GetRotation(float maxRotation, float currentAngleRads, Vector2 currentVelocity) =>
+        currentVelocity.Angle();
 
-    public override Vector2 GetVelocity(float maxSpeed)
+    public override Vector2 GetVelocity(float maxSpeed, Vector2 currentPosition, Vector2 currentVelocity)
     {
+        _name = $"{_destination.GetName(currentPosition)} - {_state}";
+        
         if (Input.IsActionJustPressed("AutoPilotCancel"))
             SetState(NavigationState.Complete);
         
         return _state switch
         {
-            NavigationState.Start => ProcessStarting(),
-            NavigationState.Travelling => ProcessTravelling(maxSpeed),
+            NavigationState.Start => ProcessStarting(currentPosition),
+            NavigationState.Travelling => ProcessTravelling(maxSpeed, currentPosition),
             _ => ProcessComplete()
         };
     }
@@ -54,20 +57,20 @@ public class SystemAutoNavigation : AutomatedNavigation
     public override void DisruptTravel() =>
         RaiseEvent(Aborted);
 
-    private Vector2 ProcessStarting()
+    private Vector2 ProcessStarting(Vector2 currentPosition)
     {
-        _destinationApproach = _destination.GetNearestMarker(_player.GlobalPosition);
+        _destinationApproach = _destination.GetNearestMarker(currentPosition);
         
-        var proposed = _destinationApproach.GlobalPosition - _player.GlobalPosition;
+        var proposed = _destinationApproach.GlobalPosition - currentPosition;
         
         SetState(NavigationState.Travelling);
 
         return proposed.LimitLength(50);
     }
 
-    private Vector2 ProcessTravelling(float maxSpeed)
+    private Vector2 ProcessTravelling(float maxSpeed, Vector2 currentPosition)
     {
-        var proposed = _destinationApproach.GlobalPosition - _player.GlobalPosition;
+        var proposed = _destinationApproach.GlobalPosition - currentPosition;
         
         if (proposed.Length() < 10)
         {
@@ -93,7 +96,7 @@ public class SystemAutoNavigation : AutomatedNavigation
 
     private void SetState(NavigationState newState)
     {
-        Log.Debug("{Name} controlling {Ship} state change from {OldState} to {NewState}", Name, _player.Name, _state, newState);
+        Log.Debug("{Name} state change from {OldState} to {NewState}", Name, _state, newState);
         _state = newState;
     }
 }

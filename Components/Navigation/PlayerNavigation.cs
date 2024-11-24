@@ -6,7 +6,6 @@ namespace Spacelancer.Components.Navigation;
 
 public class PlayerNavigation : INavigationSoftware
 {
-    
     public string Name { get => _name; }
     public NavigationSoftwareType Type => NavigationSoftwareType.Manual;
 
@@ -18,7 +17,7 @@ public class PlayerNavigation : INavigationSoftware
         _player = player;
     }
     
-    public float GetRotation(float maxRotation)
+    public float GetRotation(float maxRotation, float currentRotation, Vector2 currentVelocity)
     {
         ValidatePlayer();
         
@@ -29,7 +28,7 @@ public class PlayerNavigation : INavigationSoftware
         return mouseDirection.Angle();
     }
 
-    public Vector2 GetVelocity(float maxSpeed)
+    public Vector2 GetVelocity(float maxSpeed, Vector2 currentPosition, Vector2 currentVelocity)
     {
         ValidatePlayer();
         
@@ -53,13 +52,6 @@ public class PlayerNavigation : INavigationSoftware
 
         // TODO clamp left and right (Y axis)
         // TODO clamp reverse (negative X)
-
-        if (Input.IsActionJustPressed("AutoPilotDestination"))
-            ProcessAutoPilotDestination();
-        else if (Input.IsActionJustReleased("AutoPilotDock"))
-            ProcessAutoPilotDock();
-        
-        // TODO if press F2/F3 transfer control to an Autopilot
 		
         var acceleration = direction.Rotated(_player.Rotation);
 
@@ -79,31 +71,5 @@ public class PlayerNavigation : INavigationSoftware
         var y = Mathf.MoveToward(velocity.Y, 0.0f, 1);
 		
         return new Vector2(x, y);
-    }
-
-    private void ProcessAutoPilotDestination()
-    {
-        var target = _player.GetTarget();
-        
-        if (target.Body is not INavigable navigable)
-            return;
-        
-        var newNav = new SystemAutoNavigation(_player, navigable);
-        _player.NavComputer.SetAutomatedNavigation(newNav);
-    }
-
-    private void ProcessAutoPilotDock()
-    {
-        var target = _player.GetTarget();
-        
-        if (target.Body is not IDockable navigable)
-            return;
-
-        var original = _player.NavComputer;
-        
-        var dockNav = navigable.GetDockComputer(_player);
-        
-        var newNav = new SystemAutoNavigation(_player, navigable);
-        _player.NavComputer.SetAutomatedNavigation(newNav);
     }
 }

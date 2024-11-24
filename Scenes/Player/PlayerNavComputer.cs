@@ -1,6 +1,8 @@
 using System;
 using Godot;
+using Serilog;
 using Spacelancer.Components.Navigation;
+using Spacelancer.Controllers;
 
 namespace Spacelancer.Scenes.Player;
 
@@ -8,41 +10,53 @@ public class PlayerNavComputer
 {
     private readonly INavigationSoftware _backup;
     
+    private INavigationSoftware CurrentSoftware
+    {
+        get => _currentSoftware;
+        set
+        {
+            _currentSoftware = value;
+            Global.UserInterface.ProcessNavigationSoftwareChange(_currentSoftware.Type);
+        }
+    }
+
     private INavigationSoftware _currentSoftware;
+    
+    private Node2D _currentTarget;
 
     public PlayerNavComputer(INavigationSoftware backup)
     {
         _backup = backup;
-        _currentSoftware = backup;
+        CurrentSoftware = backup;
     }
 
-    public string Name => _currentSoftware.Name;
-    public float GetRotation(float maxRotation) =>
-        _currentSoftware.GetRotation(maxRotation);
+    public string Name => CurrentSoftware.Name;
+    
+    public float GetRotation(float maxRotation, float currentAngle, Vector2 currentVelocity) =>
+        CurrentSoftware.GetRotation(maxRotation, currentAngle, currentVelocity);
 
-    public Vector2 GetVelocity(float maxSpeed)
+    public Vector2 GetVelocity(float maxSpeed, Vector2 currentPosition, Vector2 currentVelocity) =>
+        CurrentSoftware.GetVelocity(maxSpeed, currentPosition, currentVelocity);
+    
+    public void CheckForNavigationInstructions()
     {
-        // TODO check for user input around F1, F2, F3
-        // Take appropriate action depending on current type e.g. force abort.
-        
-        return _currentSoftware.GetVelocity(maxSpeed);
+        // We're not going to entertain someone pressing all buttons at once.
+        if (Input.IsActionJustPressed("AutoPilotCancel"))
+            ProcessAutopilotCancelled();
+        else if (Input.IsActionJustPressed("AutoPilotDestination"))
+            ProcessAutopilotNavigation();
+        else if (Input.IsActionJustPressed("AutoPilotDock"))
+            ProcessAutopilotDocked();
     }
         
     
-    public INavigationSoftware GetCurrentSoftware() => _currentSoftware;
+    public INavigationSoftware GetCurrentSoftware() => CurrentSoftware;
 
-    public void ProcessNewTarget(Node2D target)
-    {
-        // TODO if dockable
-        // TODO if navigable
-        // Do we need to consider what we are already doing?
-    }
+    public void ProcessNewTarget(Node2D target) =>
+        _currentTarget = target;
 
-    public void ClearTarget()
-    {
-        // TODO deactivate whatever we need to deactivate unless it's related to software we're using
-        // e.g. deactivate autopilot and leave dock active if we have dock software
-    }
+    public void ClearTarget() =>
+        _currentTarget = null;
     
     // TODO on new target check what buttons can be enabled
     // TODO on target lost check what buttons can be disabled
@@ -52,24 +66,49 @@ public class PlayerNavComputer
     // TODO computer type instead of button type. Just use that
     // TODO add type to interface
     
-    public void ResetNavSoftware() => _currentSoftware = _backup;
+    public void ResetNavSoftware() => CurrentSoftware = _backup;
 
     public void SetAutomatedNavigation(AutomatedNavigation software)
     {
-        _currentSoftware = software;
+        CurrentSoftware = software;
 
         software.Complete += OnAutopilotComplete;
         software.Aborted += OnAutopilotAborted;
     }
 
+    private void ProcessAutopilotCancelled()
+    {
+        if (CurrentSoftware is AutomatedNavigation automatedNavigation)
+            automatedNavigation.DisruptTravel();
+    }
+
+    private void ProcessAutopilotNavigation()
+    {
+        if (_currentTarget is not INavigable target)
+            return;
+
+        var autoPilot = new SystemAutoNavigation(target);
+        SetAutomatedNavigation(autoPilot);
+    }
+
+    private void ProcessAutopilotDocked()
+    {
+        if (_currentTarget is not IDockable target)
+            return;
+
+        // FIXME if not within a certain range call Autopilot instead?
+        var autoPilot = target.GetDockComputer();
+        SetAutomatedNavigation(autoPilot);
+    }
+
     private void OnAutopilotComplete(object sender, EventArgs e)
     {
-        _currentSoftware = _backup;
+        CurrentSoftware = _backup;
     }
 
     private void OnAutopilotAborted(object sender, EventArgs e)
     {
-        _currentSoftware = _backup;
+        CurrentSoftware = _backup;
     }
     
     // Queue of software?

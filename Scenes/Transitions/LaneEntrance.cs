@@ -128,7 +128,7 @@ public partial class LaneEntrance : LanePart, IDockable
         if (player.NavSoftware is not PlayerNavigation)
             return;
         
-        var computer = new LaneNavigation(player, _entrance, Partner.GetExitNode());
+        var computer = new LaneNavigation(_entrance, Partner.GetExitNode());
         player.NavComputer.SetAutomatedNavigation(computer);
     }
 
@@ -144,6 +144,6 @@ public partial class LaneEntrance : LanePart, IDockable
     public string GetName(Vector2 _) =>
         Name;
 
-    public INavigationSoftware GetDockComputer(Player.Player ship) =>
-        new LaneNavigation(ship, _entrance, Partner.GetExitNode());
+    public AutomatedNavigation GetDockComputer() =>
+        new LaneNavigation(_entrance, Partner.GetExitNode());
 }

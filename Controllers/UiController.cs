@@ -52,19 +52,22 @@ public class UiController
     public void RemoveSensorDetection(ulong id) =>
         _sensorDisplay.RemoveItem(id);
 
+    public void ProcessNavigationSoftwareChange(NavigationSoftwareType softwareType) =>
+        _autopilotMenu.SetActive(softwareType);
+
     public void SetSensorViewPortTarget(Node2D target)
     {
         _sensorViewport.SetCameraTarget(target);
 
         if (target is IDockable)
-            _autopilotMenu.SetButtonAvailability(AutopilotButtonType.Docking, true);
+            _autopilotMenu.SetButtonAvailability(NavigationSoftwareType.Docking, true);
         else
-            _autopilotMenu.SetButtonAvailability(AutopilotButtonType.Docking, false);
+            _autopilotMenu.SetButtonAvailability(NavigationSoftwareType.Docking, false);
         
         if (target is INavigable)
-            _autopilotMenu.SetButtonAvailability(AutopilotButtonType.Autopilot, true);
+            _autopilotMenu.SetButtonAvailability(NavigationSoftwareType.Navigation, true);
         else
-            _autopilotMenu.SetButtonAvailability(AutopilotButtonType.Autopilot, false);
+            _autopilotMenu.SetButtonAvailability(NavigationSoftwareType.Navigation, false);
     }
 
 
@@ -72,15 +75,9 @@ public class UiController
     {
         _sensorViewport.Visible = false;
         
-        _autopilotMenu.SetButtonAvailability(AutopilotButtonType.Docking, false);
-        _autopilotMenu.SetButtonAvailability(AutopilotButtonType.Autopilot, false);
+        _autopilotMenu.SetButtonAvailability(NavigationSoftwareType.Docking, false);
+        _autopilotMenu.SetButtonAvailability(NavigationSoftwareType.Navigation, false);
     }
-    
-    public void SetAutopilotMenuButtonActive(AutopilotButtonType autopilotButton) =>
-        _autopilotMenu.SetActive(autopilotButton);
-    
-    public void SetAutopilotMenuButtonAvailability(AutopilotButtonType autopilotButton, bool active) =>
-        _autopilotMenu.SetButtonAvailability(autopilotButton, active);
     
     public void ShowAutopilotMenu(bool visible = true) =>
         _autopilotMenu.Visible = visible;
