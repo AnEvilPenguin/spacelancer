@@ -39,6 +39,10 @@ public abstract class AbstractNavigationComputer : INavigationSoftware
         _currentSoftware = backup;
     }
     
+    // TODO can we get rid of this?
+    // Maybe replace with a type?
+    public INavigationSoftware GetCurrentSoftware() => _currentSoftware;
+    
     public void SetAutomatedNavigation(AutomatedNavigation software)
     {
         CurrentSoftware = software;
