@@ -70,6 +70,9 @@ public partial class AutopilotMenu : PanelContainer
 
 	public void SetActive(NavigationSoftwareType button)
 	{
+		// FIXME There's something not quite right here
+		// manually going into a spacelane results in navigation coming on when it shouldn't
+		// Should we just force explicit docking without a detection area instead?
 		var availability = _buttons[_active];
 		SetButtonColor(_active, availability ? _availableColor : _inactiveColor);
 

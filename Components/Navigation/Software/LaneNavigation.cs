@@ -2,7 +2,7 @@
 using Godot;
 using Serilog;
 
-namespace Spacelancer.Components.Navigation;
+namespace Spacelancer.Components.Navigation.Software;
 
 public class LaneNavigation : AutomatedNavigation
 {

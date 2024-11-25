@@ -4,7 +4,7 @@ using Serilog;
 using Spacelancer.Controllers;
 using Spacelancer.Scenes.Transitions;
 
-namespace Spacelancer.Components.Navigation;
+namespace Spacelancer.Components.Navigation.Software;
 
 public class JumpNavigation : AutomatedNavigation
 {

@@ -1,9 +1,8 @@
 ﻿using System;
 using Godot;
-using Serilog;
 using Spacelancer.Scenes.SpaceShips;
 
-namespace Spacelancer.Components.Navigation;
+namespace Spacelancer.Components.Navigation.Software;
 
 public class PlayerNavigation : INavigationSoftware
 {

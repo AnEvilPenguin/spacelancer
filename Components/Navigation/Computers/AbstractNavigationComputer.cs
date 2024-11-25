@@ -1,5 +1,6 @@
 using System;
 using Godot;
+using Spacelancer.Components.Navigation.Software;
 
 namespace Spacelancer.Components.Navigation.Computers;
 

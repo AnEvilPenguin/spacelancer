@@ -3,6 +3,7 @@ using System.Linq;
 using Godot;
 using Spacelancer.Components.Equipment.Detection;
 using Spacelancer.Components.Navigation;
+using Spacelancer.Components.Navigation.Software;
 
 namespace Spacelancer.Scenes.Transitions;
 

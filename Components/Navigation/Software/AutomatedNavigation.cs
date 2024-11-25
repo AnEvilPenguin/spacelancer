@@ -1,7 +1,7 @@
 using System;
 using Godot;
 
-namespace Spacelancer.Components.Navigation;
+namespace Spacelancer.Components.Navigation.Software;
 
 public abstract class AutomatedNavigation : INavigationSoftware
 {   
