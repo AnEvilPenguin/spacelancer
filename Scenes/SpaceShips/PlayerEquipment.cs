@@ -2,6 +2,7 @@
 using Spacelancer.Components.Equipment.Detection;
 using Spacelancer.Components.Equipment.Storage;
 using Spacelancer.Components.Navigation;
+using Spacelancer.Components.Navigation.Computers;
 using Spacelancer.Controllers;
 using Spacelancer.Economy;
 
@@ -50,13 +51,14 @@ public partial class Player
     public SensorDetection GetTarget() =>
         _sensor.GetLockedTarget();
 
-    public void ResetNavComputer() =>
-        NavComputer.ResetNavSoftware();
-
     private void SetDefaultEquipment()
     {
         PlayerNavigation defaultNavSoftware = new (this);
         NavComputer = new PlayerNavComputer(defaultNavSoftware);
+        NavComputer.Jumping += (sender, args) =>
+        {
+            GlobalPosition = args.Target;
+        };
         
         _sensor = new Sensor(10_000f);
         AddChild(_sensor);

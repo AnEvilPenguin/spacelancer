@@ -1,31 +1,25 @@
-using System;
 using Godot;
-using Spacelancer.Components.Navigation;
 using Spacelancer.Controllers;
 
-namespace Spacelancer.Scenes.SpaceShips;
+namespace Spacelancer.Components.Navigation.Computers;
 
-public class PlayerNavComputer
+public sealed class PlayerNavComputer : AbstractNavigationComputer
 {
-    private readonly INavigationSoftware _backup;
-    
-    private INavigationSoftware CurrentSoftware
+
+    protected override INavigationSoftware CurrentSoftware
     {
-        get => _currentSoftware;
+        get => base.CurrentSoftware;
         set
         {
-            _currentSoftware = value;
-            Global.UserInterface.ProcessNavigationSoftwareChange(_currentSoftware.Type);
+            base.CurrentSoftware = value;
+            Global.UserInterface.ProcessNavigationSoftwareChange(value.Type);
         }
     }
-
-    private INavigationSoftware _currentSoftware;
     
     private Node2D _currentTarget;
 
-    public PlayerNavComputer(INavigationSoftware backup)
+    public PlayerNavComputer(INavigationSoftware backup) : base(backup)
     {
-        _backup = backup;
         CurrentSoftware = backup;
 
         Global.UserInterface.AutopilotButtonSelected += (sender, args) =>
@@ -38,14 +32,6 @@ public class PlayerNavComputer
                 ProcessAutopilotCancelled();
         };
     }
-
-    public string Name => CurrentSoftware.Name;
-    
-    public float GetRotation(float maxRotation, float currentAngle, Vector2 currentVelocity) =>
-        CurrentSoftware.GetRotation(maxRotation, currentAngle, currentVelocity);
-
-    public Vector2 GetVelocity(float maxSpeed, Vector2 currentPosition, Vector2 currentVelocity) =>
-        CurrentSoftware.GetVelocity(maxSpeed, currentPosition, currentVelocity);
     
     public void CheckForNavigationInstructions()
     {
@@ -58,7 +44,8 @@ public class PlayerNavComputer
             ProcessAutopilotDocked();
     }
         
-    
+    // Do we need to figure out something better?
+    // Can we send a softwareType or something?
     public INavigationSoftware GetCurrentSoftware() => CurrentSoftware;
 
     public void ProcessNewTarget(Node2D target) =>
@@ -67,28 +54,14 @@ public class PlayerNavComputer
     public void ClearTarget() =>
         _currentTarget = null;
     
-    // TODO on new target check what buttons can be enabled
-    // TODO on target lost check what buttons can be disabled
-    // TODO manage what active button should be
-    // TODO deal with requesting software from target
     // TODO manage queues of software (somehow)
-    // TODO computer type instead of button type. Just use that
-    // TODO add type to interface
     
-    public void ResetNavSoftware() => CurrentSoftware = _backup;
-
-    public void SetAutomatedNavigation(AutomatedNavigation software)
-    {
-        CurrentSoftware = software;
-
-        software.Complete += OnAutopilotComplete;
-        software.Aborted += OnAutopilotAborted;
-    }
-
     private void ProcessAutopilotCancelled()
     {
-        if (CurrentSoftware is AutomatedNavigation automatedNavigation)
-            automatedNavigation.DisruptTravel();
+        if (CurrentSoftware is not AutomatedNavigation automatedNavigation)
+            return;
+        
+        automatedNavigation.DisruptTravel();
     }
 
     private void ProcessAutopilotNavigation()
@@ -107,20 +80,11 @@ public class PlayerNavComputer
 
         // FIXME if not within a certain range call Autopilot instead?
         var autoPilot = target.GetDockComputer();
+        
         SetAutomatedNavigation(autoPilot);
     }
-
-    private void OnAutopilotComplete(object sender, EventArgs e)
-    {
-        CurrentSoftware = _backup;
-    }
-
-    private void OnAutopilotAborted(object sender, EventArgs e)
-    {
-        CurrentSoftware = _backup;
-    }
     
-    // Queue of software?
+    // Queue of software? (would stack be better?)
     // method in to abort
     // signal for when complete
 }

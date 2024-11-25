@@ -20,6 +20,7 @@ public class JumpNavigation : AutomatedNavigation
 
     public override event EventHandler Complete;
     public override event EventHandler Aborted;
+    public event EventHandler<JumpEventArgs> Jumping; 
 
     public override string Name => $"JumpNavigation - {_state}";
     public override NavigationSoftwareType Type => NavigationSoftwareType.Docking;
@@ -116,9 +117,8 @@ public class JumpNavigation : AutomatedNavigation
         
         _destinationNode.Visible = true;
         
-        // FIXME we probably need a method of setting the target ship for cases like this
-        // new signal up for 'warp/teleport' or something
-        Global.Player.GlobalPosition = _exit.GlobalPosition;
+        var raiseEvent = Jumping;
+        raiseEvent?.Invoke(this, new JumpEventArgs(_exit.GlobalPosition));
         
         SetState(JumpState.Exiting);
         
