@@ -46,7 +46,7 @@ public partial class LaneNode : LanePart
         // TODO health and actually disrupt our rings
         ring.Area2D.BodyEntered += (Node2D body) =>
         {
-            if (body is not Player.Player player)
+            if (body is not SpaceShips.Player player)
                 return;
             
             if (player.NavSoftware is not LaneNavigation navigation)

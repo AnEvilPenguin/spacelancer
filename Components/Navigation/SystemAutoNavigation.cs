@@ -1,7 +1,6 @@
 using System;
 using Godot;
 using Serilog;
-using Spacelancer.Scenes.Player;
 
 namespace Spacelancer.Components.Navigation;
 

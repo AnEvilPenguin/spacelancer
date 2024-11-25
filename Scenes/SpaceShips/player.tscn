@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://dwec2s7ibu8qw"]
 
 [ext_resource type="Texture2D" uid="uid://q20xg6xpdk8r" path="res://Assets/Placeholder Art/ship_L.png" id="1_3xo1u"]
-[ext_resource type="Script" path="res://Scenes/Player/Player.cs" id="1_43xxl"]
-[ext_resource type="PackedScene" uid="uid://bcvgsj62cn1gl" path="res://Scenes/Player/sensor_pointer.tscn" id="3_ij0uf"]
+[ext_resource type="Script" path="res://Scenes/SpaceShips/Player.cs" id="1_43xxl"]
+[ext_resource type="PackedScene" uid="uid://bcvgsj62cn1gl" path="res://Scenes/SpaceShips/sensor_pointer.tscn" id="3_ij0uf"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_u83ay"]
 radius = 13.0

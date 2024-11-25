@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Spacelancer.Scenes.Player;
+namespace Spacelancer.Scenes.SpaceShips;
 
 public partial class Player : CharacterBody2D
 {

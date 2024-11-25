@@ -129,7 +129,7 @@ public partial class Station : Node2D, INavigable
 
 	private void OnStationAreaEntered(Node2D body)
 	{
-		if (body is Player.Player)
+		if (body is SpaceShips.Player)
 		{
 			_playerInCommsRange = true;
 			Log.Debug("Player in comms range of {StationName}", Name);
@@ -142,7 +142,7 @@ public partial class Station : Node2D, INavigable
 
 	private void OnStationAreaExited(Node2D body)
 	{
-		if (body is Player.Player)
+		if (body is SpaceShips.Player)
 		{
 			_playerInCommsRange = false;
 			Log.Debug("Player left comms range of {StationName}", Name);

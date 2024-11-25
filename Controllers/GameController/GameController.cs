@@ -4,7 +4,7 @@ using System.Linq;
 using Godot;
 using Serilog;
 using Spacelancer.Scenes.SolarSystems;
-using Spacelancer.Scenes.Player;
+using Spacelancer.Scenes.SpaceShips;
 using Spacelancer.Scenes.Stations;
 
 namespace Spacelancer.Controllers;
@@ -48,7 +48,7 @@ public partial class GameController : Node
         
         Global.Economy.LoadEconomy();
         
-        Global.Player = LoadScene<Player>("res://Scenes/Player/player.tscn");
+        Global.Player = LoadScene<Player>("res://Scenes/SpaceShips/player.tscn");
         
         Global.UserInterface.ShowSensorDisplay();
         Global.UserInterface.ShowAutopilotMenu();

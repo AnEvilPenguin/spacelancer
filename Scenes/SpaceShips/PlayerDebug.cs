@@ -2,7 +2,7 @@
 using Godot;
 using Spacelancer.Components.Navigation;
 
-namespace Spacelancer.Scenes.Player;
+namespace Spacelancer.Scenes.SpaceShips;
 
 public partial class Player
 {

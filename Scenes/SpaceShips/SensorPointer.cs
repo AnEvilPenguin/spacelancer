@@ -1,7 +1,7 @@
 using Godot;
 using Spacelancer.Util.Shaders;
 
-namespace Spacelancer.Scenes.Player;
+namespace Spacelancer.Scenes.SpaceShips;
 
 [Tool]
 public partial class SensorPointer : Node2D

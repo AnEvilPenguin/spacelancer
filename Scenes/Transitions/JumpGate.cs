@@ -38,7 +38,7 @@ public partial class JumpGate : Node2D
     {
         Log.Debug("{Body} entered jump gate to {Destination}", body.Name, Name);
         
-        if (body is Player.Player player)
+        if (body is SpaceShips.Player player)
         {
             TakeControlOfShip(player);
         }
@@ -49,7 +49,7 @@ public partial class JumpGate : Node2D
         Log.Debug("{Body} exited jump gate from {Destination}", body.Name, Name);
     }
     
-    private void TakeControlOfShip(Player.Player player)
+    private void TakeControlOfShip(SpaceShips.Player player)
     {
         if (player.NavSoftware is not PlayerNavigation)
             return;

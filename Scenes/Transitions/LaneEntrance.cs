@@ -117,13 +117,13 @@ public partial class LaneEntrance : LanePart, IDockable
     {
         // Log.Debug("{Body} entered space lane {Origin} to {Destination}", body.Name, Name, Partner.Name);
 
-        if (body is Player.Player player)
+        if (body is SpaceShips.Player player)
         {
             TakeControlOfShip(player);
         }
     }
 
-    private void TakeControlOfShip(Player.Player player)
+    private void TakeControlOfShip(SpaceShips.Player player)
     {
         if (player.NavSoftware is not PlayerNavigation)
             return;

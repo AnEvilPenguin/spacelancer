@@ -1,12 +1,11 @@
-﻿using Godot;
-using Serilog;
+﻿using Serilog;
 using Spacelancer.Components.Equipment.Detection;
 using Spacelancer.Components.Equipment.Storage;
 using Spacelancer.Components.Navigation;
 using Spacelancer.Controllers;
 using Spacelancer.Economy;
 
-namespace Spacelancer.Scenes.Player;
+namespace Spacelancer.Scenes.SpaceShips;
 
 public partial class Player
 {

@@ -3,7 +3,6 @@ using Godot;
 using Serilog;
 using Spacelancer.Controllers;
 using Spacelancer.Scenes.Transitions;
-using Spacelancer.Scenes.Player;
 
 namespace Spacelancer.Components.Navigation;
 
