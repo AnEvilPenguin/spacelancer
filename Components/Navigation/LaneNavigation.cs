@@ -1,12 +1,16 @@
-﻿using Godot;
+﻿using System;
+using Godot;
 using Serilog;
 using Spacelancer.Scenes.Player;
 
 
 namespace Spacelancer.Components.Navigation;
 
-public class LaneNavigation : INavigationSoftware
+public class LaneNavigation : AutomatedNavigation
 {
+    public override event EventHandler Complete;
+    public override event EventHandler Aborted;
+    
     private enum LaneState
     {
         Initializing,
@@ -15,55 +19,54 @@ public class LaneNavigation : INavigationSoftware
         Travelling,
         Exiting,
         Disrupted,
-        Complete,
+        Complete
     }
     
-    public string Name => $"LaneNavigation - {_origin.Name} - {_state}";
-
-    private readonly Player _player;
+    public override string Name => $"LaneNavigation - {_origin.Name} - {_state}";
+    public override NavigationSoftwareType Type => NavigationSoftwareType.Docking;
+    
     private readonly Node2D _origin;
     private readonly Node2D _destination;
-
-    private readonly INavigationSoftware _originalSoftware;
     
     private LaneState _state;
     
-    // FIXME develop interface/class for space ships?
     // Could consider having some sort of sensor range to fire off events for nearby objects?
-    public LaneNavigation(Player ship, Node2D origin, Node2D destination)
+    public LaneNavigation(Node2D origin, Node2D destination)
     {
-        _player = ship;
         _origin = origin;
         _destination = destination;
-        
-        _originalSoftware = ship.NavComputer;
     }
 
-    public float GetRotation(float maxRotation) =>
-        _player.Velocity.Angle();
+    public override float GetRotation(float maxRotation, float currentRotation, Vector2 currentVelocity) =>
+        currentVelocity.Angle();
 
-    public Vector2 GetVelocity(float maxSpeed) =>
-        _state switch
+    public override Vector2 GetVelocity(float maxSpeed, Vector2 currentPosition, Vector2 currentVelocity)
+    {
+        if (Input.IsActionJustPressed("AutoPilotCancel"))
+            DisruptTravel();
+        
+        return _state switch
         {
-            LaneState.Initializing => ProcessInitializingVector(),
-            LaneState.Approaching => ProcessApproachingVector(),
-            LaneState.Entering => ProcessEnteringVector(),
-            LaneState.Travelling => ProcessTravelingVector(),
-            LaneState.Exiting => ProcessExitingVector(),
-            LaneState.Disrupted => ProcessDisruptedVector(),
-            LaneState.Complete => ProcessCompleteVector(),
+            LaneState.Initializing => ProcessInitializingVector(currentVelocity),
+            LaneState.Approaching => ProcessApproachingVector(currentPosition),
+            LaneState.Entering => ProcessEnteringVector(currentPosition),
+            LaneState.Travelling => ProcessTravelingVector(currentPosition),
+            LaneState.Exiting => ProcessExitingVector(currentPosition),
+            LaneState.Disrupted => ProcessDisruptedVector(currentVelocity),
+            LaneState.Complete => ProcessCompleteVector(currentVelocity),
             _ => Vector2.Zero
         };
-
-    public void DisruptTravel()
-    {
-        SetState(LaneState.Disrupted);
-        Log.Debug("Nav disrupted at {Location}", _player.GlobalPosition);
     }
 
-    private Vector2 ProcessInitializingVector()
+    public override void DisruptTravel()
     {
-        var velocity = _player.Velocity;
+        SetState(LaneState.Disrupted);
+        Log.Debug("{Name} - Nav disrupted", Name);
+    }
+
+    private Vector2 ProcessInitializingVector(Vector2 currentVelocity)
+    {
+        var velocity = currentVelocity;
         
         var x = Mathf.MoveToward(velocity.X, 0.0f, 5);
         var y = Mathf.MoveToward(velocity.Y, 0.0f, 5);
@@ -79,9 +82,9 @@ public class LaneNavigation : INavigationSoftware
         return newVelocity;
     }
 
-    private Vector2 ProcessApproachingVector()
+    private Vector2 ProcessApproachingVector(Vector2 currentPosition)
     {
-        var proposed = _origin.GlobalPosition - _player.GlobalPosition;
+        var proposed = _origin.GlobalPosition - currentPosition;
 
         if (proposed.Length() < 5)
         {
@@ -92,10 +95,10 @@ public class LaneNavigation : INavigationSoftware
         return proposed.LimitLength(50);
     }
     
-    private Vector2 ProcessEnteringVector()
+    private Vector2 ProcessEnteringVector(Vector2 currentPosition)
     {
-        var proposed = _destination.GlobalPosition - _player.GlobalPosition;
-        var traveled = _origin.GlobalPosition - _player.GlobalPosition;
+        var proposed = _destination.GlobalPosition - currentPosition;
+        var traveled = _origin.GlobalPosition - currentPosition;
 
         if (traveled.Length() > 25)
         {
@@ -105,9 +108,9 @@ public class LaneNavigation : INavigationSoftware
         return proposed.LimitLength(10);
     }
 
-    private Vector2 ProcessTravelingVector()
+    private Vector2 ProcessTravelingVector(Vector2 currentPosition)
     {
-        var proposed = _destination.GlobalPosition - _player.GlobalPosition;
+        var proposed = _destination.GlobalPosition - currentPosition;
         
         if (proposed.Length() < 5)
         {
@@ -132,46 +135,44 @@ public class LaneNavigation : INavigationSoftware
         return proposed.LimitLength(2500);
     }
 
-    private Vector2 ProcessExitingVector()
+    private Vector2 ProcessExitingVector(Vector2 currentPosition)
     {
-        if ((_destination.GlobalPosition - _player.GlobalPosition).Length() > 150)
+        if ((_destination.GlobalPosition - currentPosition).Length() > 150)
             SetState(LaneState.Complete);
         
         // TODO probably need to consider things like nearby ships in future.
         // Use boiding/flocking?
-        var proposed = _player.GlobalPosition - _origin.GlobalPosition;
+        var proposed = currentPosition - _origin.GlobalPosition;
         
         return proposed.LimitLength(50);
     }
 
-    private Vector2 ProcessDisruptedVector()
+    private Vector2 ProcessDisruptedVector(Vector2 currentVelocity)
     {
-        var proposed = _player.Velocity;
-
+        var proposed = currentVelocity;
+        
         // slowly veer off to left
-        proposed += proposed.Orthogonal() / 10;
+        proposed += proposed.Orthogonal() / 50;
         
         var length = proposed.Length();
-        
-        if (length <= 50)
-            SetState(LaneState.Complete);
+
+        if (length <= 25)
+            RaiseEvent(Aborted);
         
         // slow down 
-        return proposed.LimitLength(length * 0.9f);
+        return proposed.LimitLength(length * 0.95f);
     }
 
-    private Vector2 ProcessCompleteVector()
+    private Vector2 ProcessCompleteVector(Vector2 currentVelocity)
     {
-        RestoreOriginalSoftware();
-        return _player.Velocity;
+        RaiseEvent(Complete);
+
+        return currentVelocity;
     }
 
     private void SetState(LaneState newState)
     {
-        Log.Debug("{Name} controlling {Ship} state change from {OldState} to {NewState}", Name, _player.Name, _state, newState);
+        Log.Debug("{Name} state change from {OldState} to {NewState}", Name, _state, newState);
         _state = newState;
     }
-    
-    private void RestoreOriginalSoftware() =>
-        _player.NavComputer = _originalSoftware;
 }

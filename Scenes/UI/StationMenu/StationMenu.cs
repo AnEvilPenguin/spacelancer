@@ -29,6 +29,7 @@ public partial class StationMenu : PanelContainer
 	{
 		Visible = true;
 		GetTree().Paused = true;
+		Global.UserInterface.ShowAutopilotMenu(false);
 		
 		_selectedStation = station;
 
@@ -43,6 +44,7 @@ public partial class StationMenu : PanelContainer
 		
 		Visible = false;
 		GetTree().Paused = false;
+		Global.UserInterface.ShowAutopilotMenu(true);
 	}
 
 	private void OnTradeButtonPressed()

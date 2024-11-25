@@ -6,9 +6,9 @@ namespace Spacelancer.Components.Navigation;
 
 public class PlayerNavigation : INavigationSoftware
 {
-    
     public string Name { get => _name; }
-    
+    public NavigationSoftwareType Type => NavigationSoftwareType.Manual;
+
     private const string _name = "PlayerNavigation";
     private readonly Scenes.Player.Player _player;
 
@@ -17,7 +17,7 @@ public class PlayerNavigation : INavigationSoftware
         _player = player;
     }
     
-    public float GetRotation(float maxRotation)
+    public float GetRotation(float maxRotation, float currentRotation, Vector2 currentVelocity)
     {
         ValidatePlayer();
         
@@ -28,7 +28,7 @@ public class PlayerNavigation : INavigationSoftware
         return mouseDirection.Angle();
     }
 
-    public Vector2 GetVelocity(float maxSpeed)
+    public Vector2 GetVelocity(float maxSpeed, Vector2 currentPosition, Vector2 currentVelocity)
     {
         ValidatePlayer();
         

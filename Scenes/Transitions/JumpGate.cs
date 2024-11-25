@@ -51,10 +51,10 @@ public partial class JumpGate : Node2D
     
     private void TakeControlOfShip(Player.Player player)
     {
-        if (player.NavComputer is not PlayerNavigation)
+        if (player.NavSoftware is not PlayerNavigation)
             return;
 		
-        var computer = new JumpNavigation(player, this, Name);
-        player.NavComputer = computer;
+        var computer = new JumpNavigation(this, Name);
+        player.NavComputer.SetAutomatedNavigation(computer);
     }
 }

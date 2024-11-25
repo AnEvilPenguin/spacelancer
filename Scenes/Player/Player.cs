@@ -5,7 +5,6 @@ namespace Spacelancer.Scenes.Player;
 public partial class Player : CharacterBody2D
 {
 	public const float MaxSpeed = 150.0f;
-
 	private SensorPointer _pointer;
 
 	public override void _Ready()
@@ -19,7 +18,7 @@ public partial class Player : CharacterBody2D
 		DebugNav();
 		
 		// TODO work out what a sensible max rotation is
-		Rotation = NavComputer.GetRotation(0);
+		Rotation = NavComputer.GetRotation(0, Rotation, Velocity);
 		DebugRotation();
 		
 		ProcessVelocity();
@@ -27,16 +26,15 @@ public partial class Player : CharacterBody2D
 		
 		MoveAndSlide();
 	}
-	
-	public void SetPointerTarget(Node2D target) =>
-		_pointer.SetTarget(target);
-	
-	public void ClearPointerTarget() =>
-		_pointer.ClearTarget();
+
+	public override void _Process(double delta)
+	{
+		NavComputer.CheckForNavigationInstructions();
+	}
 
 	private void ProcessVelocity()
 	{
-		var velocity = NavComputer.GetVelocity(MaxSpeed);
+		var velocity = NavComputer.GetVelocity(MaxSpeed, GlobalPosition, Velocity);
 
 		var acceleration = velocity - Velocity;
 		DebugAcceleration(acceleration);
@@ -46,4 +44,10 @@ public partial class Player : CharacterBody2D
 		DebugVelocity();
 		DebugSpeed(Velocity.Length());
 	}
+	
+	private void SetPointerTarget(Node2D target) =>
+		_pointer.SetTarget(target);
+	
+	private void ClearPointerTarget() =>
+		_pointer.ClearTarget();
 }

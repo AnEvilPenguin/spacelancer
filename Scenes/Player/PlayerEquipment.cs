@@ -1,4 +1,5 @@
 ﻿using Godot;
+using Serilog;
 using Spacelancer.Components.Equipment.Detection;
 using Spacelancer.Components.Equipment.Storage;
 using Spacelancer.Components.Navigation;
@@ -11,16 +12,53 @@ public partial class Player
 {
     public CargoHold Hold;
     
-    public INavigationSoftware NavComputer;
+    public PlayerNavComputer NavComputer;
+    
+    public INavigationSoftware NavSoftware => NavComputer.GetCurrentSoftware();
 
     public int Credits = 500;
 
     private Sensor _sensor;
 
     private IdentificationFriendFoe _iff;
+    
+    public void SetTarget(ulong id)
+    {
+        _sensor.LockTarget(id);
+
+        var detection = _sensor.GetLockedTarget();
+
+        if (detection == null)
+        {
+            Log.Debug("Target with id '{id}' not found", id);
+            return;
+        }
+            
+        SetPointerTarget(detection.Body);
+        NavComputer.ProcessNewTarget(detection.Body);
+        Global.UserInterface.SetSensorViewPortTarget(detection.Body);
+    }
+
+    public void ClearTarget()
+    {
+        _sensor.ClearLockedTarget();
+        
+        ClearPointerTarget();
+        NavComputer.ClearTarget();
+        Global.UserInterface.ClearSensorViewPortTarget();
+    }
+    
+    public SensorDetection GetTarget() =>
+        _sensor.GetLockedTarget();
+
+    public void ResetNavComputer() =>
+        NavComputer.ResetNavSoftware();
 
     private void SetDefaultEquipment()
     {
+        PlayerNavigation defaultNavSoftware = new (this);
+        NavComputer = new PlayerNavComputer(defaultNavSoftware);
+        
         _sensor = new Sensor(10_000f);
         AddChild(_sensor);
 
@@ -34,6 +72,5 @@ public partial class Player
         _iff = new IdentificationFriendFoe(this, detection);
         
         Hold = new CargoHold(CommoditySize.Medium, 100);
-        NavComputer = new PlayerNavigation(this);
     }
 }

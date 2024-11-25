@@ -120,8 +120,7 @@ public partial class SensorDisplay : PanelContainer
 		component.Selected += (Node2D selected) =>
 		{
 			_selectedComponent = component;
-			Global.Player.SetPointerTarget(selected);
-			Global.UserInterface.SetSensorViewPortTarget(selected);
+			Global.Player.SetTarget(id);
 		};
 		
 		FilterControl(component);
@@ -137,11 +136,7 @@ public partial class SensorDisplay : PanelContainer
 			return;
 
 		if (_selectedComponent == control)
-		{
-			Global.Player.ClearPointerTarget();
-			Global.UserInterface.ClearSensorViewPortTarget();
-		}
-			
+			Global.Player.ClearTarget();
 		
 		control.Visible = false;
 		control.QueueFree();

@@ -1,24 +1,25 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using Serilog;
 using Spacelancer.Components.Equipment.Detection;
+using Spacelancer.Components.Navigation;
 using Spacelancer.Components.NPCs;
 using Spacelancer.Economy;
 using Spacelancer.Scenes.UI.StationMenu;
-using Spacelancer.Universe;
 using Spacelancer.Util;
 
 namespace Spacelancer.Scenes.Stations;
 
-public partial class Station : Node2D
+public partial class Station : Node2D, INavigable
 {
 	[Export]
 	public string Id;
 	
 	// We may need to consider making this docking range if we make a map and remote comms or something
 	private bool _playerInCommsRange = false;
-	private UI.StationMenu.StationMenu _menu;
+	private StationMenu _menu;
 	
 	private readonly List<Tuple<Commodity, int>> _commoditiesForSale = new List<Tuple<Commodity, int>>();
 	private readonly Dictionary<string, int> _commodityBuyPriceOverride = new Dictionary<string, int>();
@@ -26,6 +27,7 @@ public partial class Station : Node2D
 	private readonly List<NonPlayerCharacter> _nonPlayerCharacters = new List<NonPlayerCharacter>();
 	
 	private IdentificationFriendFoe _iff;
+	private List<Marker2D> _markers;
 	
 	public override void _Ready()
 	{
@@ -36,6 +38,8 @@ public partial class Station : Node2D
 		
 		var detection = new SensorDetection(GetInstanceId(), Name, "TODO", SensorDetectionType.Station, this);
 		_iff = new IdentificationFriendFoe(this, detection);
+		
+		_markers = GetNode("Markers").GetChildren().OfType<Marker2D>().ToList();
 		
 		LoadNpcs();
 	}
@@ -110,6 +114,18 @@ public partial class Station : Node2D
 		
 		return commodity.DefaultPrice;
 	}
+
+	public Marker2D GetNearestMarker(Vector2 position) =>
+		_markers.Aggregate((acc, cur) =>
+		{
+			var dist1 = (position - cur.GlobalPosition).Length();
+			var dist2 = (position - acc.GlobalPosition).Length();
+			
+			return dist1 < dist2 ? cur : acc;
+		});
+
+	public string GetName(Vector2 _) =>
+		Name;
 
 	private void OnStationAreaEntered(Node2D body)
 	{
