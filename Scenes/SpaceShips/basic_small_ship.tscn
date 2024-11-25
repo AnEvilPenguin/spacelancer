@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://dmtjacjk6ifqj"]
+
+[ext_resource type="Texture2D" uid="uid://q20xg6xpdk8r" path="res://Assets/Placeholder Art/ship_L.png" id="1_mjd52"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_q7cgq"]
+radius = 13.0
+height = 46.0
+
+[node name="BasicSmallShip" type="CollisionShape2D"]
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_q7cgq")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_mjd52")
