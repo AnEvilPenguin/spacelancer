@@ -27,6 +27,16 @@ public class PlayerNavComputer
     {
         _backup = backup;
         CurrentSoftware = backup;
+
+        Global.UserInterface.AutopilotButtonSelected += (sender, args) =>
+        {
+            if (args.Button == NavigationSoftwareType.Docking)
+                ProcessAutopilotDocked();
+            else if (args.Button == NavigationSoftwareType.Navigation)
+                ProcessAutopilotNavigation();
+            else
+                ProcessAutopilotCancelled();
+        };
     }
 
     public string Name => CurrentSoftware.Name;
