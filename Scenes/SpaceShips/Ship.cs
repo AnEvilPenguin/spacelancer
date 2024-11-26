@@ -19,6 +19,7 @@ public abstract partial class Ship : CharacterBody2D
         DebugNav();
 		
         // TODO work out what a sensible max rotation is
+        ProcessRotation();
         
         DebugRotation();
 		
