@@ -1,7 +1,6 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using Godot;
-using Spacelancer.Components.Equipment.Detection;
 
 namespace Spacelancer.Scenes.Transitions;
 
@@ -78,6 +77,18 @@ public partial class SpaceLane : Node2D
 			return;
 		
 		UpdateNodes();
+	}
+
+	public Tuple<Vector2, Vector2> GetNavigationPositions(Vector2 globalPosition)
+	{
+		var d1 = globalPosition.DistanceTo(_pair1.GlobalPosition);
+		var d2 = globalPosition.DistanceTo(_pair2.GlobalPosition);
+		
+		var tuple = d1 < d2 ?
+			new Tuple<Vector2, Vector2>(_pair1.GlobalPosition, _pair2.GlobalPosition) :
+			new Tuple<Vector2, Vector2>(_pair2.GlobalPosition, _pair1.GlobalPosition);
+		
+		return tuple;
 	}
 
 	private void UpdateNodes()
