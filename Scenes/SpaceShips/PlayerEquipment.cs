@@ -11,7 +11,7 @@ namespace Spacelancer.Scenes.SpaceShips;
 
 public partial class Player
 {
-    public override AbstractNavigationComputer NavComputer { get => _navComputer; }
+    public override AbstractNavigationComputer NavComputer => _navComputer;
 
     private PlayerNavComputer _navComputer;
     public INavigationSoftware NavSoftware => NavComputer.GetCurrentSoftware();
