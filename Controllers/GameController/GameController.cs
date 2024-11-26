@@ -20,8 +20,8 @@ public partial class GameController : Node
     private Control _gui;
     private Node2D _world2D;
 
-    private Dictionary<string, Node> _loadedScenes = new Dictionary<string, Node>();
-    private Dictionary<ulong, string> _nodeToPathLookup = new Dictionary<ulong, string>();
+    private Dictionary<string, Node> _loadedScenes = new ();
+    private Dictionary<ulong, string> _nodeToPathLookup = new ();
     
     private BaseSystem _currentSystem;
 
