@@ -29,10 +29,27 @@ public class SystemController
 
     public AutomatedNavigation CalculateBestRoute(Vector2 startPoint, string targetId)
     {
-        if(!_dockables.TryGetValue(targetId, out var dockable))
+        if(!_dockables.TryGetValue(targetId, out var target))
             return null; // Better might be to throw an error?
         
-        return new SystemAutoNavigation(dockable);
+        // TODO get all spacelanes and target.
+        // Get all spacelanes that are closer than the target
+            // if none just go direct
+        
+        // Get weighted distance for target
+            // divide distance by speed?
+        
+        // Get weighted distance for lane
+            // if weighted distance to target less than any lane, go direct to target
+            
+        // Get all lanes that are closer than the target
+            // recheck distances if weighted distance to target less than any lane, go direct to target
+        
+        // Repeat until we have our best route
+        
+        // Build out list of computers and return
+        
+        return new SystemAutoNavigation(target);
     }
 
     private void ProcessLists(BaseSystem system)
