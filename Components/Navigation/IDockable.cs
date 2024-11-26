@@ -4,5 +4,6 @@ namespace Spacelancer.Components.Navigation;
 
 public interface IDockable : INavigable
 {
+    public string Id { get; }
     public AutomatedNavigation GetDockComputer();
 }

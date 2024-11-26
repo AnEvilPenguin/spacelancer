@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://bmbbcbcu2jp7u"]
+[gd_scene load_steps=7 format=3 uid="uid://bmbbcbcu2jp7u"]
 
 [ext_resource type="PackedScene" uid="uid://dvmxdf7xe21e5" path="res://Scenes/SolarSystems/base_system.tscn" id="1_1pgy8"]
 [ext_resource type="PackedScene" uid="uid://dmva0i4clmiwe" path="res://Scenes/Stations/generic.tscn" id="2_6gpwg"]
 [ext_resource type="PackedScene" uid="uid://cvwti3lf0ogd2" path="res://Scenes/Stations/factory.tscn" id="3_gknnb"]
 [ext_resource type="PackedScene" uid="uid://dv5d275uoyl83" path="res://Scenes/Transitions/jump_gate.tscn" id="4_6wun0"]
+[ext_resource type="PackedScene" uid="uid://bs1i30idi6jyx" path="res://Scenes/SpaceShips/test_npc.tscn" id="6_a5rky"]
 [ext_resource type="PackedScene" uid="uid://xbtqo4gmnhny" path="res://Scenes/Transitions/space_lane.tscn" id="6_kctin"]
 
 [node name="Sunrise" instance=ExtResource("1_1pgy8")]
@@ -19,7 +20,7 @@ Id = "UA01_S02"
 
 [node name="Moonshot" parent="." index="2" instance=ExtResource("4_6wun0")]
 position = Vector2(16000, 48000)
-DestinationId = "UA02"
+Id = "UA02"
 
 [node name="Sunrise Orbital Settlement -> Annika\'s Redoubt" parent="." index="3" instance=ExtResource("6_kctin")]
 position = Vector2(17000, 16000)
@@ -29,3 +30,6 @@ _ringCount = 10
 position = Vector2(16000, 17000)
 rotation = 1.5708
 _ringCount = 14
+
+[node name="TestNpc" parent="." index="5" instance=ExtResource("6_a5rky")]
+position = Vector2(16484, 16430)

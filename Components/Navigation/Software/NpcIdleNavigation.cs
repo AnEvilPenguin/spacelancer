@@ -10,5 +10,5 @@ public class NpcIdleNavigation : INavigationSoftware
         currentVelocity.Angle();
 
     public Vector2 GetVelocity(float maxSpeed, Vector2 currentPosition, Vector2 currentVelocity) =>
-        currentVelocity;
+        Vector2.Zero;
 }

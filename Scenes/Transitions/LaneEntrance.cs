@@ -7,7 +7,7 @@ using Spacelancer.Components.Navigation.Software;
 
 namespace Spacelancer.Scenes.Transitions;
 
-public partial class LaneEntrance : LanePart, IDockable
+public partial class LaneEntrance : LanePart
 {
     public override LanePart TowardsPair1 { get; set; }
     public override LanePart TowardsPair2 { get; set; }

@@ -15,12 +15,12 @@ Id = "UA02_S01"
 [node name="Sunrise" parent="." index="1" instance=ExtResource("3_tvm70")]
 position = Vector2(32000, 4000)
 rotation = 3.14159
-DestinationId = "UA01"
+Id = "UA01"
 
 [node name="Trifecta" parent="." index="2" instance=ExtResource("3_tvm70")]
 position = Vector2(56000, 56000)
 rotation = -0.785398
-DestinationId = "UA03"
+Id = "UA03"
 
 [node name="Sunrise Jump Gate -> Brummbaer Station" parent="." index="3" instance=ExtResource("5_6vxd6")]
 position = Vector2(32000, 5000)

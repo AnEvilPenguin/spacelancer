@@ -24,7 +24,6 @@ public partial class GameController : Node
     private Dictionary<ulong, string> _nodeToPathLookup = new Dictionary<ulong, string>();
     
     private BaseSystem _currentSystem;
-    private BaseSystem _previousSystem;
 
     public override void _Ready()
     {
@@ -71,6 +70,7 @@ public partial class GameController : Node
         }
         
         _currentSystem = newSystem;
+        Global.SolarSystem.CurrentSystem = _currentSystem;
         
         _world2D.AddChild(newSystem);
         
@@ -144,6 +144,9 @@ public partial class GameController : Node
         
         scene.QueueFree();
     }
+    
+    public BaseSystem GetCurrentSystem() =>
+        _currentSystem;
 
     // FIXME load, hide, unload scene logic
     // consider dictionary of loaded items, to help with decisions over what to do with existing scenes

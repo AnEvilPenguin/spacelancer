@@ -11,7 +11,7 @@ Id = "UA03"
 [node name="Moonshot" parent="." index="0" instance=ExtResource("3_olxj2")]
 position = Vector2(12000, 12000)
 rotation = 2.36318
-DestinationId = "UA02"
+Id = "UA02"
 
 [node name="Danoher Station" parent="." index="1" instance=ExtResource("2_lo2xu")]
 position = Vector2(31000, 31000)
