@@ -71,6 +71,8 @@ public class UniverseController
             _systemScenes.Add(system.Id, scene);
             _systemNames.Add(system.Name, system.Id);
             
+            // TODO build up lists of lanes, jumpgates, stations, etc.
+            
             system.QueueFree();
             
             fileName = dir.GetNext();
