@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Godot;
 using Serilog;
 using Spacelancer.Scenes.SolarSystems;
 using Spacelancer.Scenes.Stations;
 using Spacelancer.Universe;
-using Spacelancer.Util;
 
 namespace Spacelancer.Controllers;
 

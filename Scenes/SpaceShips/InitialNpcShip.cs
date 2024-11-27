@@ -1,7 +1,5 @@
 using Godot;
-using Serilog;
 using Spacelancer.Components.Equipment.Detection;
-using Spacelancer.Components.Navigation;
 using Spacelancer.Components.Navigation.Computers;
 using Spacelancer.Components.Navigation.Software;
 using Spacelancer.Controllers;

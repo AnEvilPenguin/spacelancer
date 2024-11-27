@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Godot;
-using Spacelancer.Components.Navigation;
 using Spacelancer.Components.Navigation.Software;
 
 namespace Spacelancer.Scenes.SpaceShips;

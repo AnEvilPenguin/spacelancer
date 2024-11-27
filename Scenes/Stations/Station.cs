@@ -9,7 +9,6 @@ using Spacelancer.Components.Navigation.Software;
 using Spacelancer.Components.NPCs;
 using Spacelancer.Economy;
 using Spacelancer.Scenes.UI.StationMenu;
-using Spacelancer.Universe;
 using Spacelancer.Util;
 
 namespace Spacelancer.Scenes.Stations;

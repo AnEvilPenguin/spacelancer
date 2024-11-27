@@ -1,5 +1,3 @@
-using Godot;
-
 namespace Spacelancer.Components.Equipment.Detection;
 
 public interface ISensorDetectable
