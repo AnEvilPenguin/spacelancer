@@ -1,6 +1,7 @@
 using Godot;
 using Spacelancer.Components.Navigation.Software;
 using Spacelancer.Controllers;
+using Spacelancer.Scenes.Transitions;
 
 namespace Spacelancer.Components.Navigation.Computers;
 
@@ -56,7 +57,22 @@ public sealed class PlayerNavComputer : AbstractNavigationComputer
         _currentTarget = null;
     
     // TODO manage queues of software (somehow)
-    
+
+    protected override void OnJump(object sender, JumpEventArgs e)
+    {
+        var destinationId = Global.Universe.GetSystemId(e.Destination);
+        var destinationNode = Global.GameController.LoadSystem(destinationId);
+        destinationNode.Visible = true;
+                
+        var exit = destinationNode.GetNode<JumpGate>($"{e.Origin}");
+        
+        SetAutomatedNavigation(new JumpExitNavigation(exit));
+                
+        Global.Player.GlobalPosition = exit.GlobalPosition;
+        
+        base.OnJump(sender, e);
+    }
+
     private void ProcessAutopilotCancelled()
     {
         if (CurrentSoftware is not AutomatedNavigation automatedNavigation)

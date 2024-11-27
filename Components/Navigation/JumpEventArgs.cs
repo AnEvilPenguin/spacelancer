@@ -5,8 +5,12 @@ namespace Spacelancer.Components.Navigation;
 
 public class JumpEventArgs : EventArgs
 {
-    public Vector2 Target { get; init; }
-    public JumpEventArgs(Vector2 targetPosition) =>
-        Target = targetPosition;
-        
+    public string Destination { get; }
+    public string Origin { get; }
+
+    public JumpEventArgs(string destination, string origin)
+    {
+        Destination = destination;
+        Origin = origin;
+    }
 }

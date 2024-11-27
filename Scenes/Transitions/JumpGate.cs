@@ -64,5 +64,5 @@ public partial class JumpGate : Node2D, IDockable
         Name;
     
     public AutomatedNavigation GetDockComputer() =>
-        new JumpNavigation(this, Name);
+        new JumpEntranceNavigation(this, Name);
 }

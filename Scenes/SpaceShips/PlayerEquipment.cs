@@ -54,10 +54,6 @@ public partial class Player
     {
         PlayerNavigation defaultNavSoftware = new (this);
         _navComputer = new PlayerNavComputer(defaultNavSoftware);
-        _navComputer.Jumping += (sender, args) =>
-        {
-            GlobalPosition = args.Target;
-        };
         
         Sensor = new Sensor(10_000f);
         AddChild(Sensor);

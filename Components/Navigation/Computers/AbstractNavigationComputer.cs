@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Godot;
 using Spacelancer.Components.Navigation.Software;
 
@@ -22,6 +23,8 @@ public abstract class AbstractNavigationComputer : INavigationSoftware
     
     private readonly INavigationSoftware _backup;
     private INavigationSoftware _currentSoftware;
+    
+    private Stack<AutomatedNavigation> _navigationStack;
 
     protected virtual INavigationSoftware CurrentSoftware
     {
@@ -47,15 +50,11 @@ public abstract class AbstractNavigationComputer : INavigationSoftware
     {
         CurrentSoftware = software;
         
-        if (software is JumpNavigation jumpNavigation)
+        if (software is JumpEntranceNavigation jumpNavigation)
         {
             // TODO Think about this more. Can we hoof event generation off to abstract
             // Can we hoof more things in general off to the abstract?
-            jumpNavigation.Jumping += (_, e) =>
-            {
-                var raiseEvent = Jumping;
-                raiseEvent?.Invoke(this, e);
-            };
+            jumpNavigation.Jumping += OnJump;
         }
         
         // TODO StationNavigation
@@ -63,11 +62,26 @@ public abstract class AbstractNavigationComputer : INavigationSoftware
         software.Complete += OnAutopilotComplete;
         software.Aborted += OnAutopilotAborted;
     }
+
+    protected virtual void OnJump(object sender, JumpEventArgs e)
+    {
+        var raiseEvent = Jumping;
+        raiseEvent?.Invoke(this, e);
+    }
+    
+    public void SetNavigationStack(Stack<AutomatedNavigation> stack) => 
+        _navigationStack = stack;
     
     private void OnAutopilotComplete(object sender, EventArgs e)
     {
-        RaiseEvent(Complete);
-        CurrentSoftware = _backup;
+        if (_navigationStack == null || _navigationStack.Count == 0)
+        {
+            RaiseEvent(Complete);
+            CurrentSoftware = _backup;
+            return;
+        }
+        
+        SetAutomatedNavigation(_navigationStack.Pop());
     }
 
     private void OnAutopilotAborted(object sender, EventArgs e)
