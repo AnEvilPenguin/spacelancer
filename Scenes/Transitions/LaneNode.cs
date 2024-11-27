@@ -29,7 +29,7 @@ public partial class LaneNode : LanePart
     }
     
     // Required for the editor
-    public LaneNode() {}
+    private LaneNode() {}
     
     private void GenerateMarker()
     {
