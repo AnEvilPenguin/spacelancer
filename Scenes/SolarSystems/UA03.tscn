@@ -20,4 +20,4 @@ Id = "UA03_S01"
 [node name="Moonshot Jump Gate -> Danoher Station" parent="." index="2" instance=ExtResource("5_h2fqv")]
 position = Vector2(13000, 13000)
 rotation = 0.785398
-_ringCount = 11
+RingCount = 11

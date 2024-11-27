@@ -24,12 +24,12 @@ Id = "UA02"
 
 [node name="Sunrise Orbital Settlement -> Annika\'s Redoubt" parent="." index="3" instance=ExtResource("6_kctin")]
 position = Vector2(17000, 16000)
-_ringCount = 10
+RingCount = 10
 
 [node name="Sunrise Orbital Settlement -> Moonshot Jump Gate" parent="." index="4" instance=ExtResource("6_kctin")]
 position = Vector2(16000, 17000)
 rotation = 1.5708
-_ringCount = 14
+RingCount = 14
 
 [node name="TestNpc" parent="." index="5" instance=ExtResource("6_a5rky")]
 position = Vector2(16484, 16430)

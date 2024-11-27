@@ -25,9 +25,9 @@ Id = "UA03"
 [node name="Sunrise Jump Gate -> Brummbaer Station" parent="." index="3" instance=ExtResource("5_6vxd6")]
 position = Vector2(32000, 5000)
 rotation = 1.5708
-_ringCount = 11
+RingCount = 11
 
 [node name="Brummbaer Station -> Trifecta Jump Gate" parent="." index="4" instance=ExtResource("5_6vxd6")]
 position = Vector2(33477, 33564)
 rotation = 0.785398
-_ringCount = 14
+RingCount = 14
