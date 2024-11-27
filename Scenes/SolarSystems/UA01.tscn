@@ -33,3 +33,12 @@ RingCount = 14
 
 [node name="TestNpc" parent="." index="5" instance=ExtResource("6_a5rky")]
 position = Vector2(16484, 16430)
+
+[node name="TestNpc2" parent="." index="6" instance=ExtResource("6_a5rky")]
+position = Vector2(16943, 39865)
+
+[node name="TestNpc3" parent="." index="7" instance=ExtResource("6_a5rky")]
+position = Vector2(16195, 22181)
+
+[node name="TestNpc4" parent="." index="8" instance=ExtResource("6_a5rky")]
+position = Vector2(40372, 17145)
