@@ -5,6 +5,7 @@ namespace Spacelancer.Components.Navigation.Software;
 
 public abstract class AutomatedNavigation : INavigationSoftware
 {   
+    // FIXME single Complete event with an enum for what type it is to stop compiler whinging
     public abstract event EventHandler Complete;
     public abstract event EventHandler Aborted;
 

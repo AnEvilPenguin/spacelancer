@@ -1,5 +1,7 @@
 using Godot;
+using Serilog;
 using Spacelancer.Components.Equipment.Detection;
+using Spacelancer.Components.Navigation;
 using Spacelancer.Components.Navigation.Computers;
 using Spacelancer.Components.Navigation.Software;
 using Spacelancer.Controllers;
@@ -21,6 +23,8 @@ public partial class InitialNpcShip : Ship
     public override void _Ready()
     {
         _npcNavComputer = new NpcNavComputer(new NpcIdleNavigation());
+        _npcNavComputer.Jumping += (_, _) => OnJump();
+        
         IFF = new IdentificationFriendFoe(this, new SensorDetection(GetInstanceId(), "NPC Test", "Unaffiliated", SensorDetectionType.Ship, this));
         
         Sensor = new Sensor(10_000f);
@@ -32,12 +36,18 @@ public partial class InitialNpcShip : Ship
         if (NavComputer.GetCurrentSoftware() is not NpcIdleNavigation)
             return;
         
-        var comp = Global.SolarSystem.CalculateBestRoute(GlobalPosition, _destination);
+        var stack = Global.SolarSystem.GetAutomatedRoute(GlobalPosition, _destination);
+
+        var first = stack.Pop();
+        NavComputer.SetAutomatedNavigation(first);
         
-        NavComputer.SetAutomatedNavigation(comp);
-        
-        // TODO call out to system?
-        // Give it our position
-        // Get list of computers required to get to destination?
+        NavComputer.SetNavigationStack(stack);
+    }
+
+    private void OnJump()
+    {
+        // Evaluate if this is good enough in general
+        Visible = false;
+        QueueFree();
     }
 }

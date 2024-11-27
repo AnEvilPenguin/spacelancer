@@ -7,8 +7,9 @@ using Spacelancer.Components.Navigation.Software;
 
 namespace Spacelancer.Scenes.Transitions;
 
-public partial class LaneEntrance : LanePart
+public partial class LaneEntrance : LanePart, IDockable
 {
+    public string Id => "FIXME?";
     public override LanePart TowardsPair1 { get; set; }
     public override LanePart TowardsPair2 { get; set; }
     public override bool IsDisrupted { get; protected set; }
@@ -39,10 +40,13 @@ public partial class LaneEntrance : LanePart
     }
     
     // Required for the editor
-    public LaneEntrance() {}
+    private LaneEntrance() {}
     
     public Node2D GetExitNode() => 
         _exit;
+    
+    public Node2D GetEntranceNode() => 
+        _entrance;
 
     private Node2D GenerateMainNode(Vector2 position, Texture2D texture, Texture2D light, string name)
     {

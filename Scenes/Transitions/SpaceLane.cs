@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Godot;
+using Spacelancer.Components.Navigation;
+using Spacelancer.Components.Navigation.Software;
 
 namespace Spacelancer.Scenes.Transitions;
 
@@ -90,6 +92,10 @@ public partial class SpaceLane : Node2D
 		
 		return tuple;
 	}
+
+	public LaneEntrance GetNearestEntrance(Vector2 globalPosition) =>
+		globalPosition.DistanceTo(_pair1.GlobalPosition) < globalPosition.DistanceTo(_pair2.GlobalPosition) ? 
+			_pair1 : _pair2;
 
 	private void UpdateNodes()
 	{
