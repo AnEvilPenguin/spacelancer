@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
@@ -11,6 +12,18 @@ namespace Spacelancer.Controllers;
 
 public class SystemController
 {
+    private class RouteCalculation
+    {
+        public HashSet<ulong> SeenIds = new();
+        public Stack<Tuple<Vector2, SpaceLane>> Lanes = new();
+        public float WeightedDistance;
+        public float RemainingDistance;
+        public Vector2 CurrentLocation;
+        
+        public RouteCalculation Clone() =>
+            MemberwiseClone() as RouteCalculation;
+    }
+    
     public BaseSystem CurrentSystem { 
         get => _currentSystem;
         set
@@ -40,75 +53,81 @@ public class SystemController
         
         return output;
     }
-    
-    // 150 current max speed. We might want to move this to a constant or otherwise find a way of dealing with this
-    // 2500 for lane
-    
-    // Get weighted distance for lane
-    // if weighted distance to target less than any lane, go direct to target
-            
-    // Get all lanes that are closer than the target
-    // recheck distances if weighted distance to target less than any lane, go direct to target
-        
-    // Repeat until we have our best route
-        
-    // Build out list of computers and return
 
     private void BuildBestAutomatedRoute(Vector2 startPoint, Vector2 endPoint, Stack<AutomatedNavigation> output)
     {
-        var distance = startPoint.DistanceTo(endPoint);
-
-        var possibleLanes = GetLanesWithinRange(startPoint, distance);
-
         var weightedDistance = GetWeightedDistance(startPoint, endPoint, 150);
 
-        // TODO consider a class for making a private class to make holding these results easier?
-        var quickerLanes = possibleLanes.Where(l =>
-        {
-            var tuple = l.GetNavigationPositions(startPoint);
+        var seed = new RouteCalculation() 
+            { RemainingDistance = weightedDistance, CurrentLocation = startPoint };
 
-            // Can we get the lane to give us some of this?
-            // Or just move some of the specific speeds to constants or the like.
-            var weightedStart = GetWeightedDistance(startPoint, tuple.Item1, 150);
+        var routes = GetAutomatedRouteCalculation(seed, endPoint);
+        
+        if (routes.Count == 0)
+            return;
+
+        var bestRoute = routes.Aggregate((acc, cur) =>
+        {
+            if (acc.WeightedDistance < cur.WeightedDistance)
+                return acc;
+            
+            return cur;
+        });
+
+        foreach (var tuple in bestRoute.Lanes)
+        {
+            var entrance = tuple.Item2.GetNearestEntrance(tuple.Item1);
+            
+            // LIFO
+            output.Push(entrance.GetDockComputer());
+            output.Push(new SystemAutoNavigation(entrance));
+        }
+    }
+
+    private List<RouteCalculation> GetAutomatedRouteCalculation(RouteCalculation seed, Vector2 endPoint)
+    {
+        List<RouteCalculation> output = new ();
+
+        var start = seed.CurrentLocation;
+        var remaining = seed.RemainingDistance;
+        var seen = seed.SeenIds;
+        
+        var dist = start.DistanceTo(endPoint);
+        var rawRemaining = remaining * 150;
+        
+        var possibleLanes = GetLanesWithinRange(start, dist < rawRemaining ? dist : rawRemaining)
+            .Where(l => !seen.Contains(l.GetInstanceId()));
+
+        foreach (var lane in possibleLanes)
+        {
+            var tuple = lane.GetNavigationPositions(seed.CurrentLocation);
+            
+            var weightedStart = GetWeightedDistance(start, tuple.Item1, 150);
             var weightedMiddle = GetWeightedDistance(tuple.Item1, tuple.Item2, 2500);
             var weighedEnd = GetWeightedDistance(tuple.Item2, endPoint, 150);
 
             var total = weightedStart + weightedMiddle + weighedEnd;
 
-            return total < weightedDistance;
-        });
-        
-        var first = quickerLanes.FirstOrDefault();
-        
-        if (first == null)
-            return;
-        
-        var entrance = first.GetNearestEntrance(startPoint);
-        
-        // LIFO
-        output.Push(entrance.GetDockComputer());
-        output.Push(new SystemAutoNavigation(entrance));
+            var inRange = total < remaining;
+            
+            if (inRange)
+            {
+                var clone = seed.Clone();
+                clone.CurrentLocation = tuple.Item2;
+                clone.WeightedDistance += weightedStart + weightedMiddle;
+                clone.RemainingDistance -= weightedStart + weightedMiddle;
+                clone.Lanes.Push(new Tuple<Vector2, SpaceLane>(seed.CurrentLocation, lane));
+                clone.SeenIds.Add(lane.GetInstanceId());
+                
+                output.Add(clone);
+                
+                output.AddRange(GetAutomatedRouteCalculation(clone, endPoint));
+            }
+        }
+
+        return output;
     }
-
-    public AutomatedNavigation CalculateBestRoute(Vector2 startPoint, string targetId)
-    {
-        if(!_dockables.TryGetValue(targetId, out var target))
-            return null; // Better might be to throw an error?
-        
-        GetAutomatedRoute(startPoint, targetId);
-
-        var distanceToTarget = startPoint.DistanceTo(target.GlobalPosition);
-
-        var possibleLanes = GetLanesWithinRange(startPoint, distanceToTarget);
-        
-        if (!possibleLanes.Any())
-            return new SystemAutoNavigation(target);
-
-
-        
-        return new SystemAutoNavigation(target);
-    }
-
+    
     private void ProcessLists(BaseSystem system)
     {
         _spaceLanes.Clear();
