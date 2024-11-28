@@ -6,8 +6,7 @@ namespace Spacelancer.Components.Navigation.Software;
 
 public class LaneNavigation : AutomatedNavigation
 {
-    public override event EventHandler Complete;
-    public override event EventHandler Aborted;
+    public override event EventHandler<NavigationCompleteEventArgs> Complete;
     
     private enum LaneState
     {
@@ -155,7 +154,7 @@ public class LaneNavigation : AutomatedNavigation
         var length = proposed.Length();
 
         if (length <= 25)
-            RaiseEvent(Aborted);
+            RaiseEvent(Complete, new AbortedNavigationCompleteEventArgs());
         
         // slow down 
         return proposed.LimitLength(length * 0.95f);
@@ -163,7 +162,7 @@ public class LaneNavigation : AutomatedNavigation
 
     private Vector2 ProcessCompleteVector(Vector2 currentVelocity)
     {
-        RaiseEvent(Complete);
+        RaiseEvent(Complete, new GenericNavigationCompleteEventArgs());
 
         return currentVelocity;
     }

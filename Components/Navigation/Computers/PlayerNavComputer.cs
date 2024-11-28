@@ -45,10 +45,6 @@ public sealed class PlayerNavComputer : AbstractNavigationComputer
         else if (Input.IsActionJustPressed("AutoPilotDock"))
             ProcessAutopilotDocked();
     }
-        
-    // Do we need to figure out something better?
-    // Can we send a softwareType or something?
-    public INavigationSoftware GetCurrentSoftware() => CurrentSoftware;
 
     public void ProcessNewTarget(Node2D target) =>
         _currentTarget = target;

@@ -49,18 +49,8 @@ public abstract class AbstractNavigationComputer : INavigationSoftware
     public void SetAutomatedNavigation(AutomatedNavigation software)
     {
         CurrentSoftware = software;
-        
-        if (software is JumpEntranceNavigation jumpNavigation)
-        {
-            // TODO Think about this more. Can we hoof event generation off to abstract
-            // Can we hoof more things in general off to the abstract?
-            jumpNavigation.Jumping += OnJump;
-        }
-        
-        // TODO StationNavigation
 
         software.Complete += OnAutopilotComplete;
-        software.Aborted += OnAutopilotAborted;
     }
 
     protected virtual void OnJump(object sender, JumpEventArgs e)
@@ -72,8 +62,21 @@ public abstract class AbstractNavigationComputer : INavigationSoftware
     public void SetNavigationStack(Stack<AutomatedNavigation> stack) => 
         _navigationStack = stack;
     
-    private void OnAutopilotComplete(object sender, EventArgs e)
+    private void OnAutopilotComplete(object sender, NavigationCompleteEventArgs e)
     {
+        switch (e.Type)
+        {
+            // TODO station docking
+            case NavigationCompleteType.Jumped:
+                if (e is JumpNavigationCompleteEventArgs newEvent) 
+                    OnJump(sender, new JumpEventArgs(newEvent.Destination, newEvent.Origin));
+                return;
+            
+            case NavigationCompleteType.Aborted:
+                OnAutopilotAborted();
+                break;
+        }
+        
         if (_navigationStack == null || _navigationStack.Count == 0)
         {
             RaiseEvent(Complete);
@@ -84,7 +87,7 @@ public abstract class AbstractNavigationComputer : INavigationSoftware
         SetAutomatedNavigation(_navigationStack.Pop());
     }
 
-    private void OnAutopilotAborted(object sender, EventArgs e)
+    private void OnAutopilotAborted()
     {
         RaiseEvent(Disrupted);
         CurrentSoftware = _backup;

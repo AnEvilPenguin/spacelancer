@@ -13,8 +13,7 @@ public class JumpExitNavigation : AutomatedNavigation
         Complete
     }
     
-    public override event EventHandler Complete;
-    public override event EventHandler Aborted;
+    public override event EventHandler<NavigationCompleteEventArgs> Complete;
 
     private readonly Vector2 _destination;
     private JumpState _state = JumpState.Exiting;
@@ -53,7 +52,7 @@ public class JumpExitNavigation : AutomatedNavigation
 
     private Vector2 ProcessCompleteVector()
     {
-        RaiseEvent(Complete);
+        RaiseEvent(Complete, new GenericNavigationCompleteEventArgs());
         return Vector2.Zero;
     }
     

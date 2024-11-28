@@ -15,9 +15,7 @@ public class JumpEntranceNavigation : AutomatedNavigation
         Complete,
     }
 
-    public override event EventHandler Complete;
-    public override event EventHandler Aborted;
-    public event EventHandler<JumpEventArgs> Jumping; 
+    public override event EventHandler<NavigationCompleteEventArgs> Complete;
 
     public override string Name => $"JumpEntrance - {_state}";
     public override NavigationSoftwareType Type => NavigationSoftwareType.Docking;
@@ -48,9 +46,12 @@ public class JumpEntranceNavigation : AutomatedNavigation
             JumpState.Complete => ProcessCompleteVector(),
             _ => Vector2.Zero
         };
-    
-    public override void DisruptTravel() =>
-        RaiseEvent(Aborted);
+
+    public override void DisruptTravel()
+    {
+        RaiseEvent(Complete, new AbortedNavigationCompleteEventArgs());
+    }
+        
     
     private Vector2 ProcessInitializingVector(Vector2 currentVelocity)
     {
@@ -96,8 +97,7 @@ public class JumpEntranceNavigation : AutomatedNavigation
     
     private Vector2 ProcessCompleteVector()
     {
-        var raiseEvent = Jumping;
-        raiseEvent?.Invoke(this, new JumpEventArgs(_destination, _originalSystem));
+        RaiseEvent(Complete, new JumpNavigationCompleteEventArgs(_originalSystem, _destination));
         
         return Vector2.Zero;
     }
