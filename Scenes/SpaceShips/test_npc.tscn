@@ -7,3 +7,4 @@
 script = ExtResource("1_yr4q7")
 
 [node name="BasicSmallShip" parent="." instance=ExtResource("2_6qybk")]
+z_index = -1
