@@ -58,9 +58,15 @@ public abstract class AbstractNavigationComputer : INavigationSoftware
         var raiseEvent = Jumping;
         raiseEvent?.Invoke(this, e);
     }
-    
-    public void SetNavigationStack(Stack<AutomatedNavigation> stack) => 
+
+    public void SetNavigationStack(Stack<AutomatedNavigation> stack)
+    {
         _navigationStack = stack;
+
+        if (_currentSoftware == _backup)
+            SetAutomatedNavigation(_navigationStack.Pop());
+    }
+        
     
     private void OnAutopilotComplete(object sender, NavigationCompleteEventArgs e)
     {
