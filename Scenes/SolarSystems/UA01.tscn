@@ -37,6 +37,7 @@ RingCount = 14
 [node name="Sunrise Orbital  => Moonshot" parent="Trade Routes" index="0" node_paths=PackedStringArray("_route") instance=ExtResource("7_xfis1")]
 _nonPlayerCharacterScene = ExtResource("6_a5rky")
 _route = [NodePath("../../Sunrise Orbital Settlement"), NodePath("../../Sunrise Orbital Settlement -> Moonshot Jump Gate"), NodePath("../../Moonshot")]
+_biDirectional = true
 
 [node name="Moonshot => Annika\'s Redoubt" parent="Trade Routes" index="1" node_paths=PackedStringArray("_route") instance=ExtResource("7_xfis1")]
 _maxTimerSeconds = 120.0

@@ -59,8 +59,13 @@ public partial class TradeRoute : Node
             if (_timer.IsStopped())
                 StartTimer();
         };
+
+        var route = _route.ToList();
         
-        npc.GlobalPosition = _route[0].GlobalPosition;
+        if (_biDirectional && GD.Randi() % 2 == 0)
+            route.Reverse();
+        
+        npc.GlobalPosition = route[0].GlobalPosition;
         
         var tradeRoute = GetTradeRoute(npc.GlobalPosition);
         
