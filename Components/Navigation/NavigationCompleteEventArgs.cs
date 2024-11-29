@@ -1,4 +1,5 @@
 using System;
+using Spacelancer.Scenes.Stations;
 
 namespace Spacelancer.Components.Navigation;
 
@@ -24,9 +25,9 @@ public class JumpNavigationCompleteEventArgs : NavigationCompleteEventArgs
 
 public class DockingNavigationCompleteEventArgs : NavigationCompleteEventArgs
 {
-    public string Destination { get; }
+    public Station Destination { get; }
 
-    public DockingNavigationCompleteEventArgs(string destination) : base(NavigationCompleteType.Docked)
+    public DockingNavigationCompleteEventArgs(Station destination) : base(NavigationCompleteType.Docked)
     {
         Destination = destination;
     }

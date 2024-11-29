@@ -18,11 +18,6 @@ public partial class Station : Node2D, IDockable
 	[Export]
 	public string Id { get; private set; }
 
-	public AutomatedNavigation GetDockComputer()
-	{
-		throw new NotImplementedException();
-	}
-
 	// Is there a better way of dealing with this?
 	public new string Name => base.Name;
 
@@ -132,6 +127,9 @@ public partial class Station : Node2D, IDockable
 			
 			return dist1 < dist2 ? cur : acc;
 		});
+
+	public AutomatedNavigation GetDockComputer() =>
+		new StationDockingNavigation(this);
 
 	public string GetName(Vector2 _) =>
 		Name;
