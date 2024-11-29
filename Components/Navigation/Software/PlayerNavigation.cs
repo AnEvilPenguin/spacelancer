@@ -1,8 +1,8 @@
 ﻿using System;
 using Godot;
-using Serilog;
+using Spacelancer.Scenes.SpaceShips;
 
-namespace Spacelancer.Components.Navigation;
+namespace Spacelancer.Components.Navigation.Software;
 
 public class PlayerNavigation : INavigationSoftware
 {
@@ -10,9 +10,9 @@ public class PlayerNavigation : INavigationSoftware
     public NavigationSoftwareType Type => NavigationSoftwareType.Manual;
 
     private const string _name = "PlayerNavigation";
-    private readonly Scenes.Player.Player _player;
+    private readonly Player _player;
 
-    public PlayerNavigation(Scenes.Player.Player player)
+    public PlayerNavigation(Player player)
     {
         _player = player;
     }

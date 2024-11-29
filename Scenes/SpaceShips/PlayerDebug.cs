@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using Godot;
-using Spacelancer.Components.Navigation;
+using Spacelancer.Components.Navigation.Software;
 
-namespace Spacelancer.Scenes.Player;
+namespace Spacelancer.Scenes.SpaceShips;
 
 public partial class Player
 {
@@ -15,7 +15,7 @@ public partial class Player
     private Line2D _velocityLine;
     private Line2D _accelerationLine;
 
-    private void DebugVelocity()
+    protected override void DebugVelocity()
     {
         if (!OS.IsDebugBuild())
             return;
@@ -25,7 +25,7 @@ public partial class Player
         DrawDebugLine(_velocityLine, GlobalPosition, GlobalPosition + Velocity);
     }
     
-    private void DebugAcceleration(Vector2 acceleration)
+    protected override void DebugAcceleration(Vector2 acceleration)
     {
         if (!OS.IsDebugBuild())
             return;
@@ -38,7 +38,7 @@ public partial class Player
         DrawDebugLine(_accelerationLine, GlobalPosition, end);
     }
     
-    private void DebugRotation()
+    protected override void DebugRotation()
     {
         if (!OS.IsDebugBuild())
             return;
@@ -51,7 +51,7 @@ public partial class Player
         _rotationLabel.Text = $"{RotationDegrees:F2}\u00b0";
     }
 
-    private void DebugSpeed(float speed)
+    protected override void DebugSpeed(float speed)
     {
         if (!OS.IsDebugBuild())
             return;
@@ -69,7 +69,7 @@ public partial class Player
             _speedLabel.AddThemeColorOverride("font_color", Colors.Red);
     }
 
-    private void DebugNav()
+    protected override void DebugNav()
     {
         if (!OS.IsDebugBuild())
             return;

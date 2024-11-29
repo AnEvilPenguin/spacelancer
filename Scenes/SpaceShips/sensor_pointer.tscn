@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bcvgsj62cn1gl"]
 
-[ext_resource type="Script" path="res://Scenes/Player/SensorPointer.cs" id="1_ae7f2"]
+[ext_resource type="Script" path="res://Scenes/SpaceShips/SensorPointer.cs" id="1_ae7f2"]
 [ext_resource type="Texture2D" uid="uid://cylcyupvcvudt" path="res://Assets/Placeholder Art/ship_B.png" id="2_rrw1k"]
 
 [node name="SensorPointer" type="Node2D"]

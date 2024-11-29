@@ -1,32 +1,31 @@
-﻿using Godot;
-using Serilog;
+﻿using Serilog;
 using Spacelancer.Components.Equipment.Detection;
 using Spacelancer.Components.Equipment.Storage;
 using Spacelancer.Components.Navigation;
+using Spacelancer.Components.Navigation.Computers;
+using Spacelancer.Components.Navigation.Software;
 using Spacelancer.Controllers;
 using Spacelancer.Economy;
 
-namespace Spacelancer.Scenes.Player;
+namespace Spacelancer.Scenes.SpaceShips;
 
 public partial class Player
 {
-    public CargoHold Hold;
-    
-    public PlayerNavComputer NavComputer;
-    
+    public override AbstractNavigationComputer NavComputer => _navComputer;
+
+    private PlayerNavComputer _navComputer;
     public INavigationSoftware NavSoftware => NavComputer.GetCurrentSoftware();
 
     public int Credits = 500;
 
-    private Sensor _sensor;
-
-    private IdentificationFriendFoe _iff;
+    protected override Sensor Sensor { get; set; }
+    protected override IdentificationFriendFoe IFF { get; set; }
     
     public void SetTarget(ulong id)
     {
-        _sensor.LockTarget(id);
+        Sensor.LockTarget(id);
 
-        var detection = _sensor.GetLockedTarget();
+        var detection = Sensor.GetLockedTarget();
 
         if (detection == null)
         {
@@ -35,41 +34,38 @@ public partial class Player
         }
             
         SetPointerTarget(detection.Body);
-        NavComputer.ProcessNewTarget(detection.Body);
+        _navComputer.ProcessNewTarget(detection.Body);
         Global.UserInterface.SetSensorViewPortTarget(detection.Body);
     }
 
     public void ClearTarget()
     {
-        _sensor.ClearLockedTarget();
+        Sensor.ClearLockedTarget();
         
         ClearPointerTarget();
-        NavComputer.ClearTarget();
+        _navComputer.ClearTarget();
         Global.UserInterface.ClearSensorViewPortTarget();
     }
     
     public SensorDetection GetTarget() =>
-        _sensor.GetLockedTarget();
-
-    public void ResetNavComputer() =>
-        NavComputer.ResetNavSoftware();
+        Sensor.GetLockedTarget();
 
     private void SetDefaultEquipment()
     {
         PlayerNavigation defaultNavSoftware = new (this);
-        NavComputer = new PlayerNavComputer(defaultNavSoftware);
+        _navComputer = new PlayerNavComputer(defaultNavSoftware);
         
-        _sensor = new Sensor(10_000f);
-        AddChild(_sensor);
+        Sensor = new Sensor(10_000f);
+        AddChild(Sensor);
 
-        _sensor.SensorDetection += (sender, args) =>
+        Sensor.SensorDetection += (sender, args) =>
             Global.UserInterface.AddSensorDetection(args.Detection);
 
-        _sensor.SensorLost += (sender, args) =>
+        Sensor.SensorLost += (sender, args) =>
             Global.UserInterface.RemoveSensorDetection(args.Id);
 
         var detection = new SensorDetection(GetInstanceId(), "Player", "Temp", SensorDetectionType.Ship, this);
-        _iff = new IdentificationFriendFoe(this, detection);
+        IFF = new IdentificationFriendFoe(this, detection);
         
         Hold = new CargoHold(CommoditySize.Medium, 100);
     }

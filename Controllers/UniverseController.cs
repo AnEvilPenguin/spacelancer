@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Godot;
 using Serilog;
 using Spacelancer.Scenes.SolarSystems;
 using Spacelancer.Scenes.Stations;
 using Spacelancer.Universe;
-using Spacelancer.Util;
 
 namespace Spacelancer.Controllers;
 
@@ -70,6 +68,8 @@ public class UniverseController
             
             _systemScenes.Add(system.Id, scene);
             _systemNames.Add(system.Name, system.Id);
+            
+            // TODO build up lists of lanes, jumpgates, stations, etc.
             
             system.QueueFree();
             

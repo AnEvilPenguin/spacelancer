@@ -1,7 +1,6 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using Godot;
-using Spacelancer.Components.Equipment.Detection;
 
 namespace Spacelancer.Scenes.Transitions;
 
@@ -19,7 +18,8 @@ public partial class SpaceLane : Node2D
 	public Texture2D StopLight { get; private set; }
 
 	[ExportGroup("Generation")] 
-	[Export] private int _spacing
+	[Export] 
+	private int Spacing
 	{
 		get => _spacingValue;
 		set
@@ -30,7 +30,8 @@ public partial class SpaceLane : Node2D
 	}
 	private int _spacingValue = 1000;
 
-	[Export] private int _ringCount 
+	[Export] 
+	private int RingCount 
 	{ 
 		get => _ringCountValue;
 		set {
@@ -47,7 +48,7 @@ public partial class SpaceLane : Node2D
 	private LaneEntrance _pair2;
 
 	[Export]
-	private Vector2 _offset
+	private Vector2 Offset
 	{
 		get => _offsetValue;
 		set
@@ -80,6 +81,22 @@ public partial class SpaceLane : Node2D
 		UpdateNodes();
 	}
 
+	public Tuple<Vector2, Vector2> GetNavigationPositions(Vector2 globalPosition)
+	{
+		var d1 = globalPosition.DistanceTo(_pair1.GlobalPosition);
+		var d2 = globalPosition.DistanceTo(_pair2.GlobalPosition);
+		
+		var tuple = d1 < d2 ?
+			new Tuple<Vector2, Vector2>(_pair1.GlobalPosition, _pair2.GlobalPosition) :
+			new Tuple<Vector2, Vector2>(_pair2.GlobalPosition, _pair1.GlobalPosition);
+		
+		return tuple;
+	}
+
+	public LaneEntrance GetNearestEntrance(Vector2 globalPosition) =>
+		globalPosition.DistanceTo(_pair1.GlobalPosition) < globalPosition.DistanceTo(_pair2.GlobalPosition) ? 
+			_pair1 : _pair2;
+
 	private void UpdateNodes()
 	{
 		Regenerate();
@@ -101,10 +118,10 @@ public partial class SpaceLane : Node2D
 		}
 		_laneParts.Clear();
 		
-		var distance = _spacing * (_ringCount + 1);
+		var distance = Spacing * (RingCount + 1);
 		
-		_pair1 = new LaneEntrance(Vector2.Zero, _offset, MainTexture, GoLight, StopLight);
-		_pair2 = new LaneEntrance(new Vector2(distance, 0), _offset, MainTexture, GoLight, StopLight);
+		_pair1 = new LaneEntrance(Vector2.Zero, Offset, MainTexture, GoLight, StopLight);
+		_pair2 = new LaneEntrance(new Vector2(distance, 0), Offset, MainTexture, GoLight, StopLight);
 
 		_pair1.Partner = _pair2;
 		_pair2.Partner = _pair1;
@@ -137,10 +154,10 @@ public partial class SpaceLane : Node2D
 
 		LanePart previous = _pair1;
 
-		for (int i = 1; i <= _ringCount; i++)
+		for (int i = 1; i <= RingCount; i++)
 		{
-			var position = new Vector2(i * _spacing, 0);
-			var node = new LaneNode(position, IntermediateTexture, _offset);
+			var position = new Vector2(i * Spacing, 0);
+			var node = new LaneNode(position, IntermediateTexture, Offset);
 			node.Rotation = _pair1.Rotation;
 			
 			_laneParts.Add(node);

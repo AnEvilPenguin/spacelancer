@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://dwec2s7ibu8qw"]
+
+[ext_resource type="Script" path="res://Scenes/SpaceShips/Player.cs" id="1_43xxl"]
+[ext_resource type="PackedScene" uid="uid://dmtjacjk6ifqj" path="res://Scenes/SpaceShips/basic_small_ship.tscn" id="3_1ncxb"]
+[ext_resource type="PackedScene" uid="uid://bcvgsj62cn1gl" path="res://Scenes/SpaceShips/sensor_pointer.tscn" id="3_ij0uf"]
+
+[node name="Player" type="CharacterBody2D"]
+up_direction = Vector2(0, 1)
+script = ExtResource("1_43xxl")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="SensorPointer" parent="." instance=ExtResource("3_ij0uf")]
+visible = false
+Distance = 75
+Color = Color(0.6014, 0.87785, 0.97, 1)
+
+[node name="BasicSmallShip" parent="." instance=ExtResource("3_1ncxb")]

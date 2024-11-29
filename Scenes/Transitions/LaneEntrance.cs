@@ -3,11 +3,13 @@ using System.Linq;
 using Godot;
 using Spacelancer.Components.Equipment.Detection;
 using Spacelancer.Components.Navigation;
+using Spacelancer.Components.Navigation.Software;
 
 namespace Spacelancer.Scenes.Transitions;
 
 public partial class LaneEntrance : LanePart, IDockable
 {
+    public string Id => "FIXME?";
     public override LanePart TowardsPair1 { get; set; }
     public override LanePart TowardsPair2 { get; set; }
     public override bool IsDisrupted { get; protected set; }
@@ -38,10 +40,13 @@ public partial class LaneEntrance : LanePart, IDockable
     }
     
     // Required for the editor
-    public LaneEntrance() {}
+    private LaneEntrance() {}
     
     public Node2D GetExitNode() => 
         _exit;
+    
+    public Node2D GetEntranceNode() => 
+        _entrance;
 
     private Node2D GenerateMainNode(Vector2 position, Texture2D texture, Texture2D light, string name)
     {
@@ -117,13 +122,13 @@ public partial class LaneEntrance : LanePart, IDockable
     {
         // Log.Debug("{Body} entered space lane {Origin} to {Destination}", body.Name, Name, Partner.Name);
 
-        if (body is Player.Player player)
+        if (body is SpaceShips.Player player)
         {
             TakeControlOfShip(player);
         }
     }
 
-    private void TakeControlOfShip(Player.Player player)
+    private void TakeControlOfShip(SpaceShips.Player player)
     {
         if (player.NavSoftware is not PlayerNavigation)
             return;

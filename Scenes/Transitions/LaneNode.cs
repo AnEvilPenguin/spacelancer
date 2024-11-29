@@ -1,7 +1,6 @@
 using Godot;
-using Serilog;
 using Spacelancer.Components.Equipment.Detection;
-using Spacelancer.Components.Navigation;
+using Spacelancer.Components.Navigation.Software;
 
 namespace Spacelancer.Scenes.Transitions;
 
@@ -30,7 +29,7 @@ public partial class LaneNode : LanePart
     }
     
     // Required for the editor
-    public LaneNode() {}
+    private LaneNode() {}
     
     private void GenerateMarker()
     {
@@ -46,7 +45,7 @@ public partial class LaneNode : LanePart
         // TODO health and actually disrupt our rings
         ring.Area2D.BodyEntered += (Node2D body) =>
         {
-            if (body is not Player.Player player)
+            if (body is not SpaceShips.Player player)
                 return;
             
             if (player.NavSoftware is not LaneNavigation navigation)

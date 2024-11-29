@@ -1,9 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Godot;
 using Serilog;
-using Spacelancer.Controllers;
 
 namespace Spacelancer.Components.Equipment.Detection;
 

@@ -1,4 +1,5 @@
 using Godot;
+using Spacelancer.Scenes.SpaceShips;
 
 namespace Spacelancer.Controllers;
 
@@ -13,8 +14,10 @@ public partial class Global : Node
     public static GameController GameController;
     public static EconomyController Economy { get; } = new();
     public static UniverseController Universe { get; } = new();
+    
+    public static SystemController SolarSystem { get; } = new();
     public static UiController UserInterface { get; private set; }
-    public static Scenes.Player.Player Player;
+    public static Player Player;
     
     internal Logger Logger;
     internal SettingsController SettingsController;

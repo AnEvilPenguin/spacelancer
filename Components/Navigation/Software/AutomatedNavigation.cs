@@ -1,12 +1,14 @@
 using System;
 using Godot;
+using Spacelancer.Components.Equipment.Detection;
 
-namespace Spacelancer.Components.Navigation;
+namespace Spacelancer.Components.Navigation.Software;
 
 public abstract class AutomatedNavigation : INavigationSoftware
 {   
-    public abstract event EventHandler Complete;
-    public abstract event EventHandler Aborted;
+    // FIXME single Complete event with an enum for what type it is to stop compiler whinging
+    // Could then have a jump specific one inheriting from that
+    public abstract event EventHandler<NavigationCompleteEventArgs> Complete;
 
     public abstract void DisruptTravel();
     
@@ -16,9 +18,9 @@ public abstract class AutomatedNavigation : INavigationSoftware
 
     public abstract Vector2 GetVelocity(float maxSpeed, Vector2 currentPosition, Vector2 currentVelocity);
     
-    protected void RaiseEvent(EventHandler handler)
+    protected void RaiseEvent(EventHandler<NavigationCompleteEventArgs> handler, NavigationCompleteEventArgs e)
     {
         var raiseEvent = handler;
-        raiseEvent?.Invoke(this, EventArgs.Empty);
+        raiseEvent?.Invoke(this, e);
     }
 }

@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://bs1i30idi6jyx"]
+
+[ext_resource type="Script" path="res://Scenes/SpaceShips/InitialNpcShip.cs" id="1_yr4q7"]
+[ext_resource type="PackedScene" uid="uid://xmqmk1qfu54" path="res://Scenes/SpaceShips/basic_small_ship_alt.tscn" id="2_6qybk"]
+
+[node name="TestNpc" type="CharacterBody2D"]
+script = ExtResource("1_yr4q7")
+
+[node name="BasicSmallShip" parent="." instance=ExtResource("2_6qybk")]
+z_index = -1

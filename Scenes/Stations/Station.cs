@@ -5,6 +5,7 @@ using Godot;
 using Serilog;
 using Spacelancer.Components.Equipment.Detection;
 using Spacelancer.Components.Navigation;
+using Spacelancer.Components.Navigation.Software;
 using Spacelancer.Components.NPCs;
 using Spacelancer.Economy;
 using Spacelancer.Scenes.UI.StationMenu;
@@ -12,11 +13,14 @@ using Spacelancer.Util;
 
 namespace Spacelancer.Scenes.Stations;
 
-public partial class Station : Node2D, INavigable
+public partial class Station : Node2D, IDockable
 {
 	[Export]
-	public string Id;
-	
+	public string Id { get; private set; }
+
+	// Is there a better way of dealing with this?
+	public new string Name => base.Name;
+
 	// We may need to consider making this docking range if we make a map and remote comms or something
 	private bool _playerInCommsRange = false;
 	private StationMenu _menu;
@@ -28,7 +32,7 @@ public partial class Station : Node2D, INavigable
 	
 	private IdentificationFriendFoe _iff;
 	private List<Marker2D> _markers;
-	
+
 	public override void _Ready()
 	{
 		var stationBorder = GetNode<Area2D>("Area2D");
@@ -124,12 +128,15 @@ public partial class Station : Node2D, INavigable
 			return dist1 < dist2 ? cur : acc;
 		});
 
+	public AutomatedNavigation GetDockComputer() =>
+		new StationDockingNavigation(this);
+
 	public string GetName(Vector2 _) =>
 		Name;
 
 	private void OnStationAreaEntered(Node2D body)
 	{
-		if (body is Player.Player)
+		if (body is SpaceShips.Player)
 		{
 			_playerInCommsRange = true;
 			Log.Debug("Player in comms range of {StationName}", Name);
@@ -142,7 +149,7 @@ public partial class Station : Node2D, INavigable
 
 	private void OnStationAreaExited(Node2D body)
 	{
-		if (body is Player.Player)
+		if (body is SpaceShips.Player)
 		{
 			_playerInCommsRange = false;
 			Log.Debug("Player left comms range of {StationName}", Name);

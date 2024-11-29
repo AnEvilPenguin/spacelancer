@@ -1,15 +1,12 @@
 using System;
 using Godot;
 using Serilog;
-using Spacelancer.Scenes.Player;
 
-namespace Spacelancer.Components.Navigation;
+namespace Spacelancer.Components.Navigation.Software;
 
 public class SystemAutoNavigation : AutomatedNavigation
 {
-    public override event EventHandler Complete;
-    public override event EventHandler Aborted;
-    
+    public override event EventHandler<NavigationCompleteEventArgs> Complete;
     private enum NavigationState
     {
         Start,
@@ -55,7 +52,7 @@ public class SystemAutoNavigation : AutomatedNavigation
     // At the moment we basically don't need to deal with this.
     // If we implement warp or something we may need to revisit.
     public override void DisruptTravel() =>
-        RaiseEvent(Aborted);
+        RaiseEvent(Complete, new AbortedNavigationCompleteEventArgs());
 
     private Vector2 ProcessStarting(Vector2 currentPosition)
     {
@@ -90,7 +87,7 @@ public class SystemAutoNavigation : AutomatedNavigation
 
     private Vector2 ProcessComplete()
     {
-        RaiseEvent(Complete);
+        RaiseEvent(Complete, new GenericNavigationCompleteEventArgs());
         return Vector2.Zero;
     }
 

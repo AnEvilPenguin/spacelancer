@@ -6,7 +6,7 @@ namespace Spacelancer.Components.Equipment.Detection;
 public partial class IdentificationFriendFoe : Area2D, ISensorDetectable
 {
     private Node2D _parent;
-    private SensorDetection _detection;
+    private readonly SensorDetection _detection;
     
     public IdentificationFriendFoe(Node2D parent, SensorDetection detection)
     {
@@ -24,7 +24,8 @@ public partial class IdentificationFriendFoe : Area2D, ISensorDetectable
         AddChild(collisionShape2D);
     }
 
-    public IdentificationFriendFoe() {}
+    // Required for editor
+    private IdentificationFriendFoe() {}
 
     public SensorDetection Detect() =>
         _detection;

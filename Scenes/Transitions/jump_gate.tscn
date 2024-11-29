@@ -44,3 +44,20 @@ shape = SubResource("RectangleShape2D_qwpvd")
 
 [node name="Exit" type="Marker2D" parent="."]
 position = Vector2(0.25, -68.5)
+
+[node name="Markers" type="Node2D" parent="."]
+
+[node name="TopLeft" type="Marker2D" parent="Markers"]
+position = Vector2(-75, -100)
+
+[node name="TopCenter" type="Marker2D" parent="Markers"]
+position = Vector2(0, -125)
+
+[node name="TopRight" type="Marker2D" parent="Markers"]
+position = Vector2(75, -100)
+
+[node name="CenterLeft" type="Marker2D" parent="Markers"]
+position = Vector2(-125, -50)
+
+[node name="CenterRight" type="Marker2D" parent="Markers"]
+position = Vector2(125, -50)

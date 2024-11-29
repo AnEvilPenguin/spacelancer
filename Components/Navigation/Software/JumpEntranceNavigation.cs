@@ -1,42 +1,32 @@
 ﻿using System;
 using Godot;
 using Serilog;
-using Spacelancer.Controllers;
 using Spacelancer.Scenes.Transitions;
-using Spacelancer.Scenes.Player;
 
-namespace Spacelancer.Components.Navigation;
+namespace Spacelancer.Components.Navigation.Software;
 
-public class JumpNavigation : AutomatedNavigation
+public class JumpEntranceNavigation : AutomatedNavigation
 {
     private enum JumpState
     {
         Initializing,
         Approaching,
         Entering,
-        Travelling,
-        Exiting,
-        Complete
+        Complete,
     }
 
-    public override event EventHandler Complete;
-    public override event EventHandler Aborted;
+    public override event EventHandler<NavigationCompleteEventArgs> Complete;
 
-    public override string Name => $"JumpNavigation - {_state}";
+    public override string Name => $"JumpEntrance - {_state}";
     public override NavigationSoftwareType Type => NavigationSoftwareType.Docking;
     
     private readonly JumpGate _origin;
     private readonly string _originalSystem;
-    private JumpGate _exit;
     private readonly string _destination;
-    
-    private Node2D _destinationNode;
-    private Vector2 _exitMarker;
-    
 
     private JumpState _state;
     
-    public JumpNavigation(JumpGate origin, string destination)
+    public JumpEntranceNavigation(JumpGate origin, string destination)
     {
         _origin = origin;
         _destination = destination;
@@ -53,14 +43,15 @@ public class JumpNavigation : AutomatedNavigation
             JumpState.Initializing => ProcessInitializingVector(currentVelocity),
             JumpState.Approaching => ProcessApproachingVector(currentPosition),
             JumpState.Entering => ProcessEnteringVector(currentPosition, currentVelocity),
-            JumpState.Travelling => ProcessTravellingVector(),
-            JumpState.Exiting => ProcessExitingVector(currentPosition),
             JumpState.Complete => ProcessCompleteVector(),
             _ => Vector2.Zero
         };
-    
-    public override void DisruptTravel() =>
-        RaiseEvent(Aborted);
+
+    public override void DisruptTravel()
+    {
+        RaiseEvent(Complete, new AbortedNavigationCompleteEventArgs());
+    }
+        
     
     private Vector2 ProcessInitializingVector(Vector2 currentVelocity)
     {
@@ -95,53 +86,19 @@ public class JumpNavigation : AutomatedNavigation
 
     private Vector2 ProcessEnteringVector(Vector2 currentPosition, Vector2 currentVelocity)
     {
-        if (_destinationNode == null)
-        {
-            var destinationId = Global.Universe.GetSystemId(_destination);
-            _destinationNode = Global.GameController.LoadSystem(destinationId);
-        }
-
         if ((currentPosition - _origin.GlobalPosition).Length() < 25)
-        {
-            SetState(JumpState.Travelling);
-            return Vector2.Zero;
-        }
-        
-        return currentVelocity.LimitLength(5);
-    }
-
-    private Vector2 ProcessTravellingVector()
-    {
-        _exit = _destinationNode.GetNode<JumpGate>($"{_originalSystem}");
-        _exitMarker = _exit.GetExitMarker();
-        
-        _destinationNode.Visible = true;
-        
-        // FIXME we probably need a method of setting the target ship for cases like this
-        // new signal up for 'warp/teleport' or something
-        Global.Player.GlobalPosition = _exit.GlobalPosition;
-        
-        SetState(JumpState.Exiting);
-        
-        return Vector2.Zero;
-    }
-
-    private Vector2 ProcessExitingVector(Vector2 currentPosition)
-    {
-        var proposed = _exitMarker - currentPosition;
-        
-        if (proposed.Length() < 5)
         {
             SetState(JumpState.Complete);
             return Vector2.Zero;
         }
         
-        return proposed.LimitLength(50);
+        return currentVelocity.LimitLength(5);
     }
     
     private Vector2 ProcessCompleteVector()
     {
-        RaiseEvent(Complete);
+        RaiseEvent(Complete, new JumpNavigationCompleteEventArgs(_originalSystem, _destination));
+        
         return Vector2.Zero;
     }
     

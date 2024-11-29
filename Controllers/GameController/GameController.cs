@@ -4,7 +4,7 @@ using System.Linq;
 using Godot;
 using Serilog;
 using Spacelancer.Scenes.SolarSystems;
-using Spacelancer.Scenes.Player;
+using Spacelancer.Scenes.SpaceShips;
 using Spacelancer.Scenes.Stations;
 
 namespace Spacelancer.Controllers;
@@ -20,11 +20,10 @@ public partial class GameController : Node
     private Control _gui;
     private Node2D _world2D;
 
-    private Dictionary<string, Node> _loadedScenes = new Dictionary<string, Node>();
-    private Dictionary<ulong, string> _nodeToPathLookup = new Dictionary<ulong, string>();
+    private Dictionary<string, Node> _loadedScenes = new ();
+    private Dictionary<ulong, string> _nodeToPathLookup = new ();
     
     private BaseSystem _currentSystem;
-    private BaseSystem _previousSystem;
 
     public override void _Ready()
     {
@@ -48,7 +47,7 @@ public partial class GameController : Node
         
         Global.Economy.LoadEconomy();
         
-        Global.Player = LoadScene<Player>("res://Scenes/Player/player.tscn");
+        Global.Player = LoadScene<Player>("res://Scenes/SpaceShips/player.tscn");
         
         Global.UserInterface.ShowSensorDisplay();
         Global.UserInterface.ShowAutopilotMenu();
@@ -71,6 +70,7 @@ public partial class GameController : Node
         }
         
         _currentSystem = newSystem;
+        Global.SolarSystem.CurrentSystem = _currentSystem;
         
         _world2D.AddChild(newSystem);
         
@@ -144,6 +144,9 @@ public partial class GameController : Node
         
         scene.QueueFree();
     }
+    
+    public BaseSystem GetCurrentSystem() =>
+        _currentSystem;
 
     // FIXME load, hide, unload scene logic
     // consider dictionary of loaded items, to help with decisions over what to do with existing scenes

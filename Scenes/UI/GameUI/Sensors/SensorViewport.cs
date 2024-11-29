@@ -1,5 +1,4 @@
 using Godot;
-using Spacelancer.Components.Equipment.Detection;
 
 namespace Spacelancer.Scenes.UI.GameUI.Sensors;
 
