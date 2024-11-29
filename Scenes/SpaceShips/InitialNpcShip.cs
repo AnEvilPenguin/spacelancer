@@ -33,7 +33,7 @@ public partial class InitialNpcShip : Ship
 
     public override void _Process(double delta)
     {
-        if (NavComputer.GetCurrentSoftware() is not NpcIdleNavigation)
+        if (NavComputer.GetCurrentSoftware() is not NpcIdleNavigation || string.IsNullOrWhiteSpace(_destination))
             return;
         
         var stack = Global.SolarSystem.GetAutomatedRoute(GlobalPosition, _destination);
