@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 using Spacelancer.Components.Equipment.Detection;
 using Spacelancer.Components.Navigation.Computers;
@@ -21,7 +22,8 @@ public partial class InitialNpcShip : Ship
     public override void _Ready()
     {
         _npcNavComputer = new NpcNavComputer(new NpcIdleNavigation());
-        _npcNavComputer.Jumping += (_, _) => OnJump();
+        _npcNavComputer.Jumping += (_, _) => RemoveShip();
+        _npcNavComputer.Complete += (_, _) => RemoveShip();
         
         IFF = new IdentificationFriendFoe(this, new SensorDetection(GetInstanceId(), "NPC Test", "Unaffiliated", SensorDetectionType.Ship, this));
         
@@ -43,6 +45,7 @@ public partial class InitialNpcShip : Ship
     }
 
     private void OnJump()
+    private void RemoveShip()
     {
         // Evaluate if this is good enough in general
         Visible = false;
