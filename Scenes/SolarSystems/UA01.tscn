@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bmbbcbcu2jp7u"]
+[gd_scene load_steps=8 format=3 uid="uid://bmbbcbcu2jp7u"]
 
 [ext_resource type="PackedScene" uid="uid://dvmxdf7xe21e5" path="res://Scenes/SolarSystems/base_system.tscn" id="1_1pgy8"]
 [ext_resource type="PackedScene" uid="uid://dmva0i4clmiwe" path="res://Scenes/Stations/generic.tscn" id="2_6gpwg"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dv5d275uoyl83" path="res://Scenes/Transitions/jump_gate.tscn" id="4_6wun0"]
 [ext_resource type="PackedScene" uid="uid://bs1i30idi6jyx" path="res://Scenes/SpaceShips/test_npc.tscn" id="6_a5rky"]
 [ext_resource type="PackedScene" uid="uid://xbtqo4gmnhny" path="res://Scenes/Transitions/space_lane.tscn" id="6_kctin"]
+[ext_resource type="PackedScene" uid="uid://hxlug4ncb7o5" path="res://Scenes/trade_route.tscn" id="7_xfis1"]
 
 [node name="Sunrise" instance=ExtResource("1_1pgy8")]
 Id = "UA01"
@@ -31,14 +32,18 @@ position = Vector2(16000, 17000)
 rotation = 1.5708
 RingCount = 14
 
-[node name="TestNpc" parent="." index="5" instance=ExtResource("6_a5rky")]
-position = Vector2(16484, 16430)
+[node name="Trade Routes" type="Node" parent="." index="5"]
 
-[node name="TestNpc2" parent="." index="6" instance=ExtResource("6_a5rky")]
-position = Vector2(16943, 39865)
+[node name="Sunrise Orbital  => Moonshot" parent="Trade Routes" index="0" node_paths=PackedStringArray("_route") instance=ExtResource("7_xfis1")]
+_nonPlayerCharacterScene = ExtResource("6_a5rky")
+_route = [NodePath("../../Sunrise Orbital Settlement"), NodePath("../../Sunrise Orbital Settlement -> Moonshot Jump Gate"), NodePath("../../Moonshot")]
 
-[node name="TestNpc3" parent="." index="7" instance=ExtResource("6_a5rky")]
-position = Vector2(16195, 22181)
+[node name="Moonshot => Annika\'s Redoubt" parent="Trade Routes" index="1" node_paths=PackedStringArray("_route") instance=ExtResource("7_xfis1")]
+_maxTimerSeconds = 120.0
+_nonPlayerCharacterScene = ExtResource("6_a5rky")
+_route = [NodePath("../../Moonshot"), NodePath("../../Sunrise Orbital Settlement -> Moonshot Jump Gate"), NodePath("../../Sunrise Orbital Settlement -> Annika\'s Redoubt"), NodePath("../../Annika\'s Redoubt")]
 
-[node name="TestNpc4" parent="." index="8" instance=ExtResource("6_a5rky")]
-position = Vector2(40372, 17145)
+[node name="Annika\'s Redoubt => Sunrise Orbital" parent="Trade Routes" index="2" node_paths=PackedStringArray("_route") instance=ExtResource("7_xfis1")]
+_maxTimerSeconds = 240.0
+_nonPlayerCharacterScene = ExtResource("6_a5rky")
+_route = [NodePath("../../Annika\'s Redoubt"), NodePath("../../Sunrise Orbital Settlement -> Annika\'s Redoubt"), NodePath("../../Sunrise Orbital Settlement")]
