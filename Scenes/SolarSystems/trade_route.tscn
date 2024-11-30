@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://hxlug4ncb7o5"]
 
-[ext_resource type="Script" path="res://Scenes/TradeRoute.cs" id="1_yslru"]
+[ext_resource type="Script" path="res://Scenes/SolarSystems/TradeRoute.cs" id="1_yslru"]
 
 [node name="TradeRoute" type="Node" node_paths=PackedStringArray("_route")]
 script = ExtResource("1_yslru")

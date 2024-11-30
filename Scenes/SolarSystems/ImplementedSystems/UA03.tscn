@@ -1,0 +1,35 @@
+[gd_scene load_steps=7 format=3 uid="uid://p4jn4ttdsr4u"]
+
+[ext_resource type="PackedScene" uid="uid://dvmxdf7xe21e5" path="res://Scenes/SolarSystems/base_system.tscn" id="1_thk7c"]
+[ext_resource type="PackedScene" uid="uid://dv5d275uoyl83" path="res://Scenes/Transitions/jump_gate.tscn" id="2_h5vty"]
+[ext_resource type="PackedScene" uid="uid://cvwti3lf0ogd2" path="res://Scenes/Stations/factory.tscn" id="3_766sx"]
+[ext_resource type="PackedScene" uid="uid://xbtqo4gmnhny" path="res://Scenes/Transitions/space_lane.tscn" id="4_8ksmh"]
+[ext_resource type="PackedScene" uid="uid://hxlug4ncb7o5" path="res://Scenes/SolarSystems/trade_route.tscn" id="5_povew"]
+[ext_resource type="PackedScene" uid="uid://bs1i30idi6jyx" path="res://Scenes/SpaceShips/test_npc.tscn" id="6_iyil5"]
+
+[node name="Trifecta" instance=ExtResource("1_thk7c")]
+Id = "UA03"
+
+[node name="Moonshot" parent="." index="0" instance=ExtResource("2_h5vty")]
+position = Vector2(12000, 12000)
+rotation = 2.36318
+Id = "UA02"
+
+[node name="Danoher Station" parent="." index="1" instance=ExtResource("3_766sx")]
+position = Vector2(31000, 31000)
+Id = "UA03_S01"
+
+[node name="Moonshot Jump Gate -> Danoher Station" parent="." index="2" instance=ExtResource("4_8ksmh")]
+position = Vector2(13000, 13000)
+rotation = 0.785398
+RingCount = 11
+
+[node name="Trade Routes" type="Node" parent="." index="3"]
+
+[node name="Moonshot => Danoher Station" parent="Trade Routes" index="0" node_paths=PackedStringArray("_route") instance=ExtResource("5_povew")]
+_nonPlayerCharacterScene = ExtResource("6_iyil5")
+_route = [NodePath("../../Moonshot"), NodePath("../../Moonshot Jump Gate -> Danoher Station"), NodePath("../../Danoher Station")]
+
+[node name="Danoher Station => Moonshot" parent="Trade Routes" index="1" node_paths=PackedStringArray("_route") instance=ExtResource("5_povew")]
+_nonPlayerCharacterScene = ExtResource("6_iyil5")
+_route = [NodePath("../../Danoher Station"), NodePath("../../Moonshot Jump Gate -> Danoher Station"), NodePath("../../Moonshot")]
