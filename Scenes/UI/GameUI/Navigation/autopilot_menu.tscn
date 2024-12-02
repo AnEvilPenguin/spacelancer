@@ -27,19 +27,19 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 _iconTexture = ExtResource("2_j5ymn")
-_iconColor = Color(0.809489, 0.834708, 0.403989, 1)
+_iconColor = Color(0.588235, 0.435294, 0.282353, 1)
 
 [node name="AutoPilot" parent="HBoxContainer" instance=ExtResource("1_fka0e")]
 unique_name_in_owner = true
 layout_mode = 2
 _iconTexture = ExtResource("3_4p7bh")
-_iconColor = Color(0.365277, 0.89443, 0.887917, 1)
+_iconColor = Color(0.588235, 0.435294, 0.282353, 1)
 
 [node name="Dock" parent="HBoxContainer" instance=ExtResource("1_fka0e")]
 unique_name_in_owner = true
 layout_mode = 2
 _iconTexture = ExtResource("4_6n5x2")
-_iconColor = Color(0.364706, 0.894118, 0.886275, 1)
+_iconColor = Color(0.588235, 0.435294, 0.282353, 1)
 
 [node name="Formation" parent="HBoxContainer" instance=ExtResource("1_fka0e")]
 unique_name_in_owner = true

@@ -1,0 +1,128 @@
+[gd_scene load_steps=9 format=3 uid="uid://bmbbcbcu2jp7u"]
+
+[ext_resource type="PackedScene" uid="uid://dvmxdf7xe21e5" path="res://Scenes/SolarSystems/base_system.tscn" id="1_3y2h8"]
+[ext_resource type="PackedScene" uid="uid://dmva0i4clmiwe" path="res://Scenes/Stations/generic.tscn" id="2_lucuv"]
+[ext_resource type="PackedScene" uid="uid://cvwti3lf0ogd2" path="res://Scenes/Stations/factory.tscn" id="3_4cg3x"]
+[ext_resource type="PackedScene" uid="uid://dv5d275uoyl83" path="res://Scenes/Transitions/jump_gate.tscn" id="4_m5f4x"]
+[ext_resource type="PackedScene" uid="uid://xbtqo4gmnhny" path="res://Scenes/Transitions/space_lane.tscn" id="5_dfblu"]
+[ext_resource type="PackedScene" uid="uid://hxlug4ncb7o5" path="res://Scenes/SolarSystems/trade_route.tscn" id="6_7mcqd"]
+[ext_resource type="PackedScene" uid="uid://bs1i30idi6jyx" path="res://Scenes/SpaceShips/test_npc.tscn" id="7_ydt5h"]
+[ext_resource type="PackedScene" uid="uid://dp36wdquyel73" path="res://Scenes/SolarSystems/patrol_route.tscn" id="8_ssu8q"]
+
+[node name="Sunrise" instance=ExtResource("1_3y2h8")]
+Id = "UA01"
+
+[node name="Sunrise Orbital Settlement" parent="." index="0" instance=ExtResource("2_lucuv")]
+position = Vector2(16000, 16000)
+Id = "UA01_S01"
+
+[node name="Annika\'s Redoubt" parent="." index="1" instance=ExtResource("3_4cg3x")]
+position = Vector2(40000, 16000)
+Id = "UA01_S02"
+
+[node name="Moonshot" parent="." index="2" instance=ExtResource("4_m5f4x")]
+position = Vector2(16000, 48000)
+Id = "UA02"
+
+[node name="Sunrise Orbital Settlement -> Annika\'s Redoubt" parent="." index="3" instance=ExtResource("5_dfblu")]
+position = Vector2(17000, 16000)
+RingCount = 10
+
+[node name="Sunrise Orbital Settlement -> Moonshot Jump Gate" parent="." index="4" instance=ExtResource("5_dfblu")]
+position = Vector2(16000, 17000)
+rotation = 1.5708
+RingCount = 14
+
+[node name="Trade Routes" type="Node" parent="." index="5"]
+
+[node name="Sunrise Orbital  => Moonshot" parent="Trade Routes" index="0" node_paths=PackedStringArray("_route") instance=ExtResource("6_7mcqd")]
+_route = [NodePath("../../Sunrise Orbital Settlement"), NodePath("../../Sunrise Orbital Settlement -> Moonshot Jump Gate"), NodePath("../../Moonshot")]
+_biDirectional = true
+_nonPlayerCharacterScene = ExtResource("7_ydt5h")
+
+[node name="Moonshot => Annika\'s Redoubt" parent="Trade Routes" index="1" node_paths=PackedStringArray("_route") instance=ExtResource("6_7mcqd")]
+_route = [NodePath("../../Moonshot"), NodePath("../../Sunrise Orbital Settlement -> Moonshot Jump Gate"), NodePath("../../Sunrise Orbital Settlement -> Annika\'s Redoubt"), NodePath("../../Annika\'s Redoubt")]
+_maxTimerSeconds = 120.0
+_nonPlayerCharacterScene = ExtResource("7_ydt5h")
+
+[node name="Annika\'s Redoubt => Sunrise Orbital" parent="Trade Routes" index="2" node_paths=PackedStringArray("_route") instance=ExtResource("6_7mcqd")]
+_route = [NodePath("../../Annika\'s Redoubt"), NodePath("../../Sunrise Orbital Settlement -> Annika\'s Redoubt"), NodePath("../../Sunrise Orbital Settlement")]
+_maxTimerSeconds = 240.0
+_nonPlayerCharacterScene = ExtResource("7_ydt5h")
+
+[node name="Patrol Routes" type="Node" parent="." index="6"]
+
+[node name="Guard Back of Sunrise Orbital" parent="Patrol Routes" index="0" node_paths=PackedStringArray("_homeStation") instance=ExtResource("8_ssu8q")]
+_reverseOnComplete = true
+_homeStation = NodePath("../../Sunrise Orbital Settlement")
+_maxInstances = 1
+
+[node name="Point1" type="Marker2D" parent="Patrol Routes/Guard Back of Sunrise Orbital" index="1"]
+position = Vector2(16768, 15199)
+
+[node name="Point2" type="Marker2D" parent="Patrol Routes/Guard Back of Sunrise Orbital" index="2"]
+position = Vector2(16250, 14963)
+
+[node name="Point3" type="Marker2D" parent="Patrol Routes/Guard Back of Sunrise Orbital" index="3"]
+position = Vector2(15557, 14998)
+
+[node name="Point4" type="Marker2D" parent="Patrol Routes/Guard Back of Sunrise Orbital" index="4"]
+position = Vector2(15130, 15364)
+
+[node name="Point5" type="Marker2D" parent="Patrol Routes/Guard Back of Sunrise Orbital" index="5"]
+position = Vector2(14943, 15849)
+
+[node name="Point6" type="Marker2D" parent="Patrol Routes/Guard Back of Sunrise Orbital" index="6"]
+position = Vector2(14948, 16363)
+
+[node name="Point7" type="Marker2D" parent="Patrol Routes/Guard Back of Sunrise Orbital" index="7"]
+position = Vector2(15233, 16903)
+
+[node name="Guard Back of Annika\'s Redoubt" parent="Patrol Routes" index="1" node_paths=PackedStringArray("_homeStation") instance=ExtResource("8_ssu8q")]
+_reverseOnComplete = true
+_homeStation = NodePath("../../Annika\'s Redoubt")
+_maxInstances = 1
+
+[node name="Point1" type="Marker2D" parent="Patrol Routes/Guard Back of Annika\'s Redoubt" index="1"]
+position = Vector2(39284, 15270)
+
+[node name="Point2" type="Marker2D" parent="Patrol Routes/Guard Back of Annika\'s Redoubt" index="2"]
+position = Vector2(40009, 14999)
+
+[node name="Point3" type="Marker2D" parent="Patrol Routes/Guard Back of Annika\'s Redoubt" index="3"]
+position = Vector2(40688, 15210)
+
+[node name="Point4" type="Marker2D" parent="Patrol Routes/Guard Back of Annika\'s Redoubt" index="4"]
+position = Vector2(41058, 15981)
+
+[node name="Point5" type="Marker2D" parent="Patrol Routes/Guard Back of Annika\'s Redoubt" index="5"]
+position = Vector2(40778, 16707)
+
+[node name="Point6" type="Marker2D" parent="Patrol Routes/Guard Back of Annika\'s Redoubt" index="6"]
+position = Vector2(39996, 16988)
+
+[node name="Point7" type="Marker2D" parent="Patrol Routes/Guard Back of Annika\'s Redoubt" index="7"]
+position = Vector2(39284, 16750)
+
+[node name="Patrol Jump Gate" parent="Patrol Routes" index="2" instance=ExtResource("8_ssu8q")]
+_reverseOnComplete = true
+_homeStation = NodePath("")
+_maxInstances = 1
+
+[node name="Point1" type="Marker2D" parent="Patrol Routes/Patrol Jump Gate" index="1"]
+position = Vector2(14224, 47805)
+
+[node name="Point2" type="Marker2D" parent="Patrol Routes/Patrol Jump Gate" index="2"]
+position = Vector2(15002, 47482)
+
+[node name="Point3" type="Marker2D" parent="Patrol Routes/Patrol Jump Gate" index="3"]
+position = Vector2(15701, 47451)
+
+[node name="Point4" type="Marker2D" parent="Patrol Routes/Patrol Jump Gate" index="4"]
+position = Vector2(16300, 47437)
+
+[node name="Point5" type="Marker2D" parent="Patrol Routes/Patrol Jump Gate" index="5"]
+position = Vector2(16941, 47519)
+
+[node name="Point6" type="Marker2D" parent="Patrol Routes/Patrol Jump Gate" index="6"]
+position = Vector2(17635, 47816)

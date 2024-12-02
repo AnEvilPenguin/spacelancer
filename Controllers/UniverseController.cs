@@ -34,7 +34,7 @@ public class UniverseController
 
     public void LoadSystemScenes()
     {
-        var path = "res://Scenes/SolarSystems/";
+        var path = "res://Scenes/SolarSystems/ImplementedSystems/";
         using var dir = DirAccess.Open(path);
         if (dir == null)
         {

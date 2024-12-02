@@ -44,7 +44,7 @@ public partial class InitialNpcShip : Ship
         NavComputer.SetNavigationStack(stack);
     }
 
-    public void SetTradeRoute(Stack<AutomatedNavigation> stack) =>
+    public void SetRoute(Stack<AutomatedNavigation> stack) =>
         NavComputer.SetNavigationStack(stack);
 
     private void RemoveShip()
