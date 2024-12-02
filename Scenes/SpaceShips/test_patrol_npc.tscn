@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://clyyklcjul6ed"]
+
+[ext_resource type="Script" path="res://Scenes/SpaceShips/InitialNpcShip.cs" id="1_sokl8"]
+[ext_resource type="PackedScene" uid="uid://bk18qg70btpji" path="res://Scenes/SpaceShips/basic_patrol_ship.tscn" id="2_xbmp6"]
+
+[node name="PatrolNpc" type="CharacterBody2D"]
+script = ExtResource("1_sokl8")
+
+[node name="BasicPatrolShip" parent="." instance=ExtResource("2_xbmp6")]
