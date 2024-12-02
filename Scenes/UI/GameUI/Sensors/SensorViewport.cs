@@ -22,6 +22,12 @@ public partial class SensorViewport : SubViewportContainer
 
 	public override void _PhysicsProcess(double delta)
 	{
+		if (!IsInstanceValid(_target))
+		{
+			SetCameraTarget(null);
+			return;
+		}
+		
 		if (_target != null)
 			_camera.GlobalPosition = _target.GlobalPosition;
 	}
