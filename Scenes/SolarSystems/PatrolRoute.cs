@@ -57,6 +57,7 @@ public partial class PatrolRoute : Route
         else
             npc.GlobalPosition = _route[0];
 
+        // TODO consider getting a stack of navigation if home station is far from patrol start
         var software = new PatrolNavigation($"{Name} - {_nonPlayerCharacters.Count}", _route, _reverseOnComplete);
         npc.NavComputer.SetAutomatedNavigation(software);
     }
