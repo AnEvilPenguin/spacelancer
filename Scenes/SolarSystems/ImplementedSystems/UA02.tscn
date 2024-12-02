@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://nt4jxyd4uhgf"]
+[gd_scene load_steps=8 format=3 uid="uid://nt4jxyd4uhgf"]
 
 [ext_resource type="PackedScene" uid="uid://dvmxdf7xe21e5" path="res://Scenes/SolarSystems/base_system.tscn" id="1_70a10"]
 [ext_resource type="PackedScene" uid="uid://bypgwt1e04ww0" path="res://Scenes/Stations/mine.tscn" id="2_edibs"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://xbtqo4gmnhny" path="res://Scenes/Transitions/space_lane.tscn" id="4_vop44"]
 [ext_resource type="PackedScene" uid="uid://hxlug4ncb7o5" path="res://Scenes/SolarSystems/trade_route.tscn" id="5_epiyq"]
 [ext_resource type="PackedScene" uid="uid://bs1i30idi6jyx" path="res://Scenes/SpaceShips/test_npc.tscn" id="6_jaujm"]
+[ext_resource type="PackedScene" uid="uid://dp36wdquyel73" path="res://Scenes/SolarSystems/patrol_route.tscn" id="7_ulchk"]
 
 [node name="Moonshot" instance=ExtResource("1_70a10")]
 Id = "UA02"
@@ -37,17 +38,100 @@ RingCount = 14
 [node name="Trade Routes" type="Node" parent="." index="5"]
 
 [node name="Brummbaer Station => Sunrise" parent="Trade Routes" index="0" node_paths=PackedStringArray("_route") instance=ExtResource("5_epiyq")]
-_nonPlayerCharacterScene = ExtResource("6_jaujm")
 _route = [NodePath("../../Brummbaer Station"), NodePath("../../Sunrise Jump Gate -> Brummbaer Station"), NodePath("../../Sunrise")]
+_nonPlayerCharacterScene = ExtResource("6_jaujm")
 
 [node name="Sunrise => Brummbaer Station" parent="Trade Routes" index="1" node_paths=PackedStringArray("_route") instance=ExtResource("5_epiyq")]
-_nonPlayerCharacterScene = ExtResource("6_jaujm")
 _route = [NodePath("../../Sunrise"), NodePath("../../Sunrise Jump Gate -> Brummbaer Station"), NodePath("../../Brummbaer Station")]
+_nonPlayerCharacterScene = ExtResource("6_jaujm")
 
 [node name="Brummbaer Station => Trifecta" parent="Trade Routes" index="2" node_paths=PackedStringArray("_route") instance=ExtResource("5_epiyq")]
-_nonPlayerCharacterScene = ExtResource("6_jaujm")
 _route = [NodePath("../../Brummbaer Station"), NodePath("../../Brummbaer Station -> Trifecta Jump Gate"), NodePath("../../Trifecta")]
+_nonPlayerCharacterScene = ExtResource("6_jaujm")
 
 [node name="Trifecta => Sunrise" parent="Trade Routes" index="3" node_paths=PackedStringArray("_route") instance=ExtResource("5_epiyq")]
-_nonPlayerCharacterScene = ExtResource("6_jaujm")
 _route = [NodePath("../../Trifecta"), NodePath("../../Brummbaer Station -> Trifecta Jump Gate"), NodePath("../../Sunrise Jump Gate -> Brummbaer Station"), NodePath("../../Sunrise")]
+_nonPlayerCharacterScene = ExtResource("6_jaujm")
+
+[node name="Patrol Routes" type="Node" parent="." index="6"]
+
+[node name="Guard Brummbaer Station" parent="Patrol Routes" index="0" node_paths=PackedStringArray("_homeStation") instance=ExtResource("7_ulchk")]
+_homeStation = NodePath("../../Brummbaer Station")
+
+[node name="Point1" type="Marker2D" parent="Patrol Routes/Guard Brummbaer Station" index="1"]
+position = Vector2(33335, 31492)
+
+[node name="Point2" type="Marker2D" parent="Patrol Routes/Guard Brummbaer Station" index="2"]
+position = Vector2(32890, 32330)
+
+[node name="Point3" type="Marker2D" parent="Patrol Routes/Guard Brummbaer Station" index="3"]
+position = Vector2(32003, 32588)
+
+[node name="Point4" type="Marker2D" parent="Patrol Routes/Guard Brummbaer Station" index="4"]
+position = Vector2(31138, 32279)
+
+[node name="Point5" type="Marker2D" parent="Patrol Routes/Guard Brummbaer Station" index="5"]
+position = Vector2(30749, 31504)
+
+[node name="Point6" type="Marker2D" parent="Patrol Routes/Guard Brummbaer Station" index="6"]
+position = Vector2(31114, 30669)
+
+[node name="Point7" type="Marker2D" parent="Patrol Routes/Guard Brummbaer Station" index="7"]
+position = Vector2(32006, 30376)
+
+[node name="Point8" type="Marker2D" parent="Patrol Routes/Guard Brummbaer Station" index="8"]
+position = Vector2(32865, 30588)
+
+[node name="Guard Moonshot Jump Gate" parent="Patrol Routes" index="1" node_paths=PackedStringArray("_homeStation") instance=ExtResource("7_ulchk")]
+_homeStation = NodePath("../../Brummbaer Station")
+_maxInstances = 1
+
+[node name="Point1" type="Marker2D" parent="Patrol Routes/Guard Moonshot Jump Gate" index="1"]
+position = Vector2(32187, 4621)
+
+[node name="Point2" type="Marker2D" parent="Patrol Routes/Guard Moonshot Jump Gate" index="2"]
+position = Vector2(31795, 4620)
+
+[node name="Point3" type="Marker2D" parent="Patrol Routes/Guard Moonshot Jump Gate" index="3"]
+position = Vector2(31012, 4317)
+
+[node name="Point4" type="Marker2D" parent="Patrol Routes/Guard Moonshot Jump Gate" index="4"]
+position = Vector2(31794, 4695)
+
+[node name="Point5" type="Marker2D" parent="Patrol Routes/Guard Moonshot Jump Gate" index="5"]
+position = Vector2(32189, 4691)
+
+[node name="Point6" type="Marker2D" parent="Patrol Routes/Guard Moonshot Jump Gate" index="6"]
+position = Vector2(32997, 4317)
+
+[node name="Guard Trifecta Jump Gate" parent="Patrol Routes" index="2" node_paths=PackedStringArray("_homeStation") instance=ExtResource("7_ulchk")]
+_reverseOnComplete = true
+_homeStation = NodePath("../../Brummbaer Station")
+_maxInstances = 1
+
+[node name="Point1" type="Marker2D" parent="Patrol Routes/Guard Trifecta Jump Gate" index="1"]
+position = Vector2(52311, 51514)
+
+[node name="Point2" type="Marker2D" parent="Patrol Routes/Guard Trifecta Jump Gate" index="2"]
+position = Vector2(55187, 54303)
+
+[node name="Point3" type="Marker2D" parent="Patrol Routes/Guard Trifecta Jump Gate" index="3"]
+position = Vector2(56565, 55109)
+
+[node name="Point4" type="Marker2D" parent="Patrol Routes/Guard Trifecta Jump Gate" index="4"]
+position = Vector2(56807, 55747)
+
+[node name="Point5" type="Marker2D" parent="Patrol Routes/Guard Trifecta Jump Gate" index="5"]
+position = Vector2(56505, 56285)
+
+[node name="Point6" type="Marker2D" parent="Patrol Routes/Guard Trifecta Jump Gate" index="6"]
+position = Vector2(55846, 56601)
+
+[node name="Point7" type="Marker2D" parent="Patrol Routes/Guard Trifecta Jump Gate" index="7"]
+position = Vector2(54979, 56265)
+
+[node name="Point8" type="Marker2D" parent="Patrol Routes/Guard Trifecta Jump Gate" index="8"]
+position = Vector2(54347, 55156)
+
+[node name="Point9" type="Marker2D" parent="Patrol Routes/Guard Trifecta Jump Gate" index="9"]
+position = Vector2(51518, 52320)

@@ -55,7 +55,6 @@ _nonPlayerCharacterScene = ExtResource("7_ydt5h")
 [node name="Guard Back of Sunrise Orbital" parent="Patrol Routes" index="0" node_paths=PackedStringArray("_homeStation") instance=ExtResource("8_ssu8q")]
 _reverseOnComplete = true
 _homeStation = NodePath("../../Sunrise Orbital Settlement")
-_nonPlayerCharacterScene = ExtResource("7_ydt5h")
 _maxInstances = 1
 
 [node name="Point1" type="Marker2D" parent="Patrol Routes/Guard Back of Sunrise Orbital" index="1"]
@@ -78,3 +77,52 @@ position = Vector2(14948, 16363)
 
 [node name="Point7" type="Marker2D" parent="Patrol Routes/Guard Back of Sunrise Orbital" index="7"]
 position = Vector2(15233, 16903)
+
+[node name="Guard Back of Annika\'s Redoubt" parent="Patrol Routes" index="1" node_paths=PackedStringArray("_homeStation") instance=ExtResource("8_ssu8q")]
+_reverseOnComplete = true
+_homeStation = NodePath("../../Annika\'s Redoubt")
+_maxInstances = 1
+
+[node name="Point1" type="Marker2D" parent="Patrol Routes/Guard Back of Annika\'s Redoubt" index="1"]
+position = Vector2(39284, 15270)
+
+[node name="Point2" type="Marker2D" parent="Patrol Routes/Guard Back of Annika\'s Redoubt" index="2"]
+position = Vector2(40009, 14999)
+
+[node name="Point3" type="Marker2D" parent="Patrol Routes/Guard Back of Annika\'s Redoubt" index="3"]
+position = Vector2(40688, 15210)
+
+[node name="Point4" type="Marker2D" parent="Patrol Routes/Guard Back of Annika\'s Redoubt" index="4"]
+position = Vector2(41058, 15981)
+
+[node name="Point5" type="Marker2D" parent="Patrol Routes/Guard Back of Annika\'s Redoubt" index="5"]
+position = Vector2(40778, 16707)
+
+[node name="Point6" type="Marker2D" parent="Patrol Routes/Guard Back of Annika\'s Redoubt" index="6"]
+position = Vector2(39996, 16988)
+
+[node name="Point7" type="Marker2D" parent="Patrol Routes/Guard Back of Annika\'s Redoubt" index="7"]
+position = Vector2(39284, 16750)
+
+[node name="Patrol Jump Gate" parent="Patrol Routes" index="2" instance=ExtResource("8_ssu8q")]
+_reverseOnComplete = true
+_homeStation = NodePath("")
+_maxInstances = 1
+
+[node name="Point1" type="Marker2D" parent="Patrol Routes/Patrol Jump Gate" index="1"]
+position = Vector2(14224, 47805)
+
+[node name="Point2" type="Marker2D" parent="Patrol Routes/Patrol Jump Gate" index="2"]
+position = Vector2(15002, 47482)
+
+[node name="Point3" type="Marker2D" parent="Patrol Routes/Patrol Jump Gate" index="3"]
+position = Vector2(15701, 47451)
+
+[node name="Point4" type="Marker2D" parent="Patrol Routes/Patrol Jump Gate" index="4"]
+position = Vector2(16300, 47437)
+
+[node name="Point5" type="Marker2D" parent="Patrol Routes/Patrol Jump Gate" index="5"]
+position = Vector2(16941, 47519)
+
+[node name="Point6" type="Marker2D" parent="Patrol Routes/Patrol Jump Gate" index="6"]
+position = Vector2(17635, 47816)

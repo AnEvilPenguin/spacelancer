@@ -1,8 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://dp36wdquyel73"]
+[gd_scene load_steps=3 format=3 uid="uid://dp36wdquyel73"]
 
 [ext_resource type="Script" path="res://Scenes/SolarSystems/PatrolRoute.cs" id="1_yeu4i"]
+[ext_resource type="PackedScene" uid="uid://clyyklcjul6ed" path="res://Scenes/SpaceShips/test_patrol_npc.tscn" id="2_0st08"]
 
 [node name="PatrolRoute" type="Node"]
 script = ExtResource("1_yeu4i")
+_nonPlayerCharacterScene = ExtResource("2_0st08")
 
 [node name="Timer" type="Timer" parent="."]
