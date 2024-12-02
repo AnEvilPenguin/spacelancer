@@ -5,6 +5,7 @@ namespace Spacelancer.Scenes.UI.GameUI.Sensors;
 public partial class SensorViewport : SubViewportContainer
 {
 	private Camera2D _camera;
+	private Node2D _target;
 	
 	public override void _Ready()
 	{
@@ -19,10 +20,18 @@ public partial class SensorViewport : SubViewportContainer
 		subViewport.World2D = GetViewport().World2D;
 	}
 
+	public override void _PhysicsProcess(double delta)
+	{
+		if (_target != null)
+			_camera.GlobalPosition = _target.GlobalPosition;
+	}
+
 	// May need to consider passing in the detection type and behave differently based on type
 	// If following ships, we may need to consider having a process to follow the target
 	public void SetCameraTarget(Node2D target)
 	{
+		_target = target;
+		
 		if (target == null)
 		{
 			Visible = false;
