@@ -1,9 +1,25 @@
-[gd_scene load_steps=3 format=3 uid="uid://dmva0i4clmiwe"]
+[gd_scene load_steps=4 format=3 uid="uid://dmva0i4clmiwe"]
 
 [ext_resource type="PackedScene" uid="uid://dtfjhrdepulhe" path="res://Scenes/Stations/station.tscn" id="1_lbd7a"]
 [ext_resource type="Texture2D" uid="uid://p8j5qfmaqx6n" path="res://Assets/Placeholder Art/spaceStation_017.png" id="2_x377x"]
+[ext_resource type="PackedScene" uid="uid://qpr1vob5o4ak" path="res://Scenes/Stations/Components/dock.tscn" id="3_75rn0"]
 
 [node name="Station" instance=ExtResource("1_lbd7a")]
 
 [node name="Sprite2D" type="Sprite2D" parent="." index="1"]
 texture = ExtResource("2_x377x")
+
+[node name="Holding Location1" type="Marker2D" parent="TrafficController" index="1"]
+position = Vector2(0, 488)
+
+[node name="Holding Location2" type="Marker2D" parent="TrafficController" index="2"]
+position = Vector2(-350, -365)
+
+[node name="Holding Location3" type="Marker2D" parent="TrafficController" index="3"]
+position = Vector2(371, -368)
+
+[node name="Dock" parent="TrafficController" index="4" instance=ExtResource("3_75rn0")]
+position = Vector2(0, -57)
+
+[node name="Dock2" parent="TrafficController" index="5" instance=ExtResource("3_75rn0")]
+position = Vector2(0, 263)

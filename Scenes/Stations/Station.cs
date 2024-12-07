@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Godot;
 using Serilog;
 using Spacelancer.Components.Equipment.Detection;
@@ -8,6 +7,7 @@ using Spacelancer.Components.Navigation;
 using Spacelancer.Components.Navigation.Software;
 using Spacelancer.Components.NPCs;
 using Spacelancer.Economy;
+using Spacelancer.Scenes.Stations.Components;
 using Spacelancer.Scenes.UI.StationMenu;
 using Spacelancer.Util;
 
@@ -31,34 +31,28 @@ public partial class Station : Node2D, IDockable
 	private readonly List<NonPlayerCharacter> _nonPlayerCharacters = new List<NonPlayerCharacter>();
 	
 	private IdentificationFriendFoe _iff;
-	private List<Marker2D> _markers;
+	private TrafficController _trafficController;
 
 	public override void _Ready()
 	{
 		var stationBorder = GetNode<Area2D>("Area2D");
 		
-		stationBorder.BodyEntered += OnStationAreaEntered;
-		stationBorder.BodyExited += OnStationAreaExited;
-		
 		var detection = new SensorDetection(GetInstanceId(), Name, "TODO", SensorDetectionType.Station, this);
 		_iff = new IdentificationFriendFoe(this, detection);
 		
-		_markers = GetNode("Markers").GetChildren().OfType<Marker2D>().ToList();
+		_trafficController = GetNode<TrafficController>("TrafficController");
 		
 		LoadNpcs();
 	}
 
-	public override void _Process(double delta)
+	public void DockWithStation()
 	{
-		if (!_playerInCommsRange)
+		if (_menu is { Visible: true }) 
 			return;
-
-		if (Input.IsKeyPressed(Key.C) && (_menu == null || !_menu.Visible))
-		{
-			Log.Debug("Comms initiated with {StationName}", Name);
-			_menu = Controllers.Global.GameController.LoadScene<UI.StationMenu.StationMenu>("res://Scenes/UI/StationMenu/station_menu.tscn");
-			_menu.ShowMenu(this);
-		}
+		
+		Log.Debug("Docked with {StationName}", Name);
+		_menu = Controllers.Global.GameController.LoadScene<UI.StationMenu.StationMenu>("res://Scenes/UI/StationMenu/station_menu.tscn");
+		_menu.ShowMenu(this);
 	}
 
 	public void LoadNpcs()
@@ -120,42 +114,11 @@ public partial class Station : Node2D, IDockable
 	}
 
 	public Marker2D GetNearestMarker(Vector2 position) =>
-		_markers.Aggregate((acc, cur) =>
-		{
-			var dist1 = (position - cur.GlobalPosition).Length();
-			var dist2 = (position - acc.GlobalPosition).Length();
-			
-			return dist1 < dist2 ? cur : acc;
-		});
+		_trafficController.GetNearestMarker(position);
 
 	public AutomatedNavigation GetDockComputer() =>
-		new StationDockingNavigation(this);
+		_trafficController.GetDockComputer();
 
 	public string GetName(Vector2 _) =>
 		Name;
-
-	private void OnStationAreaEntered(Node2D body)
-	{
-		if (body is SpaceShips.Player)
-		{
-			_playerInCommsRange = true;
-			Log.Debug("Player in comms range of {StationName}", Name);
-			
-			var label = Controllers.Global.GameController.TempStationLabel;
-			label.Text = $"Press C to talk to {Name}";
-			label.Visible = true;
-		}
-	}
-
-	private void OnStationAreaExited(Node2D body)
-	{
-		if (body is SpaceShips.Player)
-		{
-			_playerInCommsRange = false;
-			Log.Debug("Player left comms range of {StationName}", Name);
-			
-			var label = Controllers.Global.GameController.TempStationLabel;
-			label.Visible = false;
-		}
-	}
 }

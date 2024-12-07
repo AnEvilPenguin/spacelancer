@@ -24,6 +24,7 @@ public partial class InitialNpcShip : Ship
         _npcNavComputer = new NpcNavComputer(new NpcIdleNavigation());
         _npcNavComputer.Jumping += (_, _) => RemoveShip();
         _npcNavComputer.Complete += (_, _) => RemoveShip();
+        _npcNavComputer.Docking += (_, _) => RemoveShip();
         
         IFF = new IdentificationFriendFoe(this, new SensorDetection(GetInstanceId(), "NPC Test", "Unaffiliated", SensorDetectionType.Ship, this));
         

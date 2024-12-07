@@ -14,9 +14,6 @@ namespace Spacelancer.Controllers;
 /// </summary>
 public partial class GameController : Node
 {
-    // FIXME extract this into a proper component
-    public Label TempStationLabel;
-    
     private Control _gui;
     private Node2D _world2D;
 
@@ -31,8 +28,6 @@ public partial class GameController : Node
 
         _world2D = GetNode<Node2D>("World2D");
         _gui = GetNode<Control>("%GUI");
-        
-        TempStationLabel = _gui.GetNode<Label>("Comms Label");
         
         Global.UserInterface.Initialize();
         

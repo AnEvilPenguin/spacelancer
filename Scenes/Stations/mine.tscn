@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://bypgwt1e04ww0"]
+[gd_scene load_steps=5 format=3 uid="uid://bypgwt1e04ww0"]
 
 [ext_resource type="PackedScene" uid="uid://dtfjhrdepulhe" path="res://Scenes/Stations/station.tscn" id="1_re1tb"]
 [ext_resource type="Texture2D" uid="uid://dmhck4k6k46jr" path="res://Assets/Placeholder Art/meteor_detailedLarge.png" id="2_3r1oo"]
 [ext_resource type="Texture2D" uid="uid://drvo75puhse6v" path="res://Assets/Placeholder Art/spaceStation_027.png" id="3_krx3s"]
+[ext_resource type="PackedScene" uid="uid://qpr1vob5o4ak" path="res://Scenes/Stations/Components/dock.tscn" id="4_xd1n0"]
 
 [node name="Station" instance=ExtResource("1_re1tb")]
 
@@ -14,3 +15,9 @@ texture = ExtResource("2_3r1oo")
 position = Vector2(7, -237)
 rotation = 1.5708
 texture = ExtResource("3_krx3s")
+
+[node name="Holding Location 1" type="Marker2D" parent="TrafficController" index="1"]
+position = Vector2(1, -509)
+
+[node name="Dock" parent="TrafficController" index="2" instance=ExtResource("4_xd1n0")]
+position = Vector2(9, -326)
