@@ -6,13 +6,7 @@
 
 [node name="Station" instance=ExtResource("1_lbd7a")]
 
-[node name="DockingController#Dock" parent="." index="0" instance=ExtResource("3_75rn0")]
-position = Vector2(0, -57)
-
-[node name="DockingController#Dock2" parent="." index="1" instance=ExtResource("3_75rn0")]
-position = Vector2(0, 263)
-
-[node name="Sprite2D" type="Sprite2D" parent="." index="3"]
+[node name="Sprite2D" type="Sprite2D" parent="." index="1"]
 texture = ExtResource("2_x377x")
 
 [node name="Holding Location1" type="Marker2D" parent="TrafficController" index="1"]
@@ -23,3 +17,9 @@ position = Vector2(-350, -365)
 
 [node name="Holding Location3" type="Marker2D" parent="TrafficController" index="3"]
 position = Vector2(371, -368)
+
+[node name="Dock" parent="TrafficController" index="4" instance=ExtResource("3_75rn0")]
+position = Vector2(0, -57)
+
+[node name="Dock2" parent="TrafficController" index="5" instance=ExtResource("3_75rn0")]
+position = Vector2(0, 263)
