@@ -8,6 +8,7 @@ using Spacelancer.Components.Navigation;
 using Spacelancer.Components.Navigation.Software;
 using Spacelancer.Components.NPCs;
 using Spacelancer.Economy;
+using Spacelancer.Scenes.Stations.Components;
 using Spacelancer.Scenes.UI.StationMenu;
 using Spacelancer.Util;
 
@@ -31,7 +32,7 @@ public partial class Station : Node2D, IDockable
 	private readonly List<NonPlayerCharacter> _nonPlayerCharacters = new List<NonPlayerCharacter>();
 	
 	private IdentificationFriendFoe _iff;
-	private List<Marker2D> _markers;
+	private TrafficController _trafficController;
 
 	public override void _Ready()
 	{
@@ -43,7 +44,7 @@ public partial class Station : Node2D, IDockable
 		var detection = new SensorDetection(GetInstanceId(), Name, "TODO", SensorDetectionType.Station, this);
 		_iff = new IdentificationFriendFoe(this, detection);
 		
-		_markers = GetNode("Markers").GetChildren().OfType<Marker2D>().ToList();
+		_trafficController = GetNode<TrafficController>("TrafficController");
 		
 		LoadNpcs();
 	}
@@ -120,16 +121,10 @@ public partial class Station : Node2D, IDockable
 	}
 
 	public Marker2D GetNearestMarker(Vector2 position) =>
-		_markers.Aggregate((acc, cur) =>
-		{
-			var dist1 = (position - cur.GlobalPosition).Length();
-			var dist2 = (position - acc.GlobalPosition).Length();
-			
-			return dist1 < dist2 ? cur : acc;
-		});
+		_trafficController.GetNearestMarker(position);
 
 	public AutomatedNavigation GetDockComputer() =>
-		new StationDockingNavigation(this);
+		_trafficController.GetDockComputer();
 
 	public string GetName(Vector2 _) =>
 		Name;

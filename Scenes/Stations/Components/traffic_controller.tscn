@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c5ix8w1drpygx"]
+
+[ext_resource type="Script" path="res://Scenes/Stations/Components/TrafficController.cs" id="1_rfiee"]
+
+[node name="DockingController" type="Node2D"]
+script = ExtResource("1_rfiee")
