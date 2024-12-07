@@ -1,15 +1,28 @@
 using Godot;
-using System;
+using Spacelancer.Components.Navigation;
+using Spacelancer.Components.Navigation.Software;
+
+namespace Spacelancer.Scenes.Stations.Components;
 
 public partial class Dock : Node2D
 {
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
-	{
-	}
+	private StationDockingNavigation _current;
+	
+	public bool IsFree() =>
+		_current == null;
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
+	public bool AssignSoftwareSlot(StationDockingNavigation software)
 	{
+		if (!IsFree())
+			return false;
+		
+		_current = software;
+
+		_current.Complete += (object _, NavigationCompleteEventArgs _) =>
+			_current = null;
+		
+		_current.SetDockingPort(this);
+		
+		return true;
 	}
 }

@@ -129,6 +129,7 @@ public partial class Station : Node2D, IDockable
 	public string GetName(Vector2 _) =>
 		Name;
 
+	// TODO remove most of this
 	private void OnStationAreaEntered(Node2D body)
 	{
 		if (body is SpaceShips.Player)

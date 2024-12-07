@@ -2,6 +2,7 @@ using System;
 using Godot;
 using Serilog;
 using Spacelancer.Scenes.Stations;
+using Spacelancer.Scenes.Stations.Components;
 
 namespace Spacelancer.Components.Navigation.Software;
 
@@ -9,7 +10,8 @@ public class StationDockingNavigation : AutomatedNavigation
 {
     private enum NavigationState
     {
-        Travelling,
+        Holding,
+        Docking,
         Completed
     }
 
@@ -17,11 +19,15 @@ public class StationDockingNavigation : AutomatedNavigation
     public override NavigationSoftwareType Type => NavigationSoftwareType.Docking;
 
     private Station _hostStation;
-    private NavigationState _state = NavigationState.Travelling;
+    private NavigationState _state = NavigationState.Holding;
+    
+    private Dock _assignedPort;
+    private readonly Vector2 _holdingPosition;
 
-    public StationDockingNavigation(Station station)
+    public StationDockingNavigation(Station station, Vector2 holdingPosition)
     {
         _hostStation = station;
+        _holdingPosition = holdingPosition;
     }
 
     public override event EventHandler<NavigationCompleteEventArgs> Complete;
@@ -36,12 +42,21 @@ public class StationDockingNavigation : AutomatedNavigation
         _state switch
         {
             NavigationState.Completed => ProcessCompletedVector(),
-            _ => ProcessTravellingVector(currentPosition)
+            NavigationState.Docking => ProcessDockingVector(currentPosition),
+            NavigationState.Holding => ProcessHoldingVector(maxSpeed, currentPosition),
+            _ => Vector2.Zero,
         };
 
-    private Vector2 ProcessTravellingVector(Vector2 currentPosition)
+    public void SetDockingPort(Dock port)
     {
-        var proposed = _hostStation.GlobalPosition - currentPosition;
+        _assignedPort = port;
+        SetState(NavigationState.Docking);
+    }
+        
+
+    private Vector2 ProcessDockingVector(Vector2 currentPosition)
+    {
+        var proposed = _assignedPort.GlobalPosition - currentPosition;
         
         if (proposed.Length() < 5)
         {
@@ -50,6 +65,22 @@ public class StationDockingNavigation : AutomatedNavigation
         }
         
         return proposed.LimitLength(50);
+    }
+
+    private Vector2 ProcessHoldingVector(float maxSpeed, Vector2 currentPosition)
+    {
+        var proposed = _holdingPosition - currentPosition;
+        
+        if (proposed.Length() < 5)
+            return Vector2.Zero;
+        
+        if (proposed.Length() > maxSpeed)
+            return proposed.LimitLength(maxSpeed);
+        
+        if (proposed.Length() < maxSpeed / 2)
+            return proposed.LimitLength(maxSpeed / 4);
+        
+        return proposed.LimitLength(maxSpeed / 2);
     }
 
     private Vector2 ProcessCompletedVector()

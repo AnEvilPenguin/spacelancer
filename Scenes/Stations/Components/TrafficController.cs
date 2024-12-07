@@ -7,12 +7,18 @@ namespace Spacelancer.Scenes.Stations.Components;
 
 public partial class TrafficController : Node2D
 {
+	private Station _parent;
+	
 	private List<Dock> _docks; 
 	private List<Marker2D> _holdingLocations;
 	private List<Marker2D> _navigationMarkers;
 	
+	private Queue<StationDockingNavigation> _dockingQueue = new();
+	
 	public override void _Ready()
 	{
+		_parent = GetParent<Station>();
+		
 		_docks = GetChildren()
 			.OfType<Dock>()
 			.ToList();
@@ -30,8 +36,13 @@ public partial class TrafficController : Node2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		// if there's nothing in the queue return
-		// if there's a dock free, dequeue item and assign it to the free (closest?) dock
+		bool shouldContinue = _dockingQueue.Count > 0;
+
+		while (shouldContinue)
+		{
+			// if there's a dock free, dequeue item and assign it to the free (closest?) dock
+			shouldContinue = ProcessQueue() && _dockingQueue.Count > 0;
+		} 
 	}
 	
 	public Marker2D GetNearestMarker(Vector2 position) =>
@@ -42,11 +53,35 @@ public partial class TrafficController : Node2D
 			
 			return dist1 < dist2 ? cur : acc;
 		});
+	
+	public AutomatedNavigation GetDockComputer()
+	{
+		var index = GD.Randi() % _holdingLocations.Count;
+		var location = _holdingLocations[(int)index].GlobalPosition;
+		
+		var software = new StationDockingNavigation(_parent, location);
+		
+		_dockingQueue.Enqueue(software);
 
-	// TODO make this work with new patterns.
-	public AutomatedNavigation GetDockComputer() =>
-		new StationDockingNavigation(GetParent<Station>());
+		return software;
+	}
 
-	// when docking software requested add it to queue.
-	// 
+	private bool ProcessQueue()
+	{
+		var freeDock = _docks.FirstOrDefault(d => d.IsFree());
+		
+		if (freeDock == null)
+			return false;
+		
+		if (!_dockingQueue.TryDequeue(out var software))
+			return false;
+
+		if (!freeDock.AssignSoftwareSlot(software))
+		{
+			_dockingQueue.Enqueue(software);
+			return false;
+		}
+		
+		return true;
+	}
 }
