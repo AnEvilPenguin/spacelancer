@@ -77,7 +77,6 @@ public abstract class AbstractNavigationComputer : INavigationSoftware
     {
         switch (e.Type)
         {
-            // TODO station docking
             case NavigationCompleteType.Jumped:
                 ProcessJump(sender, e);
                 return;
