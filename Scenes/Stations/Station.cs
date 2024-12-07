@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Godot;
 using Serilog;
 using Spacelancer.Components.Equipment.Detection;
@@ -38,9 +37,6 @@ public partial class Station : Node2D, IDockable
 	{
 		var stationBorder = GetNode<Area2D>("Area2D");
 		
-		stationBorder.BodyEntered += OnStationAreaEntered;
-		stationBorder.BodyExited += OnStationAreaExited;
-		
 		var detection = new SensorDetection(GetInstanceId(), Name, "TODO", SensorDetectionType.Station, this);
 		_iff = new IdentificationFriendFoe(this, detection);
 		
@@ -49,17 +45,14 @@ public partial class Station : Node2D, IDockable
 		LoadNpcs();
 	}
 
-	public override void _Process(double delta)
+	public void DockWithStation()
 	{
-		if (!_playerInCommsRange)
+		if (_menu is { Visible: true }) 
 			return;
-
-		if (Input.IsKeyPressed(Key.C) && (_menu == null || !_menu.Visible))
-		{
-			Log.Debug("Comms initiated with {StationName}", Name);
-			_menu = Controllers.Global.GameController.LoadScene<UI.StationMenu.StationMenu>("res://Scenes/UI/StationMenu/station_menu.tscn");
-			_menu.ShowMenu(this);
-		}
+		
+		Log.Debug("Docked with {StationName}", Name);
+		_menu = Controllers.Global.GameController.LoadScene<UI.StationMenu.StationMenu>("res://Scenes/UI/StationMenu/station_menu.tscn");
+		_menu.ShowMenu(this);
 	}
 
 	public void LoadNpcs()
@@ -128,30 +121,4 @@ public partial class Station : Node2D, IDockable
 
 	public string GetName(Vector2 _) =>
 		Name;
-
-	// TODO remove most of this
-	private void OnStationAreaEntered(Node2D body)
-	{
-		if (body is SpaceShips.Player)
-		{
-			_playerInCommsRange = true;
-			Log.Debug("Player in comms range of {StationName}", Name);
-			
-			var label = Controllers.Global.GameController.TempStationLabel;
-			label.Text = $"Press C to talk to {Name}";
-			label.Visible = true;
-		}
-	}
-
-	private void OnStationAreaExited(Node2D body)
-	{
-		if (body is SpaceShips.Player)
-		{
-			_playerInCommsRange = false;
-			Log.Debug("Player left comms range of {StationName}", Name);
-			
-			var label = Controllers.Global.GameController.TempStationLabel;
-			label.Visible = false;
-		}
-	}
 }

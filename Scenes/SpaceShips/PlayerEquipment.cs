@@ -6,6 +6,7 @@ using Spacelancer.Components.Navigation.Computers;
 using Spacelancer.Components.Navigation.Software;
 using Spacelancer.Controllers;
 using Spacelancer.Economy;
+using Spacelancer.Scenes.Stations;
 
 namespace Spacelancer.Scenes.SpaceShips;
 
@@ -54,6 +55,12 @@ public partial class Player
     {
         PlayerNavigation defaultNavSoftware = new (this);
         _navComputer = new PlayerNavComputer(defaultNavSoftware);
+
+        _navComputer.Docking += (object sender, DestinationReachedEventArgs e) =>
+        {
+            if (e.Destination is Station station)
+                station.DockWithStation();
+        };
         
         Sensor = new Sensor(10_000f);
         AddChild(Sensor);

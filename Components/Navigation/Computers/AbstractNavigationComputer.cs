@@ -5,12 +5,17 @@ using Spacelancer.Components.Navigation.Software;
 
 namespace Spacelancer.Components.Navigation.Computers;
 
+public class DestinationReachedEventArgs : EventArgs
+{
+    public Node2D Destination { get; set; }
+}
+
 public abstract class AbstractNavigationComputer : INavigationSoftware
 {
     public event EventHandler Changed;
     public event EventHandler Complete;
     public event EventHandler Disrupted;
-    // public abstract event EventHandler Docking;
+    public event EventHandler<DestinationReachedEventArgs> Docking;
     public event EventHandler<JumpEventArgs> Jumping;
     
     public string Name => _currentSoftware.Name;
@@ -74,9 +79,12 @@ public abstract class AbstractNavigationComputer : INavigationSoftware
         {
             // TODO station docking
             case NavigationCompleteType.Jumped:
-                if (e is JumpNavigationCompleteEventArgs newEvent) 
-                    OnJump(sender, new JumpEventArgs(newEvent.Destination, newEvent.Origin));
+                ProcessJump(sender, e);
                 return;
+            
+            case NavigationCompleteType.Docked:
+                ProcessDocked(e);
+                break;
             
             case NavigationCompleteType.Aborted:
                 OnAutopilotAborted();
@@ -91,6 +99,21 @@ public abstract class AbstractNavigationComputer : INavigationSoftware
         }
         
         SetAutomatedNavigation(_navigationStack.Pop());
+    }
+
+    private void ProcessJump(object sender, NavigationCompleteEventArgs e)
+    {
+        if (e is JumpNavigationCompleteEventArgs newEvent) 
+            OnJump(sender, new JumpEventArgs(newEvent.Destination, newEvent.Origin));
+    }
+
+    private void ProcessDocked(NavigationCompleteEventArgs e)
+    {
+        if (e is not DockingNavigationCompleteEventArgs newEvent)
+            return;
+                           
+        var raiseEvent = Docking;
+        raiseEvent?.Invoke(this, new DestinationReachedEventArgs() { Destination = newEvent.Destination });
     }
 
     private void OnAutopilotAborted()
