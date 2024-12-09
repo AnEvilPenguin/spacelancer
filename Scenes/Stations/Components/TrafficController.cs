@@ -54,7 +54,7 @@ public partial class TrafficController : Node2D
 			return dist1 < dist2 ? cur : acc;
 		});
 	
-	public AutomatedNavigation GetDockComputer()
+	public AutomatedNavigation GetDockComputer(Vector2 _)
 	{
 		var index = GD.Randi() % _holdingLocations.Count;
 		var location = _holdingLocations[(int)index].GlobalPosition;

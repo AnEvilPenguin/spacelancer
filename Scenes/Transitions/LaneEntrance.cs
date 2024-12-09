@@ -158,6 +158,6 @@ public partial class LaneEntrance : LanePart, IDockable, ISensorDetectable
     public Node2D ToNode2D() =>
         this as Node2D;
 
-    public AutomatedNavigation GetDockComputer() =>
+    public AutomatedNavigation GetDockComputer(Vector2 _) =>
         new LaneNavigation(_entrance, Partner.GetExitNode());
 }

@@ -120,8 +120,8 @@ public partial class Station : Node2D, IDockable, ISensorDetectable
 	public Marker2D GetNearestMarker(Vector2 position) =>
 		_trafficController.GetNearestMarker(position);
 
-	public AutomatedNavigation GetDockComputer() =>
-		_trafficController.GetDockComputer();
+	public AutomatedNavigation GetDockComputer(Vector2 position) =>
+		_trafficController.GetDockComputer(position);
 
 	public string GetName(Vector2 _) =>
 		Name;
