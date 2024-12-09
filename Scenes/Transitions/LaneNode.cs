@@ -46,21 +46,10 @@ public partial class LaneNode : LanePart, ISensorDetectable, IDockable
 
     public string GetName(Vector2 detectorPosition)
     {
-        var isPair1Closer = IsPair1Closer(detectorPosition);
-
-        LanePart endpoint = this;
-        bool shouldContinue = true;
+        var direction = IsPair1Closer(detectorPosition) ? 
+            RingDirection.Pair1 : RingDirection.Pair2; 
         
-        do
-        {
-            var next = endpoint.GetNextPart(isPair1Closer);
-
-            if (next == null)
-                shouldContinue = false;
-            else
-                endpoint = next;
-            
-        } while (shouldContinue);
+        var endpoint = GetDestinationNode(direction);
 
         return endpoint.Name;
     }
@@ -106,12 +95,37 @@ public partial class LaneNode : LanePart, ISensorDetectable, IDockable
 
     public string Id =>
         "Temp";
-    public AutomatedNavigation GetDockComputer()
+    public AutomatedNavigation GetDockComputer(Vector2 position)
     {
-        throw new System.NotImplementedException();
+        // Inverted. If we're closer to pair1 we're traveling towards pair 2
+        var direction = IsPair1Closer(position) ? RingDirection.Pair2 : RingDirection.Pair1;
+        
+        var origin = GetChildren().OfType<LaneRing>().First(r => r.Direction == direction);
+        var destination = GetDestinationNode(direction);
+        
+        return new LaneNavigation(origin, destination.GetExitNode());
     }
     
     private bool IsPair1Closer(Vector2 position) =>
         position.DistanceTo(TowardsPair1.GlobalPosition) <
         position.DistanceTo(TowardsPair2.GlobalPosition);
+
+    private LaneEntrance GetDestinationNode(RingDirection direction)
+    {
+        LanePart endpoint = this;
+        var shouldContinue = true;
+        
+        do
+        {
+            var next = endpoint.GetNextPart(direction);
+
+            if (next == null)
+                shouldContinue = false;
+            else
+                endpoint = next;
+            
+        } while (shouldContinue);
+
+        return endpoint as LaneEntrance;
+    }
 }
