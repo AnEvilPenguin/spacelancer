@@ -1,10 +1,12 @@
+using System.Linq;
 using Godot;
 using Spacelancer.Components.Equipment.Detection;
+using Spacelancer.Components.Navigation;
 using Spacelancer.Components.Navigation.Software;
 
 namespace Spacelancer.Scenes.Transitions;
 
-public partial class LaneNode : LanePart, ISensorDetectable
+public partial class LaneNode : LanePart, ISensorDetectable, IDockable
 {
     public override LanePart TowardsPair1 { get; set; }
     public override LanePart TowardsPair2 { get; set; }
@@ -28,13 +30,23 @@ public partial class LaneNode : LanePart, ISensorDetectable
         GenerateMarker();
         
         GenerateRing(offset, ringTexture, RingDirection.Pair2);
-        GenerateRing(-offset, ringTexture, RingDirection.Pair1);
+        GenerateRing(-offset, ringTexture, RingDirection.Pair1)
+            .RotationDegrees = 180;
     }
-    
+
+    public Marker2D GetNearestMarker(Vector2 position)
+    {
+        // Inverted. If we're closer to pair1 we're traveling towards pair 2
+        var direction = IsPair1Closer(position) ? RingDirection.Pair2 : RingDirection.Pair1;
+        
+        var ring = GetChildren().OfType<LaneRing>().First(r => r.Direction == direction);
+
+        return ring.GetNode<Marker2D>("Navigation Marker");
+    }
+
     public string GetName(Vector2 detectorPosition)
     {
-        var isPair1Closer = detectorPosition.DistanceTo(TowardsPair1.GlobalPosition) <
-                            detectorPosition.DistanceTo(TowardsPair2.GlobalPosition);
+        var isPair1Closer = IsPair1Closer(detectorPosition);
 
         LanePart endpoint = this;
         bool shouldContinue = true;
@@ -66,7 +78,7 @@ public partial class LaneNode : LanePart, ISensorDetectable
         AddChild(marker);
     }
 
-    private void GenerateRing(Vector2 position, Texture2D texture, RingDirection direction)
+    private LaneRing GenerateRing(Vector2 position, Texture2D texture, RingDirection direction)
     {
         var ring = new LaneRing(position, texture, direction);
 
@@ -89,5 +101,17 @@ public partial class LaneNode : LanePart, ISensorDetectable
         };
         
         AddChild(ring);
+        return ring;
     }
+
+    public string Id =>
+        "Temp";
+    public AutomatedNavigation GetDockComputer()
+    {
+        throw new System.NotImplementedException();
+    }
+    
+    private bool IsPair1Closer(Vector2 position) =>
+        position.DistanceTo(TowardsPair1.GlobalPosition) <
+        position.DistanceTo(TowardsPair2.GlobalPosition);
 }

@@ -30,6 +30,11 @@ public partial class LaneRing : Node2D
         rectangleShape.Size = new Vector2(10, 50);
         collisionShape.Shape = rectangleShape;
         
+        var marker = new Marker2D();
+        marker.Position = new Vector2(100, -100);
+        marker.Name = "Navigation Marker";
+        AddChild(marker);
+        
         Area2D.AddChild(collisionShape);
         AddChild(Area2D);
     }
