@@ -53,7 +53,7 @@ public partial class TradeRoute : Route
                 {
                     var entrance = lane.GetNearestEntrance(position);
 
-                    var docker = entrance.GetDockComputer();
+                    var docker = entrance.GetDockComputer(position);
                     
                     output.Add(new SystemAutoNavigation(entrance));
                     output.Add(docker);
@@ -64,7 +64,7 @@ public partial class TradeRoute : Route
                 
                 case IDockable dockingObject:
                 {
-                    var docker = dockingObject.GetDockComputer();
+                    var docker = dockingObject.GetDockComputer(position);
                     
                     output.Add(new SystemAutoNavigation(dockingObject));
                     output.Add(docker);

@@ -3,17 +3,23 @@ using Godot;
 namespace Spacelancer.Components.Equipment.Detection;
 
 // TODO think about how we actually want this to operate
-public partial class IdentificationFriendFoe : Area2D, ISensorDetectable
+public partial class IdentificationFriendFoe : Area2D
 {
-    private Node2D _parent;
-    private readonly SensorDetection _detection;
+    private readonly ISensorDetectable _parent;
+
+    private readonly ulong _instanceId;
+    private readonly string _affiliation;
+    private readonly SensorDetectionType _returnType;
+    private readonly Node2D _body;
     
-    public IdentificationFriendFoe(Node2D parent, SensorDetection detection)
+    public IdentificationFriendFoe(ISensorDetectable parent)
     {
         _parent = parent;
-        parent.AddChild(this);
-        
-        _detection = detection;
+
+        _instanceId = parent.GetInstanceId();
+        _affiliation = parent.Affiliation;
+        _returnType = parent.ReturnType;
+        _body = parent.ToNode2D();
         
         var collisionShape2D = new CollisionShape2D();
         var circleShape = new CircleShape2D();
@@ -27,6 +33,6 @@ public partial class IdentificationFriendFoe : Area2D, ISensorDetectable
     // Required for editor
     private IdentificationFriendFoe() {}
 
-    public SensorDetection Detect() =>
-        _detection;
+    public ISensorDetectable Detect() =>
+        _parent;
 }

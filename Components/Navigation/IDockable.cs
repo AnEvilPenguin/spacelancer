@@ -7,5 +7,5 @@ public interface IDockable : INavigable
 {
     public Vector2 GlobalPosition { get; }
     public string Id { get; }
-    public AutomatedNavigation GetDockComputer();
+    public AutomatedNavigation GetDockComputer(Vector2 position);
 }

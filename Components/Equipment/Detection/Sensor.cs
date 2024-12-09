@@ -14,12 +14,16 @@ public partial class Sensor : Node2D
     public event SensorDetectionEventHandler SensorDetection; 
     public delegate void SensorDetectionEventHandler(object sender, SensorDetectionEventArgs e);
     
-    private readonly Dictionary<ulong, SensorDetection> _detectedObjects = new();
+    private readonly Dictionary<ulong, ISensorDetectable> _detectedObjects = new();
     
-    private SensorDetection _currentTarget;
+    private ISensorDetectable _currentTarget;
     
-    public Sensor(float radius)
+    private readonly Node2D _parent;
+    
+    public Sensor(float radius, Node2D parent)
     {
+        _parent = parent;
+        
         var area2D = new Area2D();
         var collisionShape2D = new CollisionShape2D();
         var circleShape = new CircleShape2D();
@@ -35,7 +39,7 @@ public partial class Sensor : Node2D
 
     public Sensor() {}
 
-    public IEnumerable<SensorDetection> GetDetections() =>
+    public IEnumerable<ISensorDetectable> GetDetections() =>
         _detectedObjects.Values;
 
     public void LockTarget(ulong id)
@@ -44,10 +48,10 @@ public partial class Sensor : Node2D
             _currentTarget = o;
     }
     
-    public void LockTarget(SensorDetection target) => 
+    public void ISensorDetectable (ISensorDetectable target) => 
         _currentTarget = target;
         
-    public SensorDetection GetLockedTarget() =>
+    public ISensorDetectable GetLockedTarget() =>
         _currentTarget;
     
     public void ClearLockedTarget() =>
@@ -62,11 +66,11 @@ public partial class Sensor : Node2D
     private void OnBodyEntered(Area2D body)
     {
         // Ignore Areas not associated with IFF
-        if (body is not ISensorDetectable detectableBody) 
+        if (body is not IdentificationFriendFoe detectableBody) 
             return;
         
         var detection = detectableBody.Detect();
-        var id = detection.Id;
+        var id = detection.GetInstanceId();
         
         // Ignore own IFF
         if (id == GetParent().GetInstanceId())
@@ -83,11 +87,11 @@ public partial class Sensor : Node2D
 
     private void OnBodyExited(Area2D body)
     {
-        if (body is not ISensorDetectable detectableBody) 
+        if (body is not IdentificationFriendFoe detectableBody) 
             return;
         
         var detection = detectableBody.Detect();
-        var id = detection.Id;
+        var id = detection.GetInstanceId();
         
         if (id == GetParent().GetInstanceId())
             return;
@@ -98,7 +102,7 @@ public partial class Sensor : Node2D
             return;
         }
         
-        if (_currentTarget != null && _currentTarget.Id == id)
+        if (_currentTarget != null && _currentTarget.GetInstanceId() == id)
             ClearLockedTarget();
         
         _detectedObjects.Remove(id);

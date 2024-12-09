@@ -13,32 +13,36 @@ using Spacelancer.Util;
 
 namespace Spacelancer.Scenes.Stations;
 
-public partial class Station : Node2D, IDockable
+public partial class Station : Node2D, IDockable, ISensorDetectable
 {
 	[Export]
 	public string Id { get; private set; }
 
 	// Is there a better way of dealing with this?
 	public new string Name => base.Name;
+	
+	public SensorDetectionType ReturnType =>
+		SensorDetectionType.Station;
+
+	public string Affiliation =>
+		"TODO";
 
 	// We may need to consider making this docking range if we make a map and remote comms or something
-	private bool _playerInCommsRange = false;
+	private bool _playerInCommsRange;
 	private StationMenu _menu;
 	
-	private readonly List<Tuple<Commodity, int>> _commoditiesForSale = new List<Tuple<Commodity, int>>();
-	private readonly Dictionary<string, int> _commodityBuyPriceOverride = new Dictionary<string, int>();
+	private readonly List<Tuple<Commodity, int>> _commoditiesForSale = new ();
+	private readonly Dictionary<string, int> _commodityBuyPriceOverride = new ();
 	
-	private readonly List<NonPlayerCharacter> _nonPlayerCharacters = new List<NonPlayerCharacter>();
+	private readonly List<NonPlayerCharacter> _nonPlayerCharacters = new ();
 	
 	private IdentificationFriendFoe _iff;
 	private TrafficController _trafficController;
 
 	public override void _Ready()
 	{
-		var stationBorder = GetNode<Area2D>("Area2D");
-		
-		var detection = new SensorDetection(GetInstanceId(), Name, "TODO", SensorDetectionType.Station, this);
-		_iff = new IdentificationFriendFoe(this, detection);
+		_iff = new IdentificationFriendFoe(this);
+		AddChild(_iff);
 		
 		_trafficController = GetNode<TrafficController>("TrafficController");
 		
@@ -81,7 +85,7 @@ public partial class Station : Node2D, IDockable
 	}
 	
 	public List<NonPlayerCharacter> GetNonPlayerCharacters() => 
-		new List<NonPlayerCharacter>(_nonPlayerCharacters);
+		new (_nonPlayerCharacters);
 	
 	public bool HasNpc() =>
 		_nonPlayerCharacters.Count > 0;
@@ -103,7 +107,7 @@ public partial class Station : Node2D, IDockable
 		_commodityBuyPriceOverride.Add(commodity.Name, price);
 
 	public List<Tuple<Commodity, int>> GetCommodityForSale() => 
-		new List<Tuple<Commodity, int>>(_commoditiesForSale);
+		new (_commoditiesForSale);
 
 	public int GetCommodityToBuyPrice(Commodity commodity)
 	{
@@ -116,9 +120,12 @@ public partial class Station : Node2D, IDockable
 	public Marker2D GetNearestMarker(Vector2 position) =>
 		_trafficController.GetNearestMarker(position);
 
-	public AutomatedNavigation GetDockComputer() =>
-		_trafficController.GetDockComputer();
+	public AutomatedNavigation GetDockComputer(Vector2 position) =>
+		_trafficController.GetDockComputer(position);
 
 	public string GetName(Vector2 _) =>
 		Name;
+
+	public Node2D ToNode2D() =>
+		this as Node2D;
 }

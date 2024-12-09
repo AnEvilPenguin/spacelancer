@@ -1,10 +1,12 @@
+using System.Linq;
 using Godot;
 using Spacelancer.Components.Equipment.Detection;
+using Spacelancer.Components.Navigation;
 using Spacelancer.Components.Navigation.Software;
 
 namespace Spacelancer.Scenes.Transitions;
 
-public partial class LaneNode : LanePart
+public partial class LaneNode : LanePart, ISensorDetectable, IDockable
 {
     public override LanePart TowardsPair1 { get; set; }
     public override LanePart TowardsPair2 { get; set; }
@@ -12,21 +14,48 @@ public partial class LaneNode : LanePart
     
     private IdentificationFriendFoe _iff;
 
+    public SensorDetectionType ReturnType => 
+        SensorDetectionType.SpaceLaneNode;
+
+    public string Affiliation =>
+        "Unaffiliated";
+
     public LaneNode(Vector2 position, Texture2D ringTexture, Vector2 offset)
     {
         Position = position;
-
-        // FIXME figure out how to get this to provide a varying name
-        // Probably change SensorDetection name to an interface with a GetName(callee)
-        // Or something like that.
-        var detection = new SensorDetection(GetInstanceId(), Name, "Unaffiliated", SensorDetectionType.SpaceLaneNode, this);
-        _iff = new IdentificationFriendFoe(this, detection);
+        
+        _iff = new IdentificationFriendFoe(this);
+        AddChild(_iff);
         
         GenerateMarker();
         
         GenerateRing(offset, ringTexture, RingDirection.Pair2);
-        GenerateRing(-offset, ringTexture, RingDirection.Pair1);
+        GenerateRing(-offset, ringTexture, RingDirection.Pair1)
+            .RotationDegrees = 180;
     }
+
+    public Marker2D GetNearestMarker(Vector2 position)
+    {
+        // Inverted. If we're closer to pair1 we're traveling towards pair 2
+        var direction = IsPair1Closer(position) ? RingDirection.Pair2 : RingDirection.Pair1;
+        
+        var ring = GetChildren().OfType<LaneRing>().First(r => r.Direction == direction);
+
+        return ring.GetNode<Marker2D>("Navigation Marker");
+    }
+
+    public string GetName(Vector2 detectorPosition)
+    {
+        var direction = IsPair1Closer(detectorPosition) ? 
+            RingDirection.Pair1 : RingDirection.Pair2; 
+        
+        var endpoint = GetDestinationNode(direction);
+
+        return endpoint.Name;
+    }
+
+    public Node2D ToNode2D() =>
+        this as Node2D;
     
     // Required for the editor
     private LaneNode() {}
@@ -38,7 +67,7 @@ public partial class LaneNode : LanePart
         AddChild(marker);
     }
 
-    private void GenerateRing(Vector2 position, Texture2D texture, RingDirection direction)
+    private LaneRing GenerateRing(Vector2 position, Texture2D texture, RingDirection direction)
     {
         var ring = new LaneRing(position, texture, direction);
 
@@ -61,5 +90,42 @@ public partial class LaneNode : LanePart
         };
         
         AddChild(ring);
+        return ring;
+    }
+
+    public string Id =>
+        "Temp";
+    public AutomatedNavigation GetDockComputer(Vector2 position)
+    {
+        // Inverted. If we're closer to pair1 we're traveling towards pair 2
+        var direction = IsPair1Closer(position) ? RingDirection.Pair2 : RingDirection.Pair1;
+        
+        var origin = GetChildren().OfType<LaneRing>().First(r => r.Direction == direction);
+        var destination = GetDestinationNode(direction);
+        
+        return new LaneNavigation(origin, destination.GetExitNode());
+    }
+    
+    private bool IsPair1Closer(Vector2 position) =>
+        position.DistanceTo(TowardsPair1.GlobalPosition) <
+        position.DistanceTo(TowardsPair2.GlobalPosition);
+
+    private LaneEntrance GetDestinationNode(RingDirection direction)
+    {
+        LanePart endpoint = this;
+        var shouldContinue = true;
+        
+        do
+        {
+            var next = endpoint.GetNextPart(direction);
+
+            if (next == null)
+                shouldContinue = false;
+            else
+                endpoint = next;
+            
+        } while (shouldContinue);
+
+        return endpoint as LaneEntrance;
     }
 }

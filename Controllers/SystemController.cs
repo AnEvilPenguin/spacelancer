@@ -46,7 +46,7 @@ public class SystemController
         if(!_dockables.TryGetValue(targetId, out var target))
             return null; // Better might be to throw an error?
         
-        output.Push(target.GetDockComputer());
+        output.Push(target.GetDockComputer(Vector2.Zero));
         output.Push(new SystemAutoNavigation(target));
         
         BuildBestAutomatedRoute(startPoint, target.GlobalPosition, output);
@@ -79,7 +79,7 @@ public class SystemController
             var entrance = tuple.Item2.GetNearestEntrance(tuple.Item1);
             
             // LIFO
-            output.Push(entrance.GetDockComputer());
+            output.Push(entrance.GetDockComputer(Vector2.Zero));
             output.Push(new SystemAutoNavigation(entrance));
         }
     }

@@ -33,10 +33,12 @@ public partial class Player
             Log.Debug("Target with id '{id}' not found", id);
             return;
         }
-            
-        SetPointerTarget(detection.Body);
-        _navComputer.ProcessNewTarget(detection.Body);
-        Global.UserInterface.SetSensorViewPortTarget(detection.Body);
+
+        var body = detection.ToNode2D();
+        
+        SetPointerTarget(body);
+        _navComputer.ProcessNewTarget(body);
+        Global.UserInterface.SetSensorViewPortTarget(body);
     }
 
     public void ClearTarget()
@@ -48,7 +50,7 @@ public partial class Player
         Global.UserInterface.ClearSensorViewPortTarget();
     }
     
-    public SensorDetection GetTarget() =>
+    public ISensorDetectable GetTarget() =>
         Sensor.GetLockedTarget();
 
     private void SetDefaultEquipment()
@@ -62,7 +64,7 @@ public partial class Player
                 station.DockWithStation();
         };
         
-        Sensor = new Sensor(10_000f);
+        Sensor = new Sensor(10_000f, this);
         AddChild(Sensor);
 
         Sensor.SensorDetection += (sender, args) =>
@@ -70,9 +72,9 @@ public partial class Player
 
         Sensor.SensorLost += (sender, args) =>
             Global.UserInterface.RemoveSensorDetection(args.Id);
-
-        var detection = new SensorDetection(GetInstanceId(), "Player", "Temp", SensorDetectionType.Ship, this);
-        IFF = new IdentificationFriendFoe(this, detection);
+        
+        IFF = new IdentificationFriendFoe(this);
+        AddChild(IFF);
         
         Hold = new CargoHold(CommoditySize.Medium, 100);
     }

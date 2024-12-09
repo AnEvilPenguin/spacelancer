@@ -13,7 +13,7 @@ public partial class SensorDisplayComponent : PanelContainer
 	private Label _nameLabel;
 	private Label _distanceLabel;
 	
-	private SensorDetection _detection;
+	private ISensorDetectable _detection;
 	
 	public SensorDetectionType DetectionType { get; private set; }
 	public float Distance { get; private set; }
@@ -32,15 +32,15 @@ public partial class SensorDisplayComponent : PanelContainer
 		if (!IsWithinBounds(GetLocalMousePosition()))
 			return;
 		
-		Log.Debug("Player selected {detectionId} - {detectionType}", _detection.Id, _detection.ReturnType);
+		Log.Debug("Player selected {detectionId} - {detectionType}", _detection.GetInstanceId(), _detection.ReturnType);
 		
-		EmitSignal(SignalName.Selected, _detection.Body);
+		EmitSignal(SignalName.Selected, _detection.ToNode2D());
 		
 		// Stops propagation of event
 		GetViewport().SetInputAsHandled();
 	}
 
-	public void SetSensorDetection(SensorDetection detection)
+	public void SetSensorDetection(ISensorDetectable detection)
 	{
 		_detection = detection;
 		// TODO some sort of icon based on return type?
@@ -54,9 +54,9 @@ public partial class SensorDisplayComponent : PanelContainer
 
 	public SensorDisplayComponent UpdateComponent()
 	{
-		_nameLabel.Text = _detection.Name;
+		_nameLabel.Text = _detection.GetName(Global.Player.GlobalPosition);
 
-		Distance = _detection.Body.GlobalPosition.DistanceTo(Global.Player.GlobalPosition);
+		Distance = _detection.ToNode2D().GlobalPosition.DistanceTo(Global.Player.GlobalPosition);
 		_distanceLabel.Text = Distance >= 2000 ? $"{Distance / 1000 :0.0}K" : $"{Distance:0}";
 		
 		return this;

@@ -8,10 +8,18 @@ using Spacelancer.Components.Navigation.Software;
 
 namespace Spacelancer.Scenes.Transitions;
 
-public partial class JumpGate : Node2D, IDockable
+public partial class JumpGate : Node2D, IDockable, ISensorDetectable
 {
     [Export]
     public string Id { get; private set; }
+    
+    public SensorDetectionType ReturnType =>
+        SensorDetectionType.JumpGate;
+    public string Affiliation =>
+        "Unaffiliated";
+
+    public string GetName(Vector2 _) =>
+        $"{Name} Jump Gate";
     
     private static readonly PackedScene Scene = GD.Load<PackedScene>("res://Scenes/Transitions/jump_gate.tscn");
     
@@ -31,8 +39,8 @@ public partial class JumpGate : Node2D, IDockable
         _entry.BodyEntered += OnJumpBorderEntered;
         _entry.BodyExited += OnJumpBorderExited;
         
-        var detection = new SensorDetection(GetInstanceId(),$"{Name} Jump Gate", "Unaffiliated", SensorDetectionType.JumpGate, this);
-        _iff = new IdentificationFriendFoe(this, detection);
+        _iff = new IdentificationFriendFoe(this);
+        AddChild(_iff);
         
         _markers = GetNode("Markers").GetChildren().OfType<Marker2D>().ToList();
     }
@@ -60,9 +68,9 @@ public partial class JumpGate : Node2D, IDockable
             return dist1 < dist2 ? cur : acc;
         });
 
-    public string GetName(Vector2 position) =>
-        Name;
-    
-    public AutomatedNavigation GetDockComputer() =>
+    public Node2D ToNode2D() =>
+        this as Node2D;
+
+    public AutomatedNavigation GetDockComputer(Vector2 _) =>
         new JumpEntranceNavigation(this, Name);
 }

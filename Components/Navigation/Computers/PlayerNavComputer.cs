@@ -92,7 +92,7 @@ public sealed class PlayerNavComputer : AbstractNavigationComputer
             return;
 
         // FIXME if not within a certain range call Autopilot instead?
-        var autoPilot = target.GetDockComputer();
+        var autoPilot = target.GetDockComputer(Global.Player.GlobalPosition);
         
         SetAutomatedNavigation(autoPilot);
     }
