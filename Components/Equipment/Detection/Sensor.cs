@@ -18,8 +18,12 @@ public partial class Sensor : Node2D
     
     private SensorDetection _currentTarget;
     
-    public Sensor(float radius)
+    private readonly Node2D _parent;
+    
+    public Sensor(float radius, Node2D parent)
     {
+        _parent = parent;
+        
         var area2D = new Area2D();
         var collisionShape2D = new CollisionShape2D();
         var circleShape = new CircleShape2D();
@@ -62,10 +66,10 @@ public partial class Sensor : Node2D
     private void OnBodyEntered(Area2D body)
     {
         // Ignore Areas not associated with IFF
-        if (body is not ISensorDetectable detectableBody) 
+        if (body is not IdentificationFriendFoe detectableBody) 
             return;
         
-        var detection = detectableBody.Detect();
+        var detection = detectableBody.Detect(_parent.GlobalPosition);
         var id = detection.Id;
         
         // Ignore own IFF
@@ -83,10 +87,10 @@ public partial class Sensor : Node2D
 
     private void OnBodyExited(Area2D body)
     {
-        if (body is not ISensorDetectable detectableBody) 
+        if (body is not IdentificationFriendFoe detectableBody) 
             return;
         
-        var detection = detectableBody.Detect();
+        var detection = detectableBody.Detect(_parent.GlobalPosition);
         var id = detection.Id;
         
         if (id == GetParent().GetInstanceId())

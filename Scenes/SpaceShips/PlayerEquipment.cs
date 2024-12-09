@@ -62,7 +62,7 @@ public partial class Player
                 station.DockWithStation();
         };
         
-        Sensor = new Sensor(10_000f);
+        Sensor = new Sensor(10_000f, this);
         AddChild(Sensor);
 
         Sensor.SensorDetection += (sender, args) =>
@@ -70,9 +70,9 @@ public partial class Player
 
         Sensor.SensorLost += (sender, args) =>
             Global.UserInterface.RemoveSensorDetection(args.Id);
-
-        var detection = new SensorDetection(GetInstanceId(), "Player", "Temp", SensorDetectionType.Ship, this);
-        IFF = new IdentificationFriendFoe(this, detection);
+        
+        IFF = new IdentificationFriendFoe(this);
+        AddChild(IFF);
         
         Hold = new CargoHold(CommoditySize.Medium, 100);
     }

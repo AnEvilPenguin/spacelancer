@@ -7,7 +7,7 @@ using Spacelancer.Components.Navigation.Software;
 
 namespace Spacelancer.Scenes.Transitions;
 
-public partial class LaneEntrance : LanePart, IDockable
+public partial class LaneEntrance : LanePart, IDockable, ISensorDetectable
 {
     public string Id => "FIXME?";
     public override LanePart TowardsPair1 { get; set; }
@@ -15,6 +15,15 @@ public partial class LaneEntrance : LanePart, IDockable
     public override bool IsDisrupted { get; protected set; }
 
     public LaneEntrance Partner;
+
+    public SensorDetectionType ReturnType => 
+        SensorDetectionType.SpaceLane;
+
+    public string Affiliation =>
+        "Unaffiliated";
+
+    public string GetName(Vector2 _) =>
+        Name;
 
     private Vector2 _lightOffset = new (110, 0);
 
@@ -29,8 +38,8 @@ public partial class LaneEntrance : LanePart, IDockable
     {
         Position = position;
         
-        var detection = new SensorDetection(GetInstanceId(), Name, "Unaffiliated", SensorDetectionType.SpaceLane, this);
-        _iff = new IdentificationFriendFoe(this, detection);
+        _iff = new IdentificationFriendFoe(this);
+        AddChild(_iff);
         
         _entrance = GenerateMainNode(offset, mainTexture, goLight, "Entrance");
         _exit = GenerateMainNode(-offset, mainTexture, stopLight, "Exit");
@@ -146,8 +155,8 @@ public partial class LaneEntrance : LanePart, IDockable
             return dist1 < dist2 ? cur : acc;
         });
 
-    public string GetName(Vector2 _) =>
-        Name;
+    public Node2D ToNode2D() =>
+        this as Node2D;
 
     public AutomatedNavigation GetDockComputer() =>
         new LaneNavigation(_entrance, Partner.GetExitNode());

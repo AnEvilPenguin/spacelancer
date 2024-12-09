@@ -12,15 +12,21 @@ public partial class LaneNode : LanePart
     
     private IdentificationFriendFoe _iff;
 
+    public SensorDetectionType ReturnType => 
+        SensorDetectionType.SpaceLaneNode;
+
+    public string Affiliation =>
+        "Unaffiliated";
+
+    public string GetName(Vector2 position) =>
+        Name;
+
     public LaneNode(Vector2 position, Texture2D ringTexture, Vector2 offset)
     {
         Position = position;
-
-        // FIXME figure out how to get this to provide a varying name
-        // Probably change SensorDetection name to an interface with a GetName(callee)
-        // Or something like that.
-        var detection = new SensorDetection(GetInstanceId(), Name, "Unaffiliated", SensorDetectionType.SpaceLaneNode, this);
-        _iff = new IdentificationFriendFoe(this, detection);
+        
+        _iff = new IdentificationFriendFoe(this);
+        AddChild(_iff);
         
         GenerateMarker();
         

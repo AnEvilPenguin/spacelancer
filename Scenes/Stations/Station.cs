@@ -13,13 +13,19 @@ using Spacelancer.Util;
 
 namespace Spacelancer.Scenes.Stations;
 
-public partial class Station : Node2D, IDockable
+public partial class Station : Node2D, IDockable, ISensorDetectable
 {
 	[Export]
 	public string Id { get; private set; }
 
 	// Is there a better way of dealing with this?
 	public new string Name => base.Name;
+	
+	public SensorDetectionType ReturnType =>
+		SensorDetectionType.Station;
+
+	public string Affiliation =>
+		"TODO";
 
 	// We may need to consider making this docking range if we make a map and remote comms or something
 	private bool _playerInCommsRange = false;
@@ -38,7 +44,8 @@ public partial class Station : Node2D, IDockable
 		var stationBorder = GetNode<Area2D>("Area2D");
 		
 		var detection = new SensorDetection(GetInstanceId(), Name, "TODO", SensorDetectionType.Station, this);
-		_iff = new IdentificationFriendFoe(this, detection);
+		_iff = new IdentificationFriendFoe(this);
+		AddChild(_iff);
 		
 		_trafficController = GetNode<TrafficController>("TrafficController");
 		
@@ -121,4 +128,7 @@ public partial class Station : Node2D, IDockable
 
 	public string GetName(Vector2 _) =>
 		Name;
+
+	public Node2D ToNode2D() =>
+		this as Node2D;
 }
