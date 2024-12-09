@@ -43,7 +43,6 @@ public partial class Station : Node2D, IDockable, ISensorDetectable
 	{
 		var stationBorder = GetNode<Area2D>("Area2D");
 		
-		var detection = new SensorDetection(GetInstanceId(), Name, "TODO", SensorDetectionType.Station, this);
 		_iff = new IdentificationFriendFoe(this);
 		AddChild(_iff);
 		

@@ -102,9 +102,9 @@ public partial class SensorDisplay : PanelContainer
 			.ForEach(c => _objectList.AddChild(c));
 	}
 
-	public void AddItem(SensorDetection detection)
+	public void AddItem(ISensorDetectable detection)
 	{
-		var body = detection.Body;
+		var body = detection.ToNode2D();
 		var id = body.GetInstanceId();
 
 		if (_objectControlLookup.ContainsKey(id))

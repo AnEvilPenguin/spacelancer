@@ -46,7 +46,7 @@ public class UiController
     public void ShowSensorDisplay(bool visible = true) =>
         _sensorDisplay.Visible = visible;
     
-    public void AddSensorDetection(SensorDetection detection) =>
+    public void AddSensorDetection(ISensorDetectable detection) =>
         _sensorDisplay.AddItem(detection);
     
     public void RemoveSensorDetection(ulong id) =>

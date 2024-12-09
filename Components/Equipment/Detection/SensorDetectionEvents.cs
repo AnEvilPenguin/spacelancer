@@ -4,9 +4,9 @@ namespace Spacelancer.Components.Equipment.Detection;
 
 public class SensorDetectionEventArgs : EventArgs
 {
-    public SensorDetection Detection { get; init; }
+    public ISensorDetectable Detection { get; init; }
 
-    public SensorDetectionEventArgs(SensorDetection detection)
+    public SensorDetectionEventArgs(ISensorDetectable detection)
     {
         Detection = detection;
     }

@@ -14,9 +14,9 @@ public partial class Sensor : Node2D
     public event SensorDetectionEventHandler SensorDetection; 
     public delegate void SensorDetectionEventHandler(object sender, SensorDetectionEventArgs e);
     
-    private readonly Dictionary<ulong, SensorDetection> _detectedObjects = new();
+    private readonly Dictionary<ulong, ISensorDetectable> _detectedObjects = new();
     
-    private SensorDetection _currentTarget;
+    private ISensorDetectable _currentTarget;
     
     private readonly Node2D _parent;
     
@@ -39,7 +39,7 @@ public partial class Sensor : Node2D
 
     public Sensor() {}
 
-    public IEnumerable<SensorDetection> GetDetections() =>
+    public IEnumerable<ISensorDetectable> GetDetections() =>
         _detectedObjects.Values;
 
     public void LockTarget(ulong id)
@@ -48,10 +48,10 @@ public partial class Sensor : Node2D
             _currentTarget = o;
     }
     
-    public void LockTarget(SensorDetection target) => 
+    public void ISensorDetectable (ISensorDetectable target) => 
         _currentTarget = target;
         
-    public SensorDetection GetLockedTarget() =>
+    public ISensorDetectable GetLockedTarget() =>
         _currentTarget;
     
     public void ClearLockedTarget() =>
@@ -69,8 +69,8 @@ public partial class Sensor : Node2D
         if (body is not IdentificationFriendFoe detectableBody) 
             return;
         
-        var detection = detectableBody.Detect(_parent.GlobalPosition);
-        var id = detection.Id;
+        var detection = detectableBody.Detect();
+        var id = detection.GetInstanceId();
         
         // Ignore own IFF
         if (id == GetParent().GetInstanceId())
@@ -90,8 +90,8 @@ public partial class Sensor : Node2D
         if (body is not IdentificationFriendFoe detectableBody) 
             return;
         
-        var detection = detectableBody.Detect(_parent.GlobalPosition);
-        var id = detection.Id;
+        var detection = detectableBody.Detect();
+        var id = detection.GetInstanceId();
         
         if (id == GetParent().GetInstanceId())
             return;
@@ -102,7 +102,7 @@ public partial class Sensor : Node2D
             return;
         }
         
-        if (_currentTarget != null && _currentTarget.Id == id)
+        if (_currentTarget != null && _currentTarget.GetInstanceId() == id)
             ClearLockedTarget();
         
         _detectedObjects.Remove(id);
