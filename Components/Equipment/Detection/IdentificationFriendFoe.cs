@@ -33,6 +33,7 @@ public partial class IdentificationFriendFoe : Area2D
     // Required for editor
     private IdentificationFriendFoe() {}
 
-    public SensorDetection Detect() =>
-        _detection;
+    public SensorDetection Detect(Vector2 origin) =>
+        new SensorDetection(_instanceId, _parent.GetName(origin), _affiliation, _returnType, _body);
+        
 }

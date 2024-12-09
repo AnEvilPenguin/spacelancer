@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 namespace Spacelancer.Scenes.Transitions;
@@ -122,6 +123,11 @@ public partial class SpaceLane : Node2D
 		
 		_pair1 = new LaneEntrance(Vector2.Zero, Offset, MainTexture, GoLight, StopLight);
 		_pair2 = new LaneEntrance(new Vector2(distance, 0), Offset, MainTexture, GoLight, StopLight);
+
+		// FIXME we need a better way of dealing with names
+		// Take two 'ids' and try to resolve them. If not resolved treat as display name instead.
+		_pair1.Name = Name;
+		_pair2.Name = String.Join(" -> ", Name.ToString().Split(" -> ").Reverse());
 
 		_pair1.Partner = _pair2;
 		_pair2.Partner = _pair1;

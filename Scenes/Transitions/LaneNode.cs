@@ -4,7 +4,7 @@ using Spacelancer.Components.Navigation.Software;
 
 namespace Spacelancer.Scenes.Transitions;
 
-public partial class LaneNode : LanePart
+public partial class LaneNode : LanePart, ISensorDetectable
 {
     public override LanePart TowardsPair1 { get; set; }
     public override LanePart TowardsPair2 { get; set; }
@@ -18,9 +18,6 @@ public partial class LaneNode : LanePart
     public string Affiliation =>
         "Unaffiliated";
 
-    public string GetName(Vector2 position) =>
-        Name;
-
     public LaneNode(Vector2 position, Texture2D ringTexture, Vector2 offset)
     {
         Position = position;
@@ -33,6 +30,31 @@ public partial class LaneNode : LanePart
         GenerateRing(offset, ringTexture, RingDirection.Pair2);
         GenerateRing(-offset, ringTexture, RingDirection.Pair1);
     }
+    
+    public string GetName(Vector2 detectorPosition)
+    {
+        var isPair1Closer = detectorPosition.DistanceTo(TowardsPair1.GlobalPosition) <
+                            detectorPosition.DistanceTo(TowardsPair2.GlobalPosition);
+
+        LanePart endpoint = this;
+        bool shouldContinue = true;
+        
+        do
+        {
+            var next = endpoint.GetNextPart(isPair1Closer);
+
+            if (next == null)
+                shouldContinue = false;
+            else
+                endpoint = next;
+            
+        } while (shouldContinue);
+
+        return endpoint.Name;
+    }
+
+    public Node2D ToNode2D() =>
+        this as Node2D;
     
     // Required for the editor
     private LaneNode() {}
